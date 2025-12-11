@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Physiatić | Advanced Physics</title>
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2980b9">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -21,13 +24,12 @@
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
         body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
 
-        /* --- 2. INTRO / OUTRO ANIMATION --- */
+        /* --- 2. INTRO ANIMATION --- */
         #intro-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center;
-            overflow: hidden; pointer-events: none; opacity: 0; /* Hidden by default */
+            overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 0.5s;
         }
-        /* Active State for Animation */
         #intro-overlay.active { opacity: 1; pointer-events: auto; }
 
         .bolt { position: absolute; top: 50%; width: 50%; height: 10px; transform: translateY(-50%); z-index: 2; }
@@ -63,7 +65,6 @@
         .login-btn { border: 2px solid var(--accent); color: var(--accent); padding: 6px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; background: transparent; }
         .login-btn:hover { background: var(--accent); color: white; }
 
-        /* Profile Image in Nav */
         .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; transition: 0.3s; }
         .nav-avatar:hover { transform: scale(1.1); box-shadow: 0 0 10px var(--accent); }
 
@@ -92,17 +93,25 @@
         .setting-row { margin-bottom: 20px; background: rgba(128,128,128,0.05); padding: 15px; border-radius: 10px; }
         .setting-row input, .setting-row select { padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; margin-top: 5px; }
 
-        /* Team Table Styling */
         .team-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         .team-table th { text-align: left; padding: 10px; border-bottom: 2px solid var(--accent); }
         .team-table td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
         .admin-pic-small { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 1px solid #ddd; }
         
-        /* Password Eye */
         .pass-container { position: relative; width: 100%; }
         .pass-eye { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; }
 
-        .editable { border: 2px dashed #ff7675; cursor: text; }
+        /* EDITING STYLES */
+        .editable { border: 2px dashed #ff7675; cursor: pointer; position: relative; }
+        .editable:hover { background: rgba(255, 118, 117, 0.1); }
+        .editable-active { border: 2px solid #27ae60; background: rgba(39, 174, 96, 0.1); }
+        
+        .editable-img { border: 4px solid #ff7675; cursor: pointer; position: relative; }
+        .editable-img::after { 
+            content: '📸 Click to Upload'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; pointer-events: none;
+        }
+
         #saveBtn { position: fixed; bottom: 20px; right: 20px; background: #00b894; color: white; padding: 15px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 6000; }
         @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -129,28 +138,25 @@
         </div>
     </div>
 
+    <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
+
     <nav>
         <div class="logo" onclick="route('home')">
             <i class="fas fa-atom"></i> <span data-db="site_name">Physiatić</span>
         </div>
-        
         <div class="nav-center">
             <a onclick="route('home')" class="nav-link active-page" data-db="nav_1">Home</a>
             <a onclick="route('topics')" class="nav-link" data-db="nav_2">Topics</a>
             <a onclick="route('resources')" class="nav-link" data-db="nav_3">Resources</a>
             <a onclick="route('about')" class="nav-link" data-db="nav_4">About</a>
         </div>
-
         <div class="nav-actions">
-            <button class="physics-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Mode">
+            <button class="physics-toggle" onclick="toggleTheme()" id="themeBtn">
                 <i id="themeIcon" class="fas fa-lightbulb"></i>
             </button>
-            
-            <div id="loggedOutUI">
-                <button class="login-btn" onclick="openLogin()">Login</button>
-            </div>
+            <div id="loggedOutUI"><button class="login-btn" onclick="openLogin()">Login</button></div>
             <div id="loggedInUI" class="user-badge" style="display:none;">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="myNavAvatar" class="nav-avatar" onclick="openDashboard()" title="Dashboard">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="myNavAvatar" class="nav-avatar" onclick="openDashboard()">
             </div>
         </div>
     </nav>
@@ -160,43 +166,24 @@
             <header class="hero">
                 <div class="hero-text">
                     <h1 data-db="hero_title">Discover the <br><strong>Future of Physics</strong></h1>
-                    <p data-db="hero_desc" style="color:var(--text-sec); font-size:1.1rem; margin-bottom:30px;">
-                        The ultimate platform for engineering students and researchers.
-                    </p>
+                    <p data-db="hero_desc" style="color:var(--text-sec); font-size:1.1rem; margin-bottom:30px;">The ultimate platform for engineering students.</p>
                     <button class="login-btn" style="background:var(--accent); color:white; padding:12px 30px;">Start Now</button>
                 </div>
                 <div class="hero-img">
                     <img id="heroImg" data-img="hero_img" src="hero-main.jpg" onerror="this.src='https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg'">
                 </div>
             </header>
-
             <section class="content-wrapper">
-                <div style="text-align:center; margin-bottom:50px;">
-                    <h2 data-db="proj_head" style="font-size:2rem;">Our Projects</h2>
-                </div>
+                <div style="text-align:center; margin-bottom:50px;"><h2 data-db="proj_head" style="font-size:2rem;">Our Projects</h2></div>
                 <div class="grid">
-                    <div class="card">
-                        <img data-img="p1_img" src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg">
-                        <div class="card-body">
-                            <h3 data-db="p1_t">Line Follower</h3>
-                            <p data-db="p1_d">An autonomous robot that follows a black line using IR sensors.</p>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <img data-img="p2_img" src="https://img.freepik.com/free-photo/electrical-components-circuit-board_23-2148290352.jpg">
-                        <div class="card-body">
-                            <h3 data-db="p2_t">Smart Circuit</h3>
-                            <p data-db="p2_d">IoT based home automation system controlled via mobile app.</p>
-                        </div>
-                    </div>
+                    <div class="card"><img data-img="p1_img" src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg"><div class="card-body"><h3 data-db="p1_t">Line Follower</h3><p data-db="p1_d">Autonomous robot tracking pathways.</p></div></div>
+                    <div class="card"><img data-img="p2_img" src="https://img.freepik.com/free-photo/electrical-components-circuit-board_23-2148290352.jpg"><div class="card-body"><h3 data-db="p2_t">Smart Circuit</h3><p data-db="p2_d">IoT based home automation.</p></div></div>
                 </div>
             </section>
         </div>
-        
         <div id="other-pages" class="page-sec" style="display:none; text-align:center; padding:100px 20px;">
             <i class="fas fa-flask" style="font-size:4rem; color:var(--text-sec); margin-bottom:20px;"></i>
             <h2 data-db="soon_txt">Content Coming Soon</h2>
-            <p>We are currently updating this section.</p>
         </div>
     </div>
 
@@ -204,14 +191,8 @@
         <div style="display:flex; flex-direction:column; align-items:center; gap:15px;">
             <h3 data-db="foot_title">Physiatić Hub</h3>
             <p data-db="foot_sub">Empowering engineers since 2025</p>
-            <div style="display:flex; gap:20px; font-size:1.5rem;">
-                <i class="fab fa-facebook" style="cursor:pointer;"></i>
-                <i class="fab fa-linkedin" style="cursor:pointer;"></i>
-                <i class="fab fa-github" style="cursor:pointer;"></i>
-            </div>
-            <div style="border-top:1px solid #444; width:100%; padding-top:10px; opacity:0.7; font-size:0.9rem;">
-                Developed by <span data-db="dev_name" style="color:var(--accent); font-weight:bold;">Eng. Adham Sayed</span>
-            </div>
+            <div style="display:flex; gap:20px; font-size:1.5rem;"><i class="fab fa-facebook"></i><i class="fab fa-linkedin"></i><i class="fab fa-github"></i></div>
+            <div style="border-top:1px solid #444; width:100%; padding-top:10px; opacity:0.7; font-size:0.9rem;">Developed by <span data-db="dev_name" style="color:var(--accent); font-weight:bold;">Eng. Adham Sayed</span></div>
         </div>
     </footer>
 
@@ -219,14 +200,11 @@
         <div style="background:var(--bg-card); padding:40px; border-radius:16px; width:350px; text-align:center;">
             <i class="fas fa-times" onclick="document.getElementById('login-modal').style.display='none'" style="float:right; cursor:pointer;"></i>
             <h2 style="margin-bottom:20px;">Admin Access</h2>
-            
             <input type="text" id="u" placeholder="Username" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:5px;">
-            
             <div class="pass-container">
                 <input type="password" id="p" placeholder="Password" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd; border-radius:5px;">
                 <i class="fas fa-eye pass-eye" onclick="togglePass()"></i>
             </div>
-            
             <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px; cursor:pointer;">Login</button>
         </div>
     </div>
@@ -236,66 +214,74 @@
             <div class="sidebar">
                 <h3>Admin Panel</h3>
                 <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-edit"></i> Edit Content</div>
+                <div class="sb-btn" id="styleTabBtn" onclick="switchTab('style')" style="display:none;"><i class="fas fa-font"></i> <b>Style Editor</b></div>
                 <div class="sb-btn" onclick="switchTab('profile')"><i class="fas fa-user-circle"></i> My Profile</div>
                 <div class="sb-btn" onclick="switchTab('theme')"><i class="fas fa-palette"></i> Theme</div>
                 <div class="sb-btn" id="superTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users"></i> Team</div>
-                
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; background:#c0392b; color:white;">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </div>
+                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; background:#c0392b; color:white; font-weight:bold;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
             </div>
-            
             <div class="dash-main">
                 <div id="tab-content" class="dash-section active-sec">
                     <h2>Edit Website</h2>
-                    <p>Change text, images, and links live.</p>
-                    <button onclick="enableEdit()" style="padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">
-                        <i class="fas fa-pen"></i> Enable Live Edit
-                    </button>
-                    <p style="margin-top:20px; color:#666; font-size:0.9rem;">* Note: Footer is protected for Super Admins only.</p>
+                    <p>Click "Enable Live Edit". Then click any Text or Image on the site.</p>
+                    <button onclick="enableEdit()" style="padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">Enable Live Edit</button>
+                    <p style="margin-top:10px; color:#666;">Once enabled, the dashboard closes. Click items on the site to edit them.</p>
+                </div>
+
+                <div id="tab-style" class="dash-section">
+                    <h2>Style Editor</h2>
+                    <p>Editing: <b id="editingElementName" style="color:var(--accent);">None</b></p>
+                    
+                    <div class="setting-row">
+                        <label>Text Content</label>
+                        <input type="text" id="styleTextVal" oninput="applyLiveStyle('text')">
+                    </div>
+                    
+                    <div class="setting-row">
+                        <label>Text Color</label>
+                        <input type="color" id="styleColorVal" oninput="applyLiveStyle('color')">
+                    </div>
+
+                    <div class="setting-row">
+                        <label>Font Size (px)</label>
+                        <input type="number" id="styleSizeVal" oninput="applyLiveStyle('size')">
+                    </div>
+                    
+                    <button onclick="closeDashboard()" style="background:#636e72; color:white; border:none; padding:8px 15px; border-radius:5px; margin-top:10px;">Back to Site</button>
                 </div>
 
                 <div id="tab-profile" class="dash-section">
                     <h2>My Profile</h2>
-                    <div class="setting-row">
-                        <label>Profile Picture URL</label>
-                        <input type="text" id="myProfilePicInput" placeholder="https://..." onchange="document.getElementById('previewPic').src = this.value">
-                        <img id="previewPic" src="" style="width:60px; height:60px; border-radius:50%; margin-top:10px; object-fit:cover;">
-                    </div>
-                    <button onclick="updateProfile()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px; cursor:pointer;">Update Profile</button>
+                    <div class="setting-row"><label>Profile Picture</label><p style="font-size:0.8rem;">Click to upload.</p><img id="previewPic" src="" class="admin-pic-small" style="width:80px; height:80px; cursor:pointer; border:2px dashed var(--accent);" onclick="triggerProfileUpload()"></div>
                 </div>
 
                 <div id="tab-theme" class="dash-section">
                     <h2>Design</h2>
+                    <div class="setting-row"><label>Main Color</label> <input type="color" id="accentColorPicker" value="#2980b9"></div>
+                    <div class="setting-row"><label>Image Fit</label><select id="imgFitSelect"><option value="cover">Cover</option><option value="contain">Contain</option></select></div>
+                    
                     <div class="setting-row">
-                        <label>Main Color</label> <input type="color" id="accentColorPicker" value="#2980b9">
+                        <label>Light Mode Icon</label>
+                        <input type="text" id="iconLightInput" placeholder="fas fa-lightbulb">
                     </div>
                     <div class="setting-row">
-                        <label>Image Fit</label>
-                        <select id="imgFitSelect"><option value="cover">Cover</option><option value="contain">Contain</option></select>
+                        <label>Dark Mode Icon</label>
+                        <input type="text" id="iconDarkInput" placeholder="fas fa-atom">
                     </div>
+                    
                     <button onclick="saveThemeSettings()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Save Theme</button>
                 </div>
 
                 <div id="tab-team" class="dash-section">
                     <h2>Team Manager</h2>
-                    <div class="setting-row">
-                        <input id="newAdmin" placeholder="New Username" style="width:30%;">
-                        <input id="newPass" placeholder="Password" style="width:30%;">
-                        <button onclick="addAdmin()" style="width:30%; background:var(--accent); color:white; border:none; padding:10px;">Add Admin</button>
-                    </div>
-                    
-                    <h3>Current Admins</h3>
-                    <table class="team-table">
-                        <thead><tr><th>Img</th><th>Name</th><th>Pass</th><th>Role</th></tr></thead>
-                        <tbody id="teamList"></tbody>
-                    </table>
+                    <div class="setting-row"><input id="newAdmin" placeholder="New Username" style="width:30%;"><input id="newPass" placeholder="Password" style="width:30%;"><button onclick="addAdmin()" style="width:30%; background:var(--accent); color:white; border:none; padding:10px;">Add</button></div>
+                    <table class="team-table"><thead><tr><th>Img</th><th>Name</th><th>Pass</th><th>Role</th></tr></thead><tbody id="teamList"></tbody></table>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="saveBtn" onclick="saveData()">Save Content Changes</button>
+    <button id="saveBtn" onclick="saveData()">Save Changes</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -314,188 +300,252 @@
         const db = getFirestore(app);
         
         let currentUser = JSON.parse(localStorage.getItem('user'));
+        let targetImgElement = null;
+        let selectedElement = null;
+        let isProfileUpload = false;
 
-        // --- 1. CONFIG & ANIMATION ---
+        // --- GLOBAL VARIABLES FOR ICONS ---
+        window.iconLight = 'fas fa-lightbulb';
+        window.iconDark = 'fas fa-atom';
+
         async function loadConfig() {
-            // Check for intro trigger
-            if(!sessionStorage.getItem('introPlayed')) {
-                playAnimation('Welcome', 'Engineer');
-                sessionStorage.setItem('introPlayed', 'true');
-            }
-
+            if(!sessionStorage.getItem('introPlayed')) { playAnimation('Welcome', 'Engineer'); sessionStorage.setItem('introPlayed', 'true'); }
             const docSnap = await getDoc(doc(db, "settings", "config"));
             if(docSnap.exists()) {
                 const data = docSnap.data();
                 if(data.accent) document.documentElement.style.setProperty('--accent', data.accent);
                 if(data.imgFit) document.documentElement.style.setProperty('--img-fit', data.imgFit);
-                
                 document.getElementById('accentColorPicker').value = data.accent || '#2980b9';
                 document.getElementById('imgFitSelect').value = data.imgFit || 'cover';
+                
+                // Load Icons
+                if(data.iconLight) window.iconLight = data.iconLight;
+                if(data.iconDark) window.iconDark = data.iconDark;
+                document.getElementById('iconLightInput').value = window.iconLight;
+                document.getElementById('iconDarkInput').value = window.iconDark;
+                
+                updateIconDisplay();
             }
         }
         loadConfig();
 
-        // --- 2. AUTH ---
         window.login = async function() {
             const u = document.getElementById('u').value.trim();
             const p = document.getElementById('p').value.trim();
             const docRef = doc(db, "settings", "admins");
-            
             const snap = await getDoc(docRef);
             if(!snap.exists()) await setDoc(docRef, { list: [{u:'Adham', p:'20250003', role:'super_admin', img:''}] });
-
             const list = (await getDoc(docRef)).data().list;
             const found = list.find(a => a.u === u && a.p === p);
-
-            if(found) {
-                localStorage.setItem('user', JSON.stringify(found));
-                location.reload();
-            } else { alert("Wrong Credentials!"); }
+            if(found) { localStorage.setItem('user', JSON.stringify(found)); location.reload(); } else { alert("Wrong Credentials!"); }
         }
 
         window.performLogout = function() {
             document.getElementById('admin-panel').style.display = 'none';
-            // Goodbye Animation
             playAnimation('Goodbye', 'Engineer, Enjoy your day');
-            setTimeout(() => {
-                localStorage.removeItem('user');
-                sessionStorage.removeItem('introPlayed');
-                location.reload();
-            }, 3500); // Wait for animation
+            setTimeout(() => { localStorage.removeItem('user'); sessionStorage.removeItem('introPlayed'); location.reload(); }, 3500); 
         }
 
-        window.togglePass = function() {
-            const inp = document.getElementById('p');
-            inp.type = inp.type === 'password' ? 'text' : 'password';
-        }
+        window.togglePass = function() { const inp = document.getElementById('p'); inp.type = inp.type === 'password' ? 'text' : 'password'; }
 
-        // --- 3. TEAM & PROFILE ---
         window.addAdmin = async function() {
             const u = document.getElementById('newAdmin').value;
             const p = document.getElementById('newPass').value;
-            // Default placeholder image
-            await updateDoc(doc(db, "settings", "admins"), { 
-                list: arrayUnion({u, p, role:'admin', img:'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}) 
-            });
+            await updateDoc(doc(db, "settings", "admins"), { list: arrayUnion({u, p, role:'admin', img:''}) });
             alert("Added!"); loadTeamList();
-        }
-
-        window.updateProfile = async function() {
-            const newImg = document.getElementById('myProfilePicInput').value;
-            if(!newImg) return;
-
-            const docRef = doc(db, "settings", "admins");
-            const snap = await getDoc(docRef);
-            let list = snap.data().list;
-            
-            // Find me and update
-            const idx = list.findIndex(a => a.u === currentUser.u);
-            if(idx !== -1) {
-                list[idx].img = newImg;
-                await setDoc(docRef, { list: list }); // Save entire list
-                
-                // Update Local & UI
-                currentUser.img = newImg;
-                localStorage.setItem('user', JSON.stringify(currentUser));
-                document.getElementById('myNavAvatar').src = newImg;
-                alert("Profile Updated!");
-            }
         }
 
         async function loadTeamList() {
             const snap = await getDoc(doc(db, "settings", "admins"));
             const list = snap.data().list || [];
-            document.getElementById('teamList').innerHTML = list.map(a => `
-                <tr>
-                    <td><img src="${a.img || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" class="admin-pic-small"></td>
-                    <td><b>${a.u}</b></td>
-                    <td style="font-family:monospace; color:#e74c3c;">${a.p}</td>
-                    <td>${a.role}</td>
-                </tr>
-            `).join('');
+            document.getElementById('teamList').innerHTML = list.map(a => `<tr><td><img src="${a.img || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'}" class="admin-pic-small"></td><td><b>${a.u}</b></td><td style="color:#e74c3c;">${a.p}</td><td>${a.role}</td></tr>`).join('');
         }
 
-        // --- 4. DATA SAVING & PROTECTION ---
+        // --- COMPRESSION & UPLOAD ---
+        const fileInput = document.getElementById('imgUploadInput');
+        
         window.enableEdit = function() {
             document.getElementById('admin-panel').style.display='none';
             document.body.classList.add('editing');
             document.getElementById('saveBtn').style.display='block';
             
+            // Text Elements Logic
             document.querySelectorAll('[data-db]').forEach(el => { 
-                // PROTECTION LOGIC: If not super admin, don't allow editing footer
-                if(currentUser.role !== 'super_admin') {
-                    if(el.closest('footer')) return; // Skip footer elements
-                    if(el.getAttribute('data-db').includes('dev')) return; // Skip dev name
-                }
-                el.contentEditable="true"; el.classList.add('editable'); 
+                if(currentUser.role !== 'super_admin' && (el.closest('footer') || el.getAttribute('data-db').includes('dev'))) return;
+                
+                el.classList.add('editable'); 
+                el.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openStyleEditor(el);
+                };
             });
             
+            // Image Elements Logic
             document.querySelectorAll('[data-img]').forEach(el => { 
-                el.classList.add('editable-img'); 
-                el.onclick = (e) => { e.preventDefault(); let u = prompt("Image URL:", el.src); if(u) el.src = u; };
+                el.classList.add('editable-img'); el.title = "Click to Upload";
+                el.onclick = (e) => { e.preventDefault(); targetImgElement = el; isProfileUpload = false; fileInput.click(); };
             });
         }
+        
+        // --- NEW STYLE EDITOR LOGIC ---
+        window.openStyleEditor = function(element) {
+            selectedElement = element;
+            
+            // Remove active class from others
+            document.querySelectorAll('.editable-active').forEach(el => el.classList.remove('editable-active'));
+            selectedElement.classList.add('editable-active');
+
+            // Open Dashboard to Style Tab
+            document.getElementById('admin-panel').style.display = 'flex';
+            document.getElementById('styleTabBtn').style.display = 'flex';
+            window.switchTab('style');
+            
+            // Populate Inputs
+            document.getElementById('editingElementName').innerText = element.getAttribute('data-db');
+            document.getElementById('styleTextVal').value = element.innerHTML;
+            
+            // Get computed styles
+            const compStyles = window.getComputedStyle(element);
+            
+            // Color (rgb to hex for input)
+            const rgb = compStyles.color.match(/\d+/g);
+            if(rgb) {
+                const hex = "#" + ((1 << 24) + (parseInt(rgb[0]) << 16) + (parseInt(rgb[1]) << 8) + parseInt(rgb[2])).toString(16).slice(1);
+                document.getElementById('styleColorVal').value = hex;
+            }
+            
+            // Size
+            document.getElementById('styleSizeVal').value = parseInt(compStyles.fontSize);
+        }
+
+        window.applyLiveStyle = function(type) {
+            if(!selectedElement) return;
+            
+            if(type === 'text') selectedElement.innerHTML = document.getElementById('styleTextVal').value;
+            if(type === 'color') selectedElement.style.color = document.getElementById('styleColorVal').value;
+            if(type === 'size') selectedElement.style.fontSize = document.getElementById('styleSizeVal').value + 'px';
+        }
+
+        window.triggerProfileUpload = function() { isProfileUpload = true; fileInput.click(); }
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (event) => {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600;
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const base64String = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    if(isProfileUpload) {
+                        const docRef = doc(db, "settings", "admins");
+                        getDoc(docRef).then(snap => {
+                            let list = snap.data().list;
+                            const idx = list.findIndex(a => a.u === currentUser.u);
+                            if(idx !== -1) {
+                                list[idx].img = base64String;
+                                setDoc(docRef, { list: list });
+                                currentUser.img = base64String;
+                                localStorage.setItem('user', JSON.stringify(currentUser));
+                                document.getElementById('myNavAvatar').src = base64String;
+                                document.getElementById('previewPic').src = base64String;
+                                alert("Profile Picture Updated!");
+                            }
+                        });
+                    } else if(targetImgElement) {
+                        targetImgElement.src = base64String;
+                    }
+                }
+            }
+        });
 
         window.saveData = async function() {
             let payload = {};
-            document.querySelectorAll('[data-db]').forEach(el => payload[el.getAttribute('data-db')] = el.innerHTML);
+            // Save Content & Styles
+            document.querySelectorAll('[data-db]').forEach(el => {
+                payload[el.getAttribute('data-db')] = el.innerHTML;
+                // Save inline styles too (color, size)
+                if(el.style.color) payload[el.getAttribute('data-db') + '_color'] = el.style.color;
+                if(el.style.fontSize) payload[el.getAttribute('data-db') + '_size'] = el.style.fontSize;
+            });
             document.querySelectorAll('[data-img]').forEach(el => payload[el.getAttribute('data-img')] = el.src);
+            
             await setDoc(doc(db, "site_data", "content"), payload, {merge:true});
-            alert("Content Saved!"); location.reload();
+            alert("Changes Saved!"); location.reload();
         }
 
         window.saveThemeSettings = async function() {
             const color = document.getElementById('accentColorPicker').value;
             const fit = document.getElementById('imgFitSelect').value;
-            await setDoc(doc(db, "settings", "config"), { accent: color, imgFit: fit }, {merge: true});
+            const iL = document.getElementById('iconLightInput').value;
+            const iD = document.getElementById('iconDarkInput').value;
+            
+            await setDoc(doc(db, "settings", "config"), { 
+                accent: color, 
+                imgFit: fit,
+                iconLight: iL,
+                iconDark: iD
+            }, {merge: true});
             alert("Theme Saved!"); location.reload();
         }
 
-        // --- 5. REALTIME ---
         onSnapshot(doc(db, "site_data", "content"), (doc) => {
             if(doc.exists() && !document.body.classList.contains('editing')) {
                 const data = doc.data();
-                document.querySelectorAll('[data-db]').forEach(el => { if(data[el.getAttribute('data-db')]) el.innerHTML = data[el.getAttribute('data-db')]; });
+                document.querySelectorAll('[data-db]').forEach(el => { 
+                    const key = el.getAttribute('data-db');
+                    if(data[key]) el.innerHTML = data[key];
+                    // Load Styles
+                    if(data[key + '_color']) el.style.color = data[key + '_color'];
+                    if(data[key + '_size']) el.style.fontSize = data[key + '_size'];
+                });
                 document.querySelectorAll('[data-img]').forEach(el => { if(data[el.getAttribute('data-img')]) el.src = data[el.getAttribute('data-img')]; });
             }
         });
 
-        // INIT UI
         if(currentUser) {
             document.getElementById('loggedOutUI').style.display='none';
             document.getElementById('loggedInUI').style.display='flex';
-            if(currentUser.img) document.getElementById('myNavAvatar').src = currentUser.img;
-            
-            if(currentUser.role === 'super_admin') { 
-                document.getElementById('superTab').style.display='flex'; 
-                loadTeamList(); 
-            }
+            if(currentUser.img) { document.getElementById('myNavAvatar').src = currentUser.img; document.getElementById('previewPic').src = currentUser.img; }
+            if(currentUser.role === 'super_admin') { document.getElementById('superTab').style.display='flex'; loadTeamList(); }
         }
 
-        // --- Helper: Animation Trigger ---
         function playAnimation(line1, line2) {
             const overlay = document.getElementById('intro-overlay');
             const txt = document.getElementById('introMsg');
             txt.innerHTML = `${line1} <br> <span>${line2}</span>`;
-            
-            overlay.classList.remove('active');
-            void overlay.offsetWidth; // trigger reflow
-            overlay.classList.add('active');
-            
-            // Remove after 3.5s
-            setTimeout(() => {
-                overlay.classList.remove('active');
-            }, 3500);
+            overlay.classList.remove('active'); void overlay.offsetWidth; overlay.classList.add('active');
+            setTimeout(() => { overlay.classList.remove('active'); }, 3500);
         }
-
     </script>
 
     <script>
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+        // Updated Icon Logic
+        function updateIconDisplay() {
+            const icon = document.getElementById('themeIcon');
+            const isDark = document.body.classList.contains('dark-mode');
+            icon.className = isDark ? window.iconDark : window.iconLight;
         }
+
+        function toggleTheme() { 
+            document.body.classList.toggle('dark-mode'); 
+            updateIconDisplay();
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); 
+        }
+        
         if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+        // Initial icon update after short delay to ensure config loaded
+        setTimeout(updateIconDisplay, 1000);
 
         function route(p) {
             document.querySelectorAll('.page-sec').forEach(s => s.style.display='none');
@@ -506,11 +556,21 @@
         }
 
         function openLogin() { document.getElementById('login-modal').style.display='flex'; }
-        function openDashboard() { document.getElementById('admin-panel').style.display='flex'; }
-        function switchTab(t) {
-            document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-sec'));
-            document.getElementById('tab-'+t).classList.add('active-sec');
+        
+        function openDashboard() { 
+            document.getElementById('admin-panel').style.display='flex'; 
+            if(!document.body.classList.contains('editing')) {
+                 window.switchTab('content'); // Default tab
+                 document.getElementById('styleTabBtn').style.display='none';
+            }
+        }
+        
+        function closeDashboard() { document.getElementById('admin-panel').style.display='none'; }
+        
+        function switchTab(t) { 
+            document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-sec')); 
+            document.getElementById('tab-'+t).classList.add('active-sec'); 
         }
     </script>
 </body>
-                            </html>
+                        </html>
