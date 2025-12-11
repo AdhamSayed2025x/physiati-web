@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- General & Variables --- */
+        /* --- 1. General & Variables --- */
         :root { 
             --primary: #2d3436;      
             --accent: #2980b9;       
             --bg-light: #ffffff; 
             --bg-soft: #f9fbfd;
             --nav-hover: #eaf2f8;
-            --glass: rgba(255, 255, 255, 0.95);
+            --glass: rgba(255, 255, 255, 0.98);
         }
-        * { box-sizing: border-box; outline: none; }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { 
             margin: 0; font-family: 'Poppins', sans-serif; 
             background: var(--bg-light); color: var(--primary); 
@@ -33,75 +33,87 @@
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
 
-        /* --- Navigation --- */
+        /* --- 2. Navigation (Responsive) --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 8%; background: var(--glass); backdrop-filter: blur(10px);
             position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+            flex-wrap: wrap; /* Important for mobile */
         }
-        .logo { font-size: 1.5rem; font-weight: 800; color: #2c3e50; cursor: pointer; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #2c3e50; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        
         .nav-links { display: flex; gap: 10px; align-items: center; }
         .nav-link {
             text-decoration: none; color: #636e72; font-weight: 500;
-            padding: 8px 16px; border-radius: 20px; transition: 0.3s; cursor: pointer;
+            padding: 8px 16px; border-radius: 20px; transition: 0.3s; cursor: pointer; white-space: nowrap;
         }
         .nav-link:hover, .nav-link.active-page { background: var(--nav-hover); color: var(--accent); }
 
         /* User Controls */
-        .login-btn { border: 2px solid var(--accent); color: var(--accent); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .login-btn { border: 2px solid var(--accent); color: var(--accent); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
         .login-btn:hover { background: var(--accent); color: white; }
         
         .user-badge { display: none; align-items: center; gap: 10px; }
-        .admin-tag { background: #e74c3c; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; vertical-align: middle; }
+        .admin-tag { background: #e74c3c; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px; vertical-align: middle; }
 
-        /* --- Content Sections --- */
-        .hero { display: flex; align-items: center; justify-content: space-between; padding: 60px 8%; min-height: 85vh; }
+        /* --- 3. Hero Section (Responsive) --- */
+        .hero { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 40px 8%; min-height: 85vh; gap: 30px;
+        }
+        .hero-text { flex: 1; }
         .hero-text h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px; color: #1e272e; }
-        .hero-img img { width: 100%; max-width: 600px; transition: 0.3s; cursor: default; }
+        .hero-img { flex: 1; display: flex; justify-content: center; }
+        .hero-img img { width: 100%; max-width: 600px; height: auto; transition: 0.3s; cursor: default; border-radius: 10px; }
         .hero-img img:hover { transform: scale(1.02); }
 
+        /* --- 4. Projects Grid --- */
         .projects-wrapper { padding: 60px 8%; background: var(--bg-soft); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 30px; 
+        }
         .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.4s; }
         .card:hover { transform: translateY(-10px); }
         .card img { width: 100%; height: 180px; object-fit: cover; }
         .card-body { padding: 25px; }
-        .card h3 { color: var(--accent); margin: 0 0 10px; }
+        .card h3 { color: var(--accent); margin: 0 0 10px; font-size: 1.2rem; }
 
-        /* --- Login Modal --- */
+        /* --- 5. Login Modal (Responsive) --- */
         #login-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 2000;
             display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px); padding: 20px;
         }
         .modal-box {
-            background: white; padding: 40px; border-radius: 20px; width: 350px;
-            text-align: center; position: relative; animation: fadeUp 0.3s;
+            background: white; padding: 40px; border-radius: 20px; width: 100%; max-width: 400px;
+            text-align: center; position: relative; animation: fadeUp 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
-        .modal-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .modal-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
         .pass-wrapper { position: relative; }
         .toggle-pass { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; }
-        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.2rem; }
+        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.5rem; color: #333; }
 
-        /* --- Admin Dashboard --- */
+        /* --- 6. Admin Dashboard (Fully Responsive) --- */
         #admin-panel {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); z-index: 3000;
-            display: none; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.85); z-index: 3000;
+            display: none; justify-content: center; align-items: center; padding: 20px;
         }
         .dash-board {
-            background: white; width: 90%; max-width: 1000px; height: 700px;
-            border-radius: 20px; display: flex; overflow: hidden;
+            background: white; width: 100%; max-width: 1000px; height: 80vh;
+            border-radius: 20px; display: flex; overflow: hidden; position: relative;
         }
         .sidebar { width: 250px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
         .sb-btn { padding: 15px; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
         .sb-btn:hover, .sb-btn.active { background: var(--accent); }
         
-        .dash-main { flex: 1; padding: 40px; background: #f4f6f8; overflow-y: auto; }
+        .dash-main { flex: 1; padding: 30px; background: #f4f6f8; overflow-y: auto; }
         .dash-section { display: none; }
-        .dash-section.active-sec { display: block; }
+        .dash-section.active-sec { display: block; animation: fadeUp 0.3s; }
         
         /* Edit Mode Styles */
         .editable { border: 2px dashed #e74c3c; background: rgba(231, 76, 60, 0.05); cursor: text; }
@@ -113,17 +125,54 @@
             font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
             display: none; z-index: 4000;
         }
-        
-        /* Team Manager Table */
-        .team-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 10px; overflow: hidden; }
-        .team-table th, .team-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        .team-table th { background: #eee; }
+
+        /* --- 7. MEDIA QUERIES (THE MAGIC) --- */
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero-img img { max-width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            /* Nav */
+            nav { padding: 15px 5%; flex-direction: column; align-items: flex-start; gap: 15px; }
+            .logo { width: 100%; justify-content: space-between; }
+            /* Add user badge to top row next to logo on mobile */
+            #loggedInUI, #loggedOutUI { position: absolute; top: 15px; right: 5%; }
+            
+            .nav-links { 
+                width: 100%; overflow-x: auto; padding-bottom: 5px; 
+                justify-content: flex-start; /* Left align scroll */
+            }
+            .nav-links::-webkit-scrollbar { height: 0px; background: transparent; } /* Hide scrollbar */
+
+            /* Hero */
+            .hero { flex-direction: column; text-align: center; padding-top: 20px; min-height: auto; padding-bottom: 60px; }
+            .hero-text { padding: 0; order: 1; } /* Text first */
+            .hero-img { order: 2; margin-top: 20px; }
+            .hero h1 { font-size: 2.2rem; }
+            
+            /* Admin Panel Mobile */
+            .dash-board { flex-direction: column; height: 90vh; }
+            .sidebar { 
+                width: 100%; height: auto; flex-direction: row; 
+                overflow-x: auto; padding: 10px; align-items: center; 
+                border-bottom: 1px solid #ddd;
+            }
+            .sb-btn { padding: 10px; font-size: 0.9rem; white-space: nowrap; }
+            .dash-main { padding: 20px; }
+        }
+
+        /* Table Responsive */
+        .table-responsive { overflow-x: auto; }
+        .team-table { width: 100%; border-collapse: collapse; min-width: 500px; } /* Ensure min width for scroll */
+        .team-table th, .team-table td { padding: 12px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo" onclick="route('home')"><i class="fas fa-atom"></i> Physiatić</div>
+        
         <div class="nav-links">
             <a onclick="route('home')" class="nav-link active-page">Home</a>
             <a onclick="route('topics')" class="nav-link">Topics</a>
@@ -132,15 +181,15 @@
         </div>
         
         <div id="loggedOutUI">
-            <button class="login-btn" onclick="openLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
+            <button class="login-btn" onclick="openLogin()"><i class="fas fa-sign-in-alt"></i></button>
         </div>
 
         <div id="loggedInUI" class="user-badge">
-            <span id="userGreeting" style="font-weight:600;"></span>
-            <button onclick="openDashboard()" style="background:var(--primary); color:white; border:none; padding:5px 15px; border-radius:15px; cursor:pointer;">
-                <i class="fas fa-cog"></i> Dashboard
+            <span id="userGreeting" style="font-weight:600; font-size:0.9rem;"></span>
+            <button onclick="openDashboard()" style="background:var(--primary); color:white; border:none; width:30px; height:30px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                <i class="fas fa-cog"></i>
             </button>
-            <i class="fas fa-power-off" onclick="performLogout()" style="color:red; cursor:pointer; margin-left:5px;" title="Logout"></i>
+            <i class="fas fa-power-off" onclick="performLogout()" style="color:red; cursor:pointer; font-size:1.1rem;" title="Logout"></i>
         </div>
     </nav>
 
@@ -152,7 +201,7 @@
                     <p data-db="hero_desc" style="color:#636e72; font-size:1.1rem; margin-bottom:30px;">
                         The ultimate hub for engineering projects and research.
                     </p>
-                    <button class="login-btn" style="background:var(--accent); color:white;">Start Exploring</button>
+                    <button class="login-btn" style="background:var(--accent); color:white; padding: 12px 30px; font-size: 1rem;">Start Exploring</button>
                 </div>
                 <div class="hero-img animate-up delay-1">
                     <img id="mainHeroImg" data-img="hero_img" src="hero-main.jpg" onerror="this.src='https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg'" alt="Cover">
@@ -182,7 +231,7 @@
             </section>
         </div>
 
-        <div id="other-pages" class="page-sec" style="display:none; text-align:center; padding:100px;">
+        <div id="other-pages" class="page-sec" style="display:none; text-align:center; padding:100px 20px;">
             <i class="fas fa-rocket" style="font-size:4rem; color:#ccc;"></i>
             <h2 style="margin-top:20px;">Coming Soon</h2>
             <p>We are building this section.</p>
@@ -198,7 +247,7 @@
                 <input type="password" id="loginPass" placeholder="Password">
                 <i class="fas fa-eye toggle-pass" onclick="togglePass()"></i>
             </div>
-            <button onclick="attemptLogin()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:8px; margin-top:10px; cursor:pointer;">Login</button>
+            <button onclick="attemptLogin()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:8px; margin-top:10px; cursor:pointer; font-weight:600;">Login</button>
             <p id="loginError" style="color:red; display:none; margin-top:10px; font-size:0.9rem;">Wrong Credentials!</p>
         </div>
     </div>
@@ -206,10 +255,10 @@
     <div id="admin-panel">
         <div class="dash-board">
             <div class="sidebar">
-                <h3>Control Panel</h3>
+                <h3 style="margin:0; font-size:1.2rem;">Control Panel</h3>
                 <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-pen"></i> Content</div>
-                <div class="sb-btn" id="superAdminTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users"></i> Team Manager</div>
-                <div class="sb-btn" onclick="closeDashboard()" style="margin-top:auto; background:#c0392b;"><i class="fas fa-arrow-left"></i> Back to Site</div>
+                <div class="sb-btn" id="superAdminTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users"></i> Team</div>
+                <div class="sb-btn" onclick="closeDashboard()" style="margin-top:auto; background:#c0392b; justify-self: flex-end;"><i class="fas fa-times"></i> Close</div>
             </div>
             
             <div class="dash-main">
@@ -228,163 +277,186 @@
                     <h2>Manage Admins</h2>
                     <div style="background:white; padding:20px; border-radius:10px; margin-top:20px;">
                         <h4>Add New Admin</h4>
-                        <input type="text" id="newAdminUser" placeholder="Username" style="width:30%; padding:8px;">
-                        <input type="text" id="newAdminPass" placeholder="Password" style="width:30%; padding:8px;">
-                        <button onclick="addNewAdmin()" style="padding:8px 20px; background:var(--accent); color:white; border:none; cursor:pointer;">Add</button>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="text" id="newAdminUser" placeholder="Username" style="flex:1; padding:8px; min-width:120px;">
+                            <input type="text" id="newAdminPass" placeholder="Password" style="flex:1; padding:8px; min-width:120px;">
+                            <button onclick="addNewAdmin()" style="padding:8px 20px; background:var(--accent); color:white; border:none; cursor:pointer; border-radius:4px;">Add</button>
+                        </div>
                     </div>
                     
                     <h4 style="margin-top:30px;">Current Team</h4>
-                    <table class="team-table">
-                        <thead><tr><th>Name</th><th>Role</th><th>Action</th></tr></thead>
-                        <tbody id="adminListBody">
-                            </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="team-table">
+                            <thead><tr><th>Name</th><th>Role</th><th>Action</th></tr></thead>
+                            <tbody id="adminListBody">
+                                </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="saveBtn" onclick="saveChanges()"><i class="fas fa-save"></i> Save Changes</button>
+    <button id="saveBtn" onclick="saveChanges()"><i class="fas fa-save"></i> Save</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+        // ✅ FINAL FIREBASE CONFIG
         const firebaseConfig = {
-            apiKey: "AIzaSyAPTGbfFr2Cdr8d5DGDo_duwVevRxXm1bA",
-            authDomain: "physiatic.firebaseapp.com",
-            projectId: "physiatic",
-            storageBucket: "physiatic.firebasestorage.app",
-            messagingSenderId: "776862019288",
-            appId: "1:776862019288:web:61d1947138a740369bb1ad"
+          apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
+          authDomain: "physiatic-508a1.firebaseapp.com",
+          projectId: "physiatic-508a1",
+          storageBucket: "physiatic-508a1.firebasestorage.app",
+          messagingSenderId: "729031647428",
+          appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- 1. SESSION MANAGEMENT (PERSISTENCE) ---
-        // Check if user is already logged in from LocalStorage
+        // --- 1. SESSION MANAGEMENT ---
         const savedUser = localStorage.getItem('physiatic_user');
         if(savedUser) {
-            const user = JSON.parse(savedUser);
-            setupLoggedInState(user);
+            try {
+                const user = JSON.parse(savedUser);
+                setupLoggedInState(user);
+            } catch(e) { localStorage.removeItem('physiatic_user'); }
         }
 
         // --- 2. AUTH FUNCTIONS ---
         window.attemptLogin = async function() {
-            const u = document.getElementById('loginUser').value;
-            const p = document.getElementById('loginPass').value;
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+            const btn = document.querySelector('#login-modal button');
             const err = document.getElementById('loginError');
             
-            // Get admins from Firebase
-            const docRef = doc(db, "settings", "admins");
-            const docSnap = await getDoc(docRef);
-            
-            let adminList = [];
-            if(docSnap.exists()) {
-                adminList = docSnap.data().list || [];
-            } else {
-                // Initialize DB with Super Admin if empty
-                adminList = [{u: "Adham", p: "20250003", role: "super_admin"}];
-                await setDoc(docRef, { list: adminList });
+            const originalText = btn.innerText;
+            btn.innerText = "Checking...";
+            btn.disabled = true;
+            err.style.display = 'none';
+
+            try {
+                const docRef = doc(db, "settings", "admins");
+                const docSnap = await getDoc(docRef);
+                
+                let adminList = [];
+
+                if(!docSnap.exists()) {
+                    console.log("Creating Super Admin...");
+                    adminList = [{u: "Adham", p: "20250003", role: "super_admin"}];
+                    await setDoc(docRef, { list: adminList });
+                } else {
+                    adminList = docSnap.data().list || [];
+                }
+
+                const found = adminList.find(a => a.u === u && a.p === p);
+
+                if(found) {
+                    localStorage.setItem('physiatic_user', JSON.stringify(found));
+                    setupLoggedInState(found);
+                    closeLogin();
+                    alert(`Welcome Eng. ${found.u} 🚀`);
+                } else {
+                    err.innerText = "Wrong Username or Password!";
+                    err.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("Connection Error. Check your internet.");
             }
 
-            const found = adminList.find(a => a.u === u && a.p === p);
-
-            if(found) {
-                // Save to LocalStorage (Persistence)
-                localStorage.setItem('physiatic_user', JSON.stringify(found));
-                setupLoggedInState(found);
-                closeLogin();
-            } else {
-                err.style.display = 'block';
-            }
+            btn.innerText = originalText;
+            btn.disabled = false;
         }
 
         function setupLoggedInState(user) {
             document.getElementById('loggedOutUI').style.display = 'none';
             document.getElementById('loggedInUI').style.display = 'flex';
-            document.getElementById('userGreeting').innerHTML = 
-                `Welcome Eng. ${user.u} ${user.role==='super_admin' ? '<span class="admin-tag">Super Admin</span>' : ''}`;
             
-            // Show Team Tab only for Super Admin
+            // Mobile Optimization for greeting: Shorten if needed
+            const displayName = user.u.length > 8 ? user.u.substring(0,6)+'..' : user.u;
+            document.getElementById('userGreeting').innerHTML = 
+                `Hi, ${displayName} ${user.role==='super_admin' ? '<span class="admin-tag">Super</span>' : ''}`;
+            
             if(user.role === 'super_admin') {
                 document.getElementById('superAdminTab').style.display = 'flex';
             }
         }
 
         window.performLogout = function() {
-            if(confirm("Are you sure you want to logout?")) {
+            if(confirm("Log out?")) {
                 localStorage.removeItem('physiatic_user');
                 location.reload();
             }
         }
 
-        // --- 3. TEAM MANAGER (SUPER ADMIN) ---
+        // --- 3. TEAM MANAGER ---
         window.loadTeam = async function() {
             const docRef = doc(db, "settings", "admins");
             onSnapshot(docRef, (doc) => {
                 if(doc.exists()){
-                    const list = doc.data().list;
+                    const list = doc.data().list || [];
                     const tbody = document.getElementById('adminListBody');
-                    tbody.innerHTML = '';
-                    list.forEach(a => {
-                        const isMe = JSON.parse(localStorage.getItem('physiatic_user')).u === a.u;
-                        tbody.innerHTML += `
-                            <tr>
-                                <td>${a.u}</td>
-                                <td>${a.role === 'super_admin' ? '👑 Super Admin' : 'Admin'}</td>
-                                <td>
-                                    ${a.role !== 'super_admin' ? 
-                                    `<button onclick="deleteAdmin('${a.u}')" style="color:red; border:1px solid red; background:white; cursor:pointer;">Remove</button>` 
-                                    : '---'}
-                                </td>
-                            </tr>
-                        `;
-                    });
+                    if(tbody) {
+                        tbody.innerHTML = '';
+                        list.forEach(a => {
+                            const currentUser = JSON.parse(localStorage.getItem('physiatic_user')).u;
+                            const deleteBtn = (a.u === currentUser || a.role === 'super_admin') ? 
+                                `<span style="color:#ccc;">-</span>` : 
+                                `<button onclick="deleteAdmin('${a.u}')" style="color:red; border:1px solid #ddd; background:#fff; padding:5px; border-radius:5px; cursor:pointer;"><i class="fas fa-trash"></i></button>`;
+                            
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${a.u}</td>
+                                    <td>${a.role === 'super_admin' ? 'Super' : 'Admin'}</td>
+                                    <td>${deleteBtn}</td>
+                                </tr>
+                            `;
+                        });
+                    }
                 }
             });
         }
 
         window.addNewAdmin = async function() {
-            const u = document.getElementById('newAdminUser').value;
-            const p = document.getElementById('newAdminPass').value;
+            const u = document.getElementById('newAdminUser').value.trim();
+            const p = document.getElementById('newAdminPass').value.trim();
             if(!u || !p) return alert("Fill fields!");
 
-            const newAdmin = { u: u, p: p, role: "admin" };
-            await updateDoc(doc(db, "settings", "admins"), {
-                list: arrayUnion(newAdmin)
-            });
-            alert("Admin Added!");
-            document.getElementById('newAdminUser').value = '';
-            document.getElementById('newAdminPass').value = '';
+            try {
+                await updateDoc(doc(db, "settings", "admins"), {
+                    list: arrayUnion({ u: u, p: p, role: "admin" })
+                });
+                alert("Admin Added!");
+                document.getElementById('newAdminUser').value = '';
+                document.getElementById('newAdminPass').value = '';
+            } catch(e) { alert(e.message); }
         }
 
         window.deleteAdmin = async function(username) {
             if(!confirm("Remove this admin?")) return;
-            // Need to fetch full object to remove
             const docRef = doc(db, "settings", "admins");
             const snap = await getDoc(docRef);
-            const list = snap.data().list;
-            const toRemove = list.find(a => a.u === username);
-            
-            if(toRemove) {
-                await updateDoc(docRef, { list: arrayRemove(toRemove) });
+            if(snap.exists()) {
+                const list = snap.data().list;
+                const toRemove = list.find(a => a.u === username);
+                if(toRemove) await updateDoc(docRef, { list: arrayRemove(toRemove) });
             }
         }
 
-        // --- 4. DATA SYNC (TEXT & IMAGES) ---
+        // --- 4. DATA SYNC ---
         const contentRef = doc(db, "site_data", "main_content");
         
         onSnapshot(contentRef, (docSnap) => {
             if (docSnap.exists() && !document.body.classList.contains('editing-mode')) {
                 const data = docSnap.data();
-                // Update Text
                 document.querySelectorAll('[data-db]').forEach(el => {
                     const key = el.getAttribute('data-db');
                     if(data[key]) el.innerHTML = data[key];
                 });
-                // Update Images
                 document.querySelectorAll('[data-img]').forEach(el => {
                     const key = el.getAttribute('data-img');
                     if(data[key]) el.src = data[key];
@@ -394,48 +466,43 @@
 
         window.saveChanges = async function() {
             const btn = document.getElementById('saveBtn');
-            btn.innerHTML = 'Saving...';
+            btn.innerHTML = '...';
             
             let payload = {};
-            // Gather Text
             document.querySelectorAll('[data-db]').forEach(el => {
                 payload[el.getAttribute('data-db')] = el.innerHTML;
             });
-            // Gather Images
             document.querySelectorAll('[data-img]').forEach(el => {
                 payload[el.getAttribute('data-img')] = el.getAttribute('src');
             });
 
             try {
                 await setDoc(contentRef, payload, {merge: true});
-                alert("Saved & Published! 🚀");
+                alert("Saved! 🚀");
                 disableLiveEdit();
             } catch(e) { alert("Error: " + e.message); }
-            btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            btn.innerHTML = '<i class="fas fa-save"></i> Save';
         }
 
-        // --- Expose functions to window for onclick ---
         if(localStorage.getItem('physiatic_user')) {
              const u = JSON.parse(localStorage.getItem('physiatic_user'));
-             if(u.role === 'super_admin') loadTeam();
+             if(u.role === 'super_admin') window.loadTeam();
         }
     </script>
 
     <script>
-        // UI Navigation
         function route(page) {
             document.querySelectorAll('.page-sec').forEach(d => d.style.display = 'none');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
             
             if(page === 'home') {
                 document.getElementById('home').style.display = 'block';
-                document.querySelector('.nav-link').classList.add('active-page'); // highlight home
+                document.querySelector('.nav-link').classList.add('active-page'); 
             } else {
                 document.getElementById('other-pages').style.display = 'block';
             }
         }
 
-        // Login UI
         function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
         function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
         function togglePass() {
@@ -445,36 +512,30 @@
             else { inp.type = "password"; icon.classList.add('fa-eye'); icon.classList.remove('fa-eye-slash'); }
         }
 
-        // Dashboard
         function openDashboard() { 
             document.getElementById('admin-panel').style.display = 'flex'; 
-            // Load team if super admin
             const u = JSON.parse(localStorage.getItem('physiatic_user'));
-            if(u.role === 'super_admin') window.loadTeam();
+            if(u && u.role === 'super_admin') window.loadTeam();
         }
         function closeDashboard() { document.getElementById('admin-panel').style.display = 'none'; }
         
         function switchTab(tab) {
             document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-sec'));
             document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
-            
             document.getElementById('tab-'+tab).classList.add('active-sec');
             event.currentTarget.classList.add('active');
         }
 
-        // EDIT MODE
         function enableLiveEdit() {
             closeDashboard();
             document.body.classList.add('editing-mode');
             document.getElementById('saveBtn').style.display = 'block';
             
-            // Text Editable
             document.querySelectorAll('[data-db]').forEach(el => {
                 el.contentEditable = "true";
                 el.classList.add('editable');
             });
 
-            // Image Editable
             document.querySelectorAll('[data-img]').forEach(el => {
                 el.classList.add('editable-img');
                 el.onclick = function(e) {
@@ -484,8 +545,7 @@
                     if(newUrl) el.src = newUrl;
                 }
             });
-
-            alert("✏️ Live Edit ON\n- Click text to type.\n- Click images to change URL.");
+            alert("Editing Mode ON");
         }
 
         function disableLiveEdit() {
