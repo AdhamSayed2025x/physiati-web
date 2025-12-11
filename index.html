@@ -8,16 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. General & Variables --- */
+        /* --- General & Variables --- */
         :root { 
             --primary: #2d3436;      
             --accent: #2980b9;       
             --bg-light: #ffffff; 
             --bg-soft: #f9fbfd;
-            --nav-hover: #eaf2f8; /* اللون اللبني الخفيف */
+            --nav-hover: #eaf2f8;
             --glass: rgba(255, 255, 255, 0.95);
         }
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; outline: none; }
         body { 
             margin: 0; font-family: 'Poppins', sans-serif; 
             background: var(--bg-light); color: var(--primary); 
@@ -26,273 +26,230 @@
 
         /* --- Animations --- */
         @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .animate-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
         .delay-1 { animation-delay: 0.2s; }
         .delay-2 { animation-delay: 0.4s; }
-        .delay-3 { animation-delay: 0.6s; }
 
-        /* --- 2. Login Screen --- */
-        #login-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            z-index: 9999; display: flex; justify-content: center; align-items: center;
-        }
-        .login-box {
-            background: white; padding: 40px; border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); width: 350px; text-align: center;
-            animation: fadeUp 0.6s ease-out;
-        }
-        .login-box input {
-            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
-            border-radius: 8px; outline: none; transition: 0.3s;
-        }
-        .login-box input:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(41, 128, 185, 0.2); }
-        .btn-main {
-            background: var(--primary); color: white; border: none; padding: 12px;
-            width: 100%; border-radius: 50px; cursor: pointer; font-weight: 600;
-            transition: 0.3s; margin-top: 10px;
-        }
-        .btn-main:hover { background: var(--accent); transform: translateY(-2px); }
-
-        /* --- 3. Navigation --- */
+        /* --- Navigation --- */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 8%; background: var(--glass); backdrop-filter: blur(10px);
+            padding: 15px 8%; background: var(--glass); backdrop-filter: blur(10px);
             position: sticky; top: 0; z-index: 1000;
             box-shadow: 0 2px 15px rgba(0,0,0,0.03);
         }
-        .logo { font-size: 1.5rem; font-weight: 800; color: #2c3e50; letter-spacing: -0.5px; }
-        .logo span { color: var(--accent); }
-        
-        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #2c3e50; cursor: pointer; }
+        .nav-links { display: flex; gap: 10px; align-items: center; }
         .nav-link {
             text-decoration: none; color: #636e72; font-weight: 500;
-            padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease;
-            cursor: pointer;
+            padding: 8px 16px; border-radius: 20px; transition: 0.3s; cursor: pointer;
         }
-        /* Hover & Active State (Light Blue) */
-        .nav-link:hover, .nav-link.active-page {
-            background-color: var(--nav-hover);
-            color: var(--accent);
-        }
+        .nav-link:hover, .nav-link.active-page { background: var(--nav-hover); color: var(--accent); }
 
-        .user-badge { font-size: 0.9rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
-        .logout-icon { color: #e74c3c; cursor: pointer; margin-left: 10px; transition: 0.3s; }
-        .logout-icon:hover { transform: scale(1.2); }
-
-        /* --- 4. Main Content (Home) --- */
-        #home-section { display: block; } /* Visible by default */
+        /* User Controls */
+        .login-btn { border: 2px solid var(--accent); color: var(--accent); padding: 5px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .login-btn:hover { background: var(--accent); color: white; }
         
-        .hero {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 60px 8%; min-height: 85vh;
-        }
+        .user-badge { display: none; align-items: center; gap: 10px; }
+        .admin-tag { background: #e74c3c; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; vertical-align: middle; }
+
+        /* --- Content Sections --- */
+        .hero { display: flex; align-items: center; justify-content: space-between; padding: 60px 8%; min-height: 85vh; }
         .hero-text h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px; color: #1e272e; }
-        .hero-text strong { color: var(--accent); }
-        .hero-img img { width: 100%; max-width: 600px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1)); transition: transform 0.5s; }
-        .hero-img:hover img { transform: translateY(-10px); }
+        .hero-img img { width: 100%; max-width: 600px; transition: 0.3s; cursor: default; }
+        .hero-img img:hover { transform: scale(1.02); }
 
-        /* Projects */
         .projects-wrapper { padding: 60px 8%; background: var(--bg-soft); }
-        .section-header { text-align: center; margin-bottom: 50px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
-        
-        .card { 
-            background: white; border-radius: 16px; overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.4s; cursor: pointer;
-        }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.4s; }
+        .card:hover { transform: translateY(-10px); }
         .card img { width: 100%; height: 180px; object-fit: cover; }
         .card-body { padding: 25px; }
         .card h3 { color: var(--accent); margin: 0 0 10px; }
 
-        /* --- 5. "Soon" Pages --- */
-        .soon-section {
-            display: none; /* Hidden by default */
-            height: 80vh; text-align: center; justify-content: center; 
-            align-items: center; flex-direction: column;
-        }
-        .soon-content i { font-size: 4rem; color: #bdc3c7; margin-bottom: 20px; }
-        .soon-content h2 { font-size: 2.5rem; color: #2d3436; }
-        .soon-content p { color: #636e72; }
-
-        /* --- 6. Admin Dashboard (Overlay) --- */
-        #admin-panel {
-            display: none; /* Hidden */
+        /* --- Login Modal --- */
+        #login-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.5); z-index: 2000;
-            justify-content: center; align-items: center;
+            display: none; justify-content: center; align-items: center;
             backdrop-filter: blur(5px);
         }
-        .admin-board {
-            background: white; width: 80%; max-width: 900px; height: 600px;
-            border-radius: 20px; display: flex; overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
-            animation: fadeUp 0.4s ease-out;
+        .modal-box {
+            background: white; padding: 40px; border-radius: 20px; width: 350px;
+            text-align: center; position: relative; animation: fadeUp 0.3s;
         }
-        .sidebar {
-            width: 250px; background: #2c3e50; color: white; padding: 30px;
-            display: flex; flex-direction: column; gap: 20px;
-        }
-        .sidebar h3 { margin: 0 0 30px; font-size: 1.5rem; border-bottom: 1px solid #34495e; padding-bottom: 15px; }
-        .sb-item {
-            padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
-        }
-        .sb-item:hover, .sb-item.active { background: var(--accent); }
-        
-        .dash-content { flex: 1; padding: 40px; background: #f8f9fa; position: relative; }
-        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        
-        .close-dash { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .modal-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        .pass-wrapper { position: relative; }
+        .toggle-pass { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; }
+        .close-modal { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 1.2rem; }
 
-        /* Editable Highlight */
-        .editable { border: 2px dashed #e74c3c !important; background: rgba(231, 76, 60, 0.05); cursor: text; }
+        /* --- Admin Dashboard --- */
+        #admin-panel {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 3000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .dash-board {
+            background: white; width: 90%; max-width: 1000px; height: 700px;
+            border-radius: 20px; display: flex; overflow: hidden;
+        }
+        .sidebar { width: 250px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .sb-btn { padding: 15px; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 10px; }
+        .sb-btn:hover, .sb-btn.active { background: var(--accent); }
+        
+        .dash-main { flex: 1; padding: 40px; background: #f4f6f8; overflow-y: auto; }
+        .dash-section { display: none; }
+        .dash-section.active-sec { display: block; }
+        
+        /* Edit Mode Styles */
+        .editable { border: 2px dashed #e74c3c; background: rgba(231, 76, 60, 0.05); cursor: text; }
+        .editable-img { border: 4px solid #e74c3c; opacity: 0.8; cursor: pointer !important; }
+        
         #saveBtn {
             position: fixed; bottom: 30px; right: 30px; background: #27ae60;
             color: white; padding: 15px 35px; border-radius: 50px; border: none;
             font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
-            display: none; z-index: 2001; animation: fadeUp 0.3s;
+            display: none; z-index: 4000;
         }
-
+        
+        /* Team Manager Table */
+        .team-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 10px; overflow: hidden; }
+        .team-table th, .team-table td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        .team-table th { background: #eee; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <div style="font-size: 3rem; color: var(--accent); margin-bottom: 10px;"><i class="fas fa-atom"></i></div>
-            <h2>Physiatić Access</h2>
-            <p style="color:#888; font-size:0.9rem;">Please identify yourself</p>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button class="btn-main" onclick="attemptLogin()">Enter Dashboard</button>
-            <p id="errorMsg" style="color: #e74c3c; display: none; margin-top: 10px; font-size:0.85rem;">Invalid Credentials</p>
-        </div>
-    </div>
-
-    <nav id="navbar" style="display:none;">
-        <div class="logo"><i class="fas fa-atom"></i> Physiatić</div>
-        
+    <nav>
+        <div class="logo" onclick="route('home')"><i class="fas fa-atom"></i> Physiatić</div>
         <div class="nav-links">
-            <a onclick="route('home')" class="nav-link active-page" id="nav-home">Home</a>
-            <a onclick="route('topics')" class="nav-link" id="nav-topics">Topics</a>
-            <a onclick="route('resources')" class="nav-link" id="nav-resources">Resources</a>
-            <a onclick="route('articles')" class="nav-link" id="nav-articles">Articles</a>
-            <a onclick="route('about')" class="nav-link" id="nav-about">About</a>
+            <a onclick="route('home')" class="nav-link active-page">Home</a>
+            <a onclick="route('topics')" class="nav-link">Topics</a>
+            <a onclick="route('resources')" class="nav-link">Resources</a>
+            <a onclick="route('about')" class="nav-link">About</a>
+        </div>
+        
+        <div id="loggedOutUI">
+            <button class="login-btn" onclick="openLogin()"><i class="fas fa-sign-in-alt"></i> Login</button>
         </div>
 
-        <div class="user-badge">
-            <span id="welcomeMsg"></span>
-            <span id="adminBtn" onclick="openAdminPanel()" style="display:none; margin-left:10px; cursor:pointer; background:var(--accent); color:white; padding:5px 12px; border-radius:15px; font-size:0.8rem;">
-                <i class="fas fa-tools"></i> Admin
-            </span>
-            <i class="fas fa-sign-out-alt logout-icon" onclick="logout()" title="Logout"></i>
+        <div id="loggedInUI" class="user-badge">
+            <span id="userGreeting" style="font-weight:600;"></span>
+            <button onclick="openDashboard()" style="background:var(--primary); color:white; border:none; padding:5px 15px; border-radius:15px; cursor:pointer;">
+                <i class="fas fa-cog"></i> Dashboard
+            </button>
+            <i class="fas fa-power-off" onclick="performLogout()" style="color:red; cursor:pointer; margin-left:5px;" title="Logout"></i>
         </div>
     </nav>
 
-    <div id="home" class="page-section">
-        <header class="hero">
-            <div class="hero-text animate-up">
-                <h1 data-db="hero_title">Master the Art of <br><strong>Physical Science</strong></h1>
-                <p data-db="hero_desc" style="color:#636e72; font-size:1.1rem; margin-bottom:30px;">
-                    Your ultimate destination for interactive physics projects, research papers, and virtual simulations.
-                </p>
-                <a onclick="route('topics')" class="btn-main" style="display:inline-block; width:auto; padding:12px 35px;">Start Exploring</a>
-            </div>
-            <div class="hero-img animate-up delay-1">
-                <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg" alt="Physics Lab">
-            </div>
-        </header>
+    <div id="main-container">
+        <div id="home" class="page-sec">
+            <header class="hero">
+                <div class="hero-text animate-up">
+                    <h1 data-db="hero_title">Master the Art of <br><strong>Physical Science</strong></h1>
+                    <p data-db="hero_desc" style="color:#636e72; font-size:1.1rem; margin-bottom:30px;">
+                        The ultimate hub for engineering projects and research.
+                    </p>
+                    <button class="login-btn" style="background:var(--accent); color:white;">Start Exploring</button>
+                </div>
+                <div class="hero-img animate-up delay-1">
+                    <img id="mainHeroImg" data-img="hero_img" src="hero-main.jpg" onerror="this.src='https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg'" alt="Cover">
+                </div>
+            </header>
 
-        <section class="projects-wrapper animate-up delay-2">
-            <div class="section-header">
-                <h2 data-db="proj_header">Featured Projects</h2>
-                <p style="color:#888;">Innovative solutions by our engineering team</p>
-            </div>
-            
-            <div class="grid">
-                <div class="card">
-                    <img src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg" alt="Robot">
-                    <div class="card-body">
-                        <h3 data-db="p1_t">Line Follower Robot</h3>
-                        <p data-db="p1_d">Autonomous robot using IR sensors to track pathways with high precision.</p>
+            <section class="projects-wrapper animate-up delay-2">
+                <div style="text-align:center; margin-bottom:40px;">
+                    <h2 data-db="proj_head">Featured Projects</h2>
+                </div>
+                <div class="grid">
+                    <div class="card">
+                        <img id="proj1Img" data-img="p1_img" src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg" alt="Robot">
+                        <div class="card-body">
+                            <h3 data-db="p1_t">Line Follower Robot</h3>
+                            <p data-db="p1_d">Autonomous robot tracking pathways with high precision.</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <img id="proj2Img" data-img="p2_img" src="https://img.freepik.com/free-photo/electrical-components-circuit-board_23-2148290352.jpg" alt="Circuit">
+                        <div class="card-body">
+                            <h3 data-db="p2_t">Smart Circuitry</h3>
+                            <p data-db="p2_d">Advanced PCB design for automation.</p>
+                        </div>
                     </div>
                 </div>
+            </section>
+        </div>
 
-                <div class="card">
-                    <img src="https://img.freepik.com/free-photo/electrical-components-circuit-board_23-2148290352.jpg" alt="Circuit">
-                    <div class="card-body">
-                        <h3 data-db="p2_t">Smart Circuitry</h3>
-                        <p data-db="p2_d">Advanced PCB design for home automation systems.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <img src="https://img.freepik.com/free-photo/futuristic-robot-arm-laboratory_23-2149122822.jpg" alt="Robotics">
-                    <div class="card-body">
-                        <h3 data-db="p3_t">Robotic Arm V2</h3>
-                        <p data-db="p3_d">5-DOF robotic arm controlled via Bluetooth application.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <div id="other-pages" class="page-sec" style="display:none; text-align:center; padding:100px;">
+            <i class="fas fa-rocket" style="font-size:4rem; color:#ccc;"></i>
+            <h2 style="margin-top:20px;">Coming Soon</h2>
+            <p>We are building this section.</p>
+        </div>
     </div>
 
-    <div id="soon-template" class="soon-section animate-up">
-        <div class="soon-content">
-            <i class="fas fa-rocket"></i>
-            <h2>Under Construction</h2>
-            <p>We are working hard to build this section. Stay tuned!</p>
-            <button class="btn-main" onclick="route('home')" style="width:auto; padding:10px 30px; margin-top:20px;">Back Home</button>
+    <div id="login-modal">
+        <div class="modal-box">
+            <i class="fas fa-times close-modal" onclick="closeLogin()"></i>
+            <h2>Admin Access</h2>
+            <input type="text" id="loginUser" placeholder="Username">
+            <div class="pass-wrapper">
+                <input type="password" id="loginPass" placeholder="Password">
+                <i class="fas fa-eye toggle-pass" onclick="togglePass()"></i>
+            </div>
+            <button onclick="attemptLogin()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:8px; margin-top:10px; cursor:pointer;">Login</button>
+            <p id="loginError" style="color:red; display:none; margin-top:10px; font-size:0.9rem;">Wrong Credentials!</p>
         </div>
     </div>
 
     <div id="admin-panel">
-        <div class="admin-board">
+        <div class="dash-board">
             <div class="sidebar">
-                <h3>Dashboard</h3>
-                <div class="sb-item active"><i class="fas fa-edit"></i> Edit Content</div>
-                <div class="sb-item" onclick="alert('File Manager coming soon!')"><i class="fas fa-folder"></i> Files</div>
-                <div class="sb-item" onclick="alert('User Settings coming soon!')"><i class="fas fa-users-cog"></i> Settings</div>
+                <h3>Control Panel</h3>
+                <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-pen"></i> Content</div>
+                <div class="sb-btn" id="superAdminTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users"></i> Team Manager</div>
+                <div class="sb-btn" onclick="closeDashboard()" style="margin-top:auto; background:#c0392b;"><i class="fas fa-arrow-left"></i> Back to Site</div>
             </div>
-            <div class="dash-content">
-                <i class="fas fa-times close-dash" onclick="closeAdminPanel()"></i>
-                <div class="dash-header">
-                    <h2>Website Control</h2>
-                </div>
-                
-                <div class="stat-card">
-                    <h4>Content Editor</h4>
-                    <p style="color:#666; font-size:0.9rem; margin-bottom:15px;">Enable this to click and edit any text on the live website.</p>
-                    <button class="btn-main" style="width: auto; padding: 10px 30px; background: #27ae60;" onclick="enableEditMode()">
-                        <i class="fas fa-pen"></i> Enable Live Edit
-                    </button>
+            
+            <div class="dash-main">
+                <div id="tab-content" class="dash-section active-sec">
+                    <h2>Website Content</h2>
+                    <div style="background:white; padding:20px; border-radius:10px; margin-top:20px;">
+                        <h4><i class="fas fa-magic"></i> Live Editor</h4>
+                        <p>Click the button below. You can then click on any text OR image on the website to change it.</p>
+                        <button onclick="enableLiveEdit()" style="padding:10px 20px; background:#27ae60; color:white; border:none; border-radius:5px; cursor:pointer;">
+                            Enable Live Edit
+                        </button>
+                    </div>
                 </div>
 
-                <div class="stat-card">
-                    <h4>Database Status</h4>
-                    <p style="color: green;"><i class="fas fa-check-circle"></i> Connected to Physiatic Firebase</p>
+                <div id="tab-team" class="dash-section">
+                    <h2>Manage Admins</h2>
+                    <div style="background:white; padding:20px; border-radius:10px; margin-top:20px;">
+                        <h4>Add New Admin</h4>
+                        <input type="text" id="newAdminUser" placeholder="Username" style="width:30%; padding:8px;">
+                        <input type="text" id="newAdminPass" placeholder="Password" style="width:30%; padding:8px;">
+                        <button onclick="addNewAdmin()" style="padding:8px 20px; background:var(--accent); color:white; border:none; cursor:pointer;">Add</button>
+                    </div>
+                    
+                    <h4 style="margin-top:30px;">Current Team</h4>
+                    <table class="team-table">
+                        <thead><tr><th>Name</th><th>Role</th><th>Action</th></tr></thead>
+                        <tbody id="adminListBody">
+                            </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <button id="saveBtn" onclick="saveData()"><i class="fas fa-save"></i> Save Changes</button>
+    <button id="saveBtn" onclick="saveChanges()"><i class="fas fa-save"></i> Save Changes</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        // ✅ NEW CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAPTGbfFr2Cdr8d5DGDo_duwVevRxXm1bA",
             authDomain: "physiatic.firebaseapp.com",
@@ -305,119 +262,244 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- Load Logic ---
-        window.loadDB = async function() {
-            try {
-                const docRef = doc(db, "site_data", "main_content");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    document.querySelectorAll('[data-db]').forEach(el => {
-                        const key = el.getAttribute('data-db');
-                        if(data[key]) el.innerHTML = data[key];
-                    });
-                }
-            } catch(e) { console.log("Init DB: ", e); }
+        // --- 1. SESSION MANAGEMENT (PERSISTENCE) ---
+        // Check if user is already logged in from LocalStorage
+        const savedUser = localStorage.getItem('physiatic_user');
+        if(savedUser) {
+            const user = JSON.parse(savedUser);
+            setupLoggedInState(user);
         }
 
-        // --- Save Logic ---
-        window.saveData = async function() {
+        // --- 2. AUTH FUNCTIONS ---
+        window.attemptLogin = async function() {
+            const u = document.getElementById('loginUser').value;
+            const p = document.getElementById('loginPass').value;
+            const err = document.getElementById('loginError');
+            
+            // Get admins from Firebase
+            const docRef = doc(db, "settings", "admins");
+            const docSnap = await getDoc(docRef);
+            
+            let adminList = [];
+            if(docSnap.exists()) {
+                adminList = docSnap.data().list || [];
+            } else {
+                // Initialize DB with Super Admin if empty
+                adminList = [{u: "Adham", p: "20250003", role: "super_admin"}];
+                await setDoc(docRef, { list: adminList });
+            }
+
+            const found = adminList.find(a => a.u === u && a.p === p);
+
+            if(found) {
+                // Save to LocalStorage (Persistence)
+                localStorage.setItem('physiatic_user', JSON.stringify(found));
+                setupLoggedInState(found);
+                closeLogin();
+            } else {
+                err.style.display = 'block';
+            }
+        }
+
+        function setupLoggedInState(user) {
+            document.getElementById('loggedOutUI').style.display = 'none';
+            document.getElementById('loggedInUI').style.display = 'flex';
+            document.getElementById('userGreeting').innerHTML = 
+                `Welcome Eng. ${user.u} ${user.role==='super_admin' ? '<span class="admin-tag">Super Admin</span>' : ''}`;
+            
+            // Show Team Tab only for Super Admin
+            if(user.role === 'super_admin') {
+                document.getElementById('superAdminTab').style.display = 'flex';
+            }
+        }
+
+        window.performLogout = function() {
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('physiatic_user');
+                location.reload();
+            }
+        }
+
+        // --- 3. TEAM MANAGER (SUPER ADMIN) ---
+        window.loadTeam = async function() {
+            const docRef = doc(db, "settings", "admins");
+            onSnapshot(docRef, (doc) => {
+                if(doc.exists()){
+                    const list = doc.data().list;
+                    const tbody = document.getElementById('adminListBody');
+                    tbody.innerHTML = '';
+                    list.forEach(a => {
+                        const isMe = JSON.parse(localStorage.getItem('physiatic_user')).u === a.u;
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${a.u}</td>
+                                <td>${a.role === 'super_admin' ? '👑 Super Admin' : 'Admin'}</td>
+                                <td>
+                                    ${a.role !== 'super_admin' ? 
+                                    `<button onclick="deleteAdmin('${a.u}')" style="color:red; border:1px solid red; background:white; cursor:pointer;">Remove</button>` 
+                                    : '---'}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
+        }
+
+        window.addNewAdmin = async function() {
+            const u = document.getElementById('newAdminUser').value;
+            const p = document.getElementById('newAdminPass').value;
+            if(!u || !p) return alert("Fill fields!");
+
+            const newAdmin = { u: u, p: p, role: "admin" };
+            await updateDoc(doc(db, "settings", "admins"), {
+                list: arrayUnion(newAdmin)
+            });
+            alert("Admin Added!");
+            document.getElementById('newAdminUser').value = '';
+            document.getElementById('newAdminPass').value = '';
+        }
+
+        window.deleteAdmin = async function(username) {
+            if(!confirm("Remove this admin?")) return;
+            // Need to fetch full object to remove
+            const docRef = doc(db, "settings", "admins");
+            const snap = await getDoc(docRef);
+            const list = snap.data().list;
+            const toRemove = list.find(a => a.u === username);
+            
+            if(toRemove) {
+                await updateDoc(docRef, { list: arrayRemove(toRemove) });
+            }
+        }
+
+        // --- 4. DATA SYNC (TEXT & IMAGES) ---
+        const contentRef = doc(db, "site_data", "main_content");
+        
+        onSnapshot(contentRef, (docSnap) => {
+            if (docSnap.exists() && !document.body.classList.contains('editing-mode')) {
+                const data = docSnap.data();
+                // Update Text
+                document.querySelectorAll('[data-db]').forEach(el => {
+                    const key = el.getAttribute('data-db');
+                    if(data[key]) el.innerHTML = data[key];
+                });
+                // Update Images
+                document.querySelectorAll('[data-img]').forEach(el => {
+                    const key = el.getAttribute('data-img');
+                    if(data[key]) el.src = data[key];
+                });
+            }
+        });
+
+        window.saveChanges = async function() {
             const btn = document.getElementById('saveBtn');
-            btn.innerHTML = "Saving...";
+            btn.innerHTML = 'Saving...';
+            
             let payload = {};
+            // Gather Text
             document.querySelectorAll('[data-db]').forEach(el => {
                 payload[el.getAttribute('data-db')] = el.innerHTML;
             });
-            
+            // Gather Images
+            document.querySelectorAll('[data-img]').forEach(el => {
+                payload[el.getAttribute('data-img')] = el.getAttribute('src');
+            });
+
             try {
-                await setDoc(doc(db, "site_data", "main_content"), payload);
-                alert("Saved to Physiatić Database! ✅");
-                // Disable edit mode after save
-                document.querySelectorAll('[data-db]').forEach(el => {
-                    el.contentEditable = "false";
-                    el.classList.remove('editable');
-                });
-                document.getElementById('saveBtn').style.display = 'none';
-            } catch(e) { alert("Error saving: " + e.message); }
-            
+                await setDoc(contentRef, payload, {merge: true});
+                alert("Saved & Published! 🚀");
+                disableLiveEdit();
+            } catch(e) { alert("Error: " + e.message); }
             btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
         }
 
-        loadDB();
+        // --- Expose functions to window for onclick ---
+        if(localStorage.getItem('physiatic_user')) {
+             const u = JSON.parse(localStorage.getItem('physiatic_user'));
+             if(u.role === 'super_admin') loadTeam();
+        }
     </script>
 
     <script>
-        // 1. User Database
-        const admins = [
-            { u: "AdhamSayed", p: "20250003" },
-            { u: "Abd-ElrhmanYahia", p: "20250008" },
-            { u: "RahmaAyman", p: "20250025" },
-            { u: "Mahmoud", p: "0000" },
-            { u: "Khaled", p: "1111" }
-        ];
-
-        // 2. Login System
-        function attemptLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const found = admins.find(a => a.u === u && a.p === p);
-
-            if(found) {
-                // Hide Login, Show Site
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('navbar').style.display = 'flex';
-                
-                // Set Welcome Message
-                document.getElementById('welcomeMsg').innerHTML = `Welcome back Eng ${found.u}`;
-                document.getElementById('adminBtn').style.display = 'inline-block';
-            } else {
-                document.getElementById('errorMsg').style.display = 'block';
-            }
-        }
-
-        function logout() { location.reload(); }
-
-        // 3. Routing System (SPA Feel)
-        function route(pageId) {
-            // Update Active Nav
+        // UI Navigation
+        function route(page) {
+            document.querySelectorAll('.page-sec').forEach(d => d.style.display = 'none');
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            document.getElementById('nav-' + pageId).classList.add('active-page');
-
-            // Hide all pages
-            document.getElementById('home').style.display = 'none';
-            document.getElementById('soon-template').style.display = 'none';
-
-            // Show selected
-            if(pageId === 'home') {
+            
+            if(page === 'home') {
                 document.getElementById('home').style.display = 'block';
-                // Trigger animation again
-                document.querySelector('.hero-text').classList.remove('animate-up');
-                void document.querySelector('.hero-text').offsetWidth; // trigger reflow
-                document.querySelector('.hero-text').classList.add('animate-up');
+                document.querySelector('.nav-link').classList.add('active-page'); // highlight home
             } else {
-                // Show generic "Soon" page for other tabs
-                const soon = document.getElementById('soon-template');
-                soon.style.display = 'flex'; 
+                document.getElementById('other-pages').style.display = 'block';
             }
         }
 
-        // 4. Admin Dashboard Functions
-        function openAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'flex';
-        }
-        function closeAdminPanel() {
-            document.getElementById('admin-panel').style.display = 'none';
+        // Login UI
+        function openLogin() { document.getElementById('login-modal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('login-modal').style.display = 'none'; }
+        function togglePass() {
+            const inp = document.getElementById('loginPass');
+            const icon = document.querySelector('.toggle-pass');
+            if(inp.type === "password") { inp.type = "text"; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash'); }
+            else { inp.type = "password"; icon.classList.add('fa-eye'); icon.classList.remove('fa-eye-slash'); }
         }
 
-        function enableEditMode() {
-            closeAdminPanel(); // Close modal
+        // Dashboard
+        function openDashboard() { 
+            document.getElementById('admin-panel').style.display = 'flex'; 
+            // Load team if super admin
+            const u = JSON.parse(localStorage.getItem('physiatic_user'));
+            if(u.role === 'super_admin') window.loadTeam();
+        }
+        function closeDashboard() { document.getElementById('admin-panel').style.display = 'none'; }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-sec'));
+            document.querySelectorAll('.sb-btn').forEach(b => b.classList.remove('active'));
+            
+            document.getElementById('tab-'+tab).classList.add('active-sec');
+            event.currentTarget.classList.add('active');
+        }
+
+        // EDIT MODE
+        function enableLiveEdit() {
+            closeDashboard();
+            document.body.classList.add('editing-mode');
+            document.getElementById('saveBtn').style.display = 'block';
+            
+            // Text Editable
             document.querySelectorAll('[data-db]').forEach(el => {
                 el.contentEditable = "true";
                 el.classList.add('editable');
             });
-            document.getElementById('saveBtn').style.display = 'block';
-            alert("✏️ Live Edit Enabled! Click on text to change it.");
+
+            // Image Editable
+            document.querySelectorAll('[data-img]').forEach(el => {
+                el.classList.add('editable-img');
+                el.onclick = function(e) {
+                    if(!document.body.classList.contains('editing-mode')) return;
+                    e.preventDefault();
+                    const newUrl = prompt("Enter new Image URL:", el.src);
+                    if(newUrl) el.src = newUrl;
+                }
+            });
+
+            alert("✏️ Live Edit ON\n- Click text to type.\n- Click images to change URL.");
+        }
+
+        function disableLiveEdit() {
+            document.body.classList.remove('editing-mode');
+            document.getElementById('saveBtn').style.display = 'none';
+            document.querySelectorAll('[data-db]').forEach(el => {
+                el.contentEditable = "false";
+                el.classList.remove('editable');
+            });
+            document.querySelectorAll('[data-img]').forEach(el => {
+                el.classList.remove('editable-img');
+                el.onclick = null;
+            });
         }
     </script>
 </body>
-</html>
+    </html>
