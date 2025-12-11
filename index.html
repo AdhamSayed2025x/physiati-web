@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Physiatić | Advanced Physics</title>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#2980b9">
@@ -11,237 +11,237 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. Variables & Modern Theme --- */
+        /* --- 1. Variables --- */
         :root { 
-            --primary: #2d3436; --accent: #3498db; --bg-body: #f0f2f5; --bg-card: #ffffff;
-            --text-main: #2c3e50; --text-sec: #7f8c8d; --nav-bg: rgba(255, 255, 255, 0.85);
-            --img-fit: contain; --radius: 20px; --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --sidebar-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary: #2d3436; --accent: #3498db; --bg-body: #f4f7f6; --bg-card: #ffffff;
+            --text-main: #2c3e50; --text-sec: #7f8c8d; --nav-bg: rgba(255, 255, 255, 0.95);
+            --img-fit: contain; --radius: 20px; --shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         body.dark-mode {
-            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
-            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.85); --shadow: 0 10px 30px rgba(0,0,0,0.3);
-            --sidebar-grad: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --primary: #dfe6e9; --bg-body: #1a1a2e; --bg-card: #16213e; --text-main: #f8fafc;
+            --text-sec: #a2a8d3; --nav-bg: rgba(26, 26, 46, 0.95);
         }
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 70px; }
 
         /* --- 2. Animations --- */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Intro Animation - FIXED Z-INDEX */
-        #intro-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: #000; z-index: 999999; display: flex; justify-content: center; align-items: center; 
-            pointer-events: none; opacity: 0; transition: opacity 0.5s;
-        }
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
         #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .intro-content { position: relative; text-align: center; }
-        .intro-text { font-size: 3.5rem; font-weight: 900; color: white; opacity: 0; transform: scale(0.9); }
-        .intro-text span { color: var(--accent); display: block; font-size: 1.8rem; margin-top: 10px; }
-        
-        /* Electric Bolts */
-        .bolt { position: absolute; top: 50%; width: 0%; height: 8px; background: white; box-shadow: 0 0 20px #fff; z-index: 2; transition: width 0.1s; }
-        .bolt-left { left: 0; background: linear-gradient(90deg, transparent, #00f2ff); box-shadow: 0 0 20px #00f2ff; }
-        .bolt-right { right: 0; background: linear-gradient(-90deg, transparent, #ff0055); box-shadow: 0 0 20px #ff0055; }
-        
-        /* Animation Classes */
-        .active .bolt-left { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .bolt-right { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .intro-text { animation: textReveal 0.5s ease-out 0.8s forwards; }
-        
-        @keyframes strike { 0% { width: 0%; opacity: 0; } 50% { opacity: 1; } 100% { width: 51%; opacity: 1; } }
-        @keyframes textReveal { 0% { opacity: 0; transform: scale(1.5); filter: blur(10px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+        .intro-text { font-size: 3rem; font-weight: 900; color: white; text-align: center; }
+        .intro-text span { color: var(--accent); display: block; font-size: 1.5rem; margin-top: 10px; }
+        .active .intro-text { animation: zoomIn 0.5s ease-out; }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        /* --- 3. UI Components --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
-        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        /* --- 3. Navbar (Mobile Optimized) --- */
+        nav { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 10px 5%; background: var(--nav-bg); backdrop-filter: blur(10px); 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 70px;
+        }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 5px; }
         
-        .nav-center { display: flex; gap: 20px; align-items: center; }
-        .nav-item-wrapper { position: relative; }
-        .nav-link { color: var(--text-sec); font-weight: 500; padding: 8px 16px; border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px; }
-        .nav-link:hover, .nav-link.active-page { background: rgba(52, 152, 219, 0.1); color: var(--accent); }
+        .nav-center { display: flex; gap: 10px; overflow-x: auto; flex: 1; margin: 0 15px; scrollbar-width: none; }
+        .nav-center::-webkit-scrollbar { display: none; }
         
-        .dropdown-menu { position: absolute; top: 120%; left: 50%; transform: translateX(-50%); background: var(--bg-card); min-width: 180px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 10px; display: none; flex-direction: column; gap: 5px; z-index: 1001; animation: slideUp 0.2s ease-out; border: 1px solid rgba(255,255,255,0.1); }
-        .nav-item-wrapper:hover .dropdown-menu { display: flex; }
-        .dropdown-item { padding: 10px 15px; border-radius: 8px; cursor: pointer; color: var(--text-sec); font-size: 0.9rem; transition: 0.2s; }
-        .dropdown-item:hover { background: var(--bg-body); color: var(--accent); }
+        .nav-link { 
+            color: var(--text-sec); font-weight: 500; padding: 8px 12px; border-radius: 10px; 
+            cursor: pointer; white-space: nowrap; font-size: 0.9rem; 
+        }
+        .nav-link.active-page { background: var(--accent); color: white; }
 
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .physics-toggle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); background: transparent; transition: 0.3s; }
-        .physics-toggle:hover { background: var(--accent); color: white; transform: rotate(15deg); }
-        
-        .user-nav-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .nav-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(52, 152, 219, 0.3); }
+        .nav-actions { display: flex; align-items: center; gap: 10px; }
+        .physics-toggle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); background: transparent; }
+        .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
 
-        /* --- Content --- */
-        #main-container { min-height: 90vh; }
-        .page-container { padding: 60px 5%; animation: slideUp 0.5s ease-out; display: none; }
+        /* --- 4. Content --- */
+        .page-container { padding: 30px 5%; min-height: 80vh; display: none; animation: zoomIn 0.4s; }
         .active-view { display: block; }
 
-        .hero-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 60px; gap: 40px; flex-wrap: wrap; }
-        .hero-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; color: var(--text-main); background: -webkit-linear-gradient(45deg, var(--text-main), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-img img { width: 100%; max-width: 550px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15)); animation: float 6s infinite ease-in-out; }
+        /* Hero Section */
+        .hero-section { 
+            display: flex; align-items: center; justify-content: space-between; 
+            margin-bottom: 50px; gap: 30px; flex-wrap: wrap; 
+        }
+        .hero-text { flex: 1; min-width: 300px; }
+        .hero-text h1 { font-size: 2.8rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
+        .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
+        .hero-img img { width: 100%; max-width: 500px; height: auto; border-radius: 20px; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
-        .card { background: var(--bg-card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: 0.4s; position: relative; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); border-color: var(--accent); }
-        .card img { width: 100%; height: 220px; object-fit: var(--img-fit); background: var(--bg-body); padding: 10px; }
-        .card-body { padding: 25px; }
-        .card h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.4rem; }
-        .card p { color: var(--text-sec); font-size: 0.95rem; line-height: 1.6; }
-        
-        .card-delete-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { 
+            background: var(--bg-card); border-radius: 15px; overflow: hidden; 
+            box-shadow: var(--shadow); transition: 0.3s; position: relative; cursor: pointer;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: 1px solid var(--accent); }
+        .card img { width: 100%; height: 200px; object-fit: var(--img-fit); background: #f8f9fa; padding: 10px; }
+        .card-body { padding: 20px; }
+        .card h3 { font-size: 1.2rem; margin-bottom: 5px; color: var(--accent); }
+        .card-delete-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; color: white; width: 30px; height: 30px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; }
         .editing .card-delete-btn { display: flex; }
 
-        /* --- PROJECT DETAIL MODAL --- */
-        #project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 2000; overflow-y: auto; display: none; animation: slideUp 0.4s ease-out; }
-        .project-detail-header { position: sticky; top: 0; background: var(--nav-bg); backdrop-filter: blur(15px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2001; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .close-modal-btn { background: #ff4757; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        .project-detail-content { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .detail-hero { width: 100%; height: 400px; object-fit: contain; border-radius: 25px; margin-bottom: 30px; box-shadow: var(--shadow); background: var(--bg-card); }
-        .detail-title { font-size: 2.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 15px; }
-        .detail-body { font-size: 1.1rem; line-height: 1.8; color: var(--text-sec); }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; margin: 30px 0; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); background: black; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        /* --- Footer --- */
+        footer { padding: 40px 5%; text-align: center; margin-top: 50px; background: #1e272e; color: white; }
+        .footer-socials { display: flex; justify-content: center; gap: 20px; margin-bottom: 15px; font-size: 1.5rem; }
+        .footer-socials a { color: white; transition: 0.3s; }
+        .footer-socials a:hover { color: var(--accent); transform: scale(1.2); }
 
-        /* --- DASHBOARD --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .dash-board { background: var(--bg-card); width: 90%; max-width: 1200px; height: 85vh; border-radius: 30px; display: flex; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .sidebar { width: 280px; background: var(--sidebar-grad); color: white; padding: 30px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar-header { font-size: 1.5rem; font-weight: 800; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-        .sb-btn { padding: 12px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: #333; transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-weight: 600; }
-        .dash-main { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); position: relative; }
-        .dash-section { display: none; animation: fadeIn 0.4s; }
+        /* --- Admin Panel --- */
+        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 5000; display: none; justify-content: center; align-items: center; }
+        .dash-board { background: var(--bg-card); width: 90%; max-width: 1000px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; flex-direction: row; position: relative; }
+        .close-dash-x { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; z-index: 100; color: var(--text-sec); }
+        
+        .sidebar { width: 250px; background: #2d3436; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+        .dash-main { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
+        
+        .sb-btn { padding: 10px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+        .sb-btn:hover, .sb-btn.active { background: white; color: #333; }
+        .dash-section { display: none; }
         .dash-section.active-sec { display: block; }
-        .close-dash-x { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #ff4757; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); z-index: 100; font-size: 1.2rem; }
-        .setting-card { background: var(--bg-card); padding: 25px; border-radius: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
-        .verified-badge { color: #3498db; margin-left: 5px; font-size: 0.9em; }
-        .editable { border: 2px dashed #ff9f43; cursor: text; min-height: 1em; }
-        #saveBtn { position: fixed; bottom: 30px; right: 30px; background: #2ed573; color: white; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; z-index: 6000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        
+        .setting-row { margin-bottom: 15px; }
+        .setting-row label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
+        .setting-row input, .setting-row select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; }
 
+        /* --- Mobile Responsive --- */
         @media (max-width: 900px) {
-            .dash-board { flex-direction: column; width: 100%; height: 100vh; border-radius: 0; }
-            .sidebar { width: 100%; height: auto; padding: 15px; flex-direction: row; overflow-x: auto; }
-            .sidebar-header { display: none; }
-            .sb-btn { white-space: nowrap; font-size: 0.8rem; padding: 8px 12px; }
+            .hero-section { flex-direction: column-reverse; text-align: center; }
+            .hero-text { width: 100%; }
+            .hero-img { width: 100%; }
+            
+            .dash-board { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; white-space: nowrap; }
+            .sb-btn { padding: 8px 12px; font-size: 0.8rem; }
             .dash-main { padding: 20px 15px 80px 15px; }
-            .hero-section { flex-direction: column; text-align: center; }
-            .hero-img { order: 2; width: 100%; } .hero-text { order: 1; }
         }
+
+        /* Edit Mode */
+        .editable { border: 2px dashed #ff9f43; cursor: text; }
+        #saveBtn { position: fixed; bottom: 20px; right: 20px; background: #2ed573; color: white; padding: 12px 30px; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; z-index: 6000; }
     </style>
 </head>
 <body>
 
-    <div id="intro-overlay">
-        <div class="bolt bolt-left"></div> <div class="bolt bolt-right"></div>
-        <div class="intro-content">
-            <div class="intro-text" id="introMsg">Welcome <br> <span>Engineer</span></div>
-        </div>
-    </div>
-    
+    <div id="intro-overlay"><div class="intro-text">Welcome <br> <span>Engineer</span></div></div>
     <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
 
     <nav>
-        <div class="logo" onclick="route('home')"><i class="fas fa-atom" style="color:var(--accent)"></i> <span data-db="site_name">Physiatić</span></div>
-        <div class="nav-center" id="dynamicNav"></div>
+        <div class="logo" onclick="route('home')"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
+        <div class="nav-center" id="dynamicNav">
+            <a onclick="route('home')" class="nav-link active-page">Home</a>
+        </div>
         <div class="nav-actions">
-            <button class="physics-toggle" onclick="toggleTheme()" id="themeBtn"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="loggedOutUI"><button style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:50px; cursor:pointer; font-weight:600;" onclick="openLogin()">Login</button></div>
-            <div id="loggedInUI" style="display:none;" onclick="openDashboard()"><div class="user-nav-area"><img src="" id="myNavAvatar" class="nav-avatar"></div></div>
+            <button class="physics-toggle" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
+            <div id="loggedOutUI"><button style="padding:6px 15px; background:var(--accent); color:white; border:none; border-radius:20px; font-weight:600;" onclick="openLogin()">Login</button></div>
+            <div id="loggedInUI" style="display:none;" onclick="openDashboard()"><img src="" id="myNavAvatar" class="nav-avatar"></div>
         </div>
     </nav>
 
     <div id="main-container">
-        <div id="page-content-area" class="page-container active-view"></div> 
+        <div id="page-home" class="page-container active-view">
+            <div class="hero-section">
+                <div class="hero-text">
+                    <h1 data-db="h_t">Discover the <br><strong>Future of Physics</strong></h1>
+                    <p data-db="h_d">The ultimate platform for engineering students.</p>
+                </div>
+                <div class="hero-img">
+                    <img data-img="h_img" src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg" alt="Hero">
+                </div>
+            </div>
+            
+            <div style="text-align:center; margin-bottom:30px;"><h2 data-db="p_head">Our Projects</h2></div>
+            
+            <div class="grid" id="grid-home">
+                <div class="card" onclick="openDetail(this)">
+                    <button class="card-delete-btn" onclick="deleteCard(event, this)"><i class="fas fa-trash"></i></button>
+                    <img src="https://via.placeholder.com/400" data-img="p1_img">
+                    <div class="card-body">
+                        <h3 data-db="p1_t">Line Follower</h3>
+                        <p data-db="p1_d">Autonomous robot tracking pathways.</p>
+                        <div class="detail-data" style="display:none;">
+                            <p>Full details about the robot...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div id="project-modal">
-        <div class="project-detail-header">
-            <h3 style="margin:0; font-size:1.2rem;">Details</h3>
-            <button class="close-modal-btn" onclick="closeProjectDetail()"><i class="fas fa-times"></i></button>
+    <footer>
+        <h3>Physiatić Hub</h3>
+        <div class="footer-socials">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-whatsapp"></i></a>
+            <a href="#"><i class="fas fa-phone"></i></a>
         </div>
-        <div class="project-detail-content">
-            <img id="modal-hero-img" class="detail-hero" src="">
-            <h1 id="modal-title" class="detail-title"></h1>
-            <div id="modal-body" class="detail-body"></div>
-            <button id="modalEditBtn" onclick="enableModalEdit()" style="margin-top:30px; padding:12px 25px; background:var(--accent); color:white; border:none; border-radius:10px; cursor:pointer; display:none; font-weight:600; width:100%;"><i class="fas fa-edit"></i> Edit Content</button>
-        </div>
-    </div>
+        <div style="font-size:0.8rem; opacity:0.7;">Developed by Eng. Adham Sayed</div>
+    </footer>
 
     <div id="admin-panel">
         <div class="dash-board">
-            <div class="close-dash-x" onclick="closeDashboard()"><i class="fas fa-times"></i></div>
+            <i class="fas fa-times close-dash-x" onclick="closeDashboard()"></i>
             <div class="sidebar">
-                <div class="sidebar-header"><i class="fas fa-cubes"></i> Control</div>
-                <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-laptop-code"></i> Content</div>
-                <div class="sb-btn" onclick="switchTab('menu')"><i class="fas fa-sitemap"></i> Menu</div>
-                <div class="sb-btn" onclick="switchTab('profile')"><i class="fas fa-id-badge"></i> Profile</div>
-                <div class="sb-btn" onclick="switchTab('theme')"><i class="fas fa-brush"></i> Theme</div>
-                <div class="sb-btn" id="superTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users-cog"></i> Team</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; background:rgba(231, 76, 60, 0.2); color:#ff6b6b;"><i class="fas fa-power-off"></i> Logout</div>
-                <div class="sb-btn" onclick="replayIntro()" style="background:rgba(255,255,255,0.1); font-size:0.8rem;"><i class="fas fa-play"></i> Replay Intro</div>
+                <h3>Admin</h3>
+                <div class="sb-btn active" onclick="switchTab('content')">Content</div>
+                <div class="sb-btn" onclick="switchTab('menu')">Menu</div>
+                <div class="sb-btn" onclick="switchTab('profile')">Profile</div>
+                <div class="sb-btn" onclick="switchTab('theme')">Theme</div>
+                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
             </div>
             <div class="dash-main">
                 <div id="tab-content" class="dash-section active-sec">
-                    <h2>Edit: <span id="lblCurrentPage" style="color:var(--accent)">Home</span></h2>
-                    <div class="setting-card" style="display:flex; gap:15px; flex-wrap:wrap;">
-                        <button onclick="enableEdit()" style="padding:15px 30px; background:#2ed573; color:white; border:none; border-radius:12px; cursor:pointer; font-weight:600;"><i class="fas fa-magic"></i> Live Edit</button>
-                        <button onclick="addNewProject()" style="padding:15px 30px; background:var(--accent); color:white; border:none; border-radius:12px; cursor:pointer; font-weight:600;"><i class="fas fa-plus-circle"></i> Add Card</button>
+                    <h2>Content</h2>
+                    <div style="display:flex; gap:10px; margin-top:15px;">
+                        <button onclick="enableEdit()" style="padding:10px; background:#2ed573; color:white; border:none; border-radius:8px;">Live Edit</button>
+                        <button onclick="addNewProject()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:8px;">Add Project</button>
                     </div>
                 </div>
                 <div id="tab-menu" class="dash-section">
-                    <h2>Menu Structure</h2>
-                    <div class="setting-card">
-                        <div class="form-group"><label>Tab Name</label><input id="newTabName" placeholder="e.g. Gallery"></div>
-                        <div class="form-group"><label>Parent</label><select id="parentTabSelect"><option value="">Main Tab</option></select></div>
-                        <button onclick="addTab()" style="background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:8px;">Add</button>
+                    <h2>Menu</h2>
+                    <div class="setting-row">
+                        <input id="newTabName" placeholder="Tab Name">
+                        <button onclick="addTab()" style="margin-top:5px; width:100%; padding:8px; background:var(--accent); color:white; border:none; border-radius:5px;">Add</button>
                     </div>
-                    <div id="menuList" style="margin-top:20px;"></div>
+                    <div id="menuList"></div>
                 </div>
                 <div id="tab-profile" class="dash-section">
-                    <h2>Profile <span id="verifiedBadge" style="display:none;"><i class="fas fa-check-circle verified-badge"></i></span></h2>
-                    <div class="setting-card">
-                        <div style="text-align:center; margin-bottom:15px;"><img id="previewPic" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid var(--accent); display:block; margin:0 auto 10px;"><button onclick="triggerProfileUpload()" style="padding:5px 15px; background:var(--primary); color:white; border:none; border-radius:20px; font-size:0.8rem;">Change Photo</button></div>
-                        <div class="form-group"><label>Name</label><input id="profileName" onchange="updateProfileInfo()"></div>
-                        <div class="form-group"><label>Bio</label><input id="profileBio" placeholder="Bio..." onchange="updateProfileInfo()"></div>
-                        <div class="form-group"><label>Password</label><input type="password" id="newPass"><button onclick="changeMyPassword()" style="margin-top:5px; background:#ff4757; color:white; border:none; padding:8px; border-radius:5px;">Update</button></div>
+                    <h2>Profile</h2>
+                    <div style="text-align:center;">
+                        <img id="previewPic" src="" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px;">
+                        <button onclick="triggerUpload()" style="display:block; margin:0 auto;">Change Photo</button>
                     </div>
-                </div>
-                <div id="tab-team" class="dash-section">
-                    <h2>Team</h2>
-                    <div class="setting-card">
-                        <div style="display:flex; gap:5px;"><input id="newAdmin" placeholder="User" style="flex:1;"><input id="newPassAdmin" placeholder="Pass" style="flex:1;"></div>
-                        <button onclick="addAdmin()" style="background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:10px;">Add Admin</button>
+                    <div class="setting-row" style="margin-top:10px;">
+                        <input id="profileName" placeholder="Name" onchange="updateProfile()">
                     </div>
-                    <div id="teamList"></div>
                 </div>
                 <div id="tab-theme" class="dash-section">
                     <h2>Theme</h2>
-                    <div class="setting-card">
-                        <div class="form-group"><label>Accent Color</label><input type="color" id="accentColorPicker" value="#3498db" style="height:40px;"></div>
-                        <div class="form-group"><label>Image Fit</label><select id="imgFitSelect"><option value="contain">Contain</option><option value="cover">Cover</option></select></div>
-                        <button onclick="saveThemeSettings()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:8px;">Save</button>
-                    </div>
+                    <div class="setting-row"><label>Color</label><input type="color" id="accentPicker"></div>
+                    <div class="setting-row"><label>Image Fit</label><select id="fitSelect"><option value="contain">Contain</option><option value="cover">Cover</option></select></div>
+                    <button onclick="saveTheme()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:5px;">Save Theme</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:6000; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-        <div style="background:var(--bg-card); padding:40px; border-radius:25px; width:350px; text-align:center;">
-            <h2 style="color:var(--text-main); margin-bottom:20px;">Login</h2>
-            <input id="u" placeholder="Username" style="width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #ddd; background:var(--bg-body);">
-            <input id="p" type="password" placeholder="Password" style="width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #ddd; background:var(--bg-body);">
-            <button onclick="login()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer; margin-top:10px;">Enter</button>
-            <p onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; color:var(--text-sec); cursor:pointer;">Cancel</p>
+    <div id="project-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:2000; display:none; overflow-y:auto; padding:20px;">
+        <div style="max-width:800px; margin:0 auto;">
+            <button onclick="document.getElementById('project-modal').style.display='none'" style="float:right; padding:5px 15px; background:#ff4757; color:white; border:none; border-radius:20px;">Close</button>
+            <img id="modal-img" style="width:100%; height:300px; object-fit:contain; margin-top:20px;">
+            <h1 id="modal-title" style="margin:20px 0;"></h1>
+            <div id="modal-body" style="line-height:1.6;"></div>
+            <button id="modalEditBtn" onclick="editModalContent()" style="display:none; margin-top:20px; width:100%; padding:10px; background:var(--accent); color:white; border:none;">Edit Details</button>
+        </div>
+    </div>
+
+    <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:6000; justify-content:center; align-items:center;">
+        <div style="background:white; padding:30px; border-radius:15px; width:300px; text-align:center;">
+            <h2>Login</h2>
+            <input id="u" placeholder="User" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
+            <input id="p" type="password" placeholder="Pass" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
+            <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none;">Enter</button>
+            <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:10px; background:none; border:none;">Cancel</button>
         </div>
     </div>
 
@@ -249,7 +249,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
@@ -264,247 +264,194 @@
         const db = getFirestore(app);
         
         let currentUser = JSON.parse(localStorage.getItem('user'));
-        let navTabs = [{id: 'home', label: 'Home', children: []}];
         let activeTab = 'home';
-        let activeCard = null; 
+        let navTabs = [{id:'home', label:'Home'}];
+        let activeCard = null;
 
-        // --- INIT & ANIMATION ---
+        // --- INIT ---
         async function loadConfig() {
-            // Force Animation EVERY TIME for presentation
-            playAnimation('Welcome', 'Engineer');
-            
+            // Play Intro Always on Reload
+            document.getElementById('intro-overlay').classList.add('active');
+            setTimeout(() => document.getElementById('intro-overlay').classList.remove('active'), 2500);
+
             const docSnap = await getDoc(doc(db, "settings", "config"));
             if(docSnap.exists()) {
                 const data = docSnap.data();
                 if(data.accent) document.documentElement.style.setProperty('--accent', data.accent);
                 if(data.imgFit) document.documentElement.style.setProperty('--img-fit', data.imgFit);
                 if(data.navTabs) navTabs = data.navTabs;
-                renderNav(); updateParentSelect();
+                renderNav();
             }
-            loadTabContent('home');
+            loadContent('home');
         }
         loadConfig();
 
-        function playAnimation(t1, t2) {
-            const overlay = document.getElementById('intro-overlay');
-            const msg = document.getElementById('introMsg');
-            msg.innerHTML = `${t1} <br> <span>${t2}</span>`;
-            overlay.classList.add('active');
-            setTimeout(() => { overlay.classList.remove('active'); }, 3000);
-        }
-        window.replayIntro = () => playAnimation('Welcome', 'Engineer');
-
-        // --- NAV SYSTEM ---
         function renderNav() {
-            const nav = document.getElementById('dynamicNav');
-            nav.innerHTML = navTabs.map(tab => {
-                if(tab.children && tab.children.length > 0) {
-                    return `
-                    <div class="nav-item-wrapper">
-                        <span class="nav-link">${tab.label} <i class="fas fa-chevron-down" style="font-size:0.7em; margin-left:5px;"></i></span>
-                        <div class="dropdown-menu">
-                            ${tab.children.map(child => `<div class="dropdown-item" onclick="route('${child.id}', '${child.label}')">${child.label}</div>`).join('')}
-                        </div>
-                    </div>`;
-                } else {
-                    return `<a onclick="route('${tab.id}', '${tab.label}')" class="nav-link ${tab.id === activeTab ? 'active-page' : ''}">${tab.label}</a>`;
-                }
-            }).join('');
+            const container = document.getElementById('dynamicNav');
+            container.innerHTML = navTabs.map(t => 
+                `<a onclick="route('${t.id}')" class="nav-link ${t.id===activeTab?'active-page':''}">${t.label}</a>`
+            ).join('');
+            
+            const menuList = document.getElementById('menuList');
+            menuList.innerHTML = navTabs.map(t => 
+                `<div style="padding:10px; border-bottom:1px solid #eee;">${t.label} ${t.id!=='home'?`<i class="fas fa-trash" style="float:right; color:red;" onclick="delTab('${t.id}')"></i>`:''}</div>`
+            ).join('');
         }
 
-        window.route = function(id, label) {
+        window.route = function(id) {
             activeTab = id;
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            if(document.getElementById('lblCurrentPage')) document.getElementById('lblCurrentPage').innerText = label || id;
-            loadTabContent(id);
+            loadContent(id);
             renderNav();
         }
 
-        async function loadTabContent(id) {
-            const container = document.getElementById('page-content-area');
-            let contentHTML = "";
+        async function loadContent(id) {
+            // Hide all pages, show container
+            document.getElementById('page-home').style.display = 'none';
+            // Create dynamic page if not home
+            let page = document.getElementById('page-'+id);
+            
             if(id === 'home') {
+                page = document.getElementById('page-home');
                 const snap = await getDoc(doc(db, "site_data", "home_content"));
-                if(snap.exists()) contentHTML = snap.data().html;
-                else contentHTML = `
-                    <div class="hero-section">
-                        <div class="hero-text"><h1 data-db="h_t">Welcome</h1><p data-db="h_d">To Physics World</p></div>
-                        <div class="hero-img"><img src="https://via.placeholder.com/600" data-img="hero_img"></div>
-                    </div>
-                    <div style="text-align:center;"><h2 data-db="s_t">Featured</h2></div>
-                    <div class="grid" id="grid-home"></div>`;
+                if(snap.exists()) page.innerHTML = snap.data().html;
             } else {
+                if(!page) {
+                    page = document.createElement('div');
+                    page.id = 'page-'+id;
+                    page.className = 'page-container';
+                    document.getElementById('main-container').appendChild(page);
+                }
                 const snap = await getDoc(doc(db, "site_data", "content_"+id));
-                if(snap.exists()) contentHTML = snap.data().html;
-                else contentHTML = `<div style="text-align:center; padding:40px;"><h2>${id}</h2></div><div class="grid" id="grid-${id}"></div>`;
+                if(snap.exists()) page.innerHTML = snap.data().html;
+                else page.innerHTML = `<div style="text-align:center; padding:50px;"><h2>${id}</h2><div class="grid" id="grid-${id}"></div></div>`;
             }
-            container.innerHTML = contentHTML;
+            
+            document.querySelectorAll('.page-container').forEach(p => p.style.display='none');
+            page.style.display = 'block';
             if(document.body.classList.contains('editing')) window.enableEdit();
         }
 
-        // --- MENU BUILDER ---
-        function updateParentSelect() {
-            const sel = document.getElementById('parentTabSelect');
-            if(sel) {
-                sel.innerHTML = '<option value="">No Parent (Main Tab)</option>' + navTabs.map(t => `<option value="${t.id}">${t.label}</option>`).join('');
-                const list = document.getElementById('menuList');
-                list.innerHTML = navTabs.map(t => {
-                    let html = `<div style="padding:15px; background:rgba(0,0,0,0.03); margin-bottom:10px; border-radius:10px;"><b>${t.label}</b> ${t.id!=='home'?`<i class="fas fa-trash" style="color:#ff4757; cursor:pointer; float:right;" onclick="delTab('${t.id}')"></i>`:''}</div>`;
-                    if(t.children) html += t.children.map(c => `<div style="padding:10px 10px 10px 40px; border-left:3px solid var(--accent); margin-bottom:5px;">- ${c.label} <i class="fas fa-trash" style="color:#ff4757; cursor:pointer; float:right; font-size:0.9em;" onclick="delTab('${c.id}', '${t.id}')"></i></div>`).join('');
-                    return html;
-                }).join('');
-            }
-        }
-
+        // --- ACTIONS ---
         window.addTab = async function() {
             const name = document.getElementById('newTabName').value;
-            const parent = document.getElementById('parentTabSelect').value;
             if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g, '');
-            if(parent) {
-                const pIndex = navTabs.findIndex(t => t.id === parent);
-                if(!navTabs[pIndex].children) navTabs[pIndex].children = [];
-                navTabs[pIndex].children.push({id, label: name});
-            } else { navTabs.push({id, label: name, children: []}); }
-            await updateDoc(doc(db, "settings", "config"), { navTabs });
-            alert("Menu Updated!"); loadConfig();
+            const id = name.toLowerCase().replace(/\s/g,'');
+            navTabs.push({id, label:name});
+            await setDoc(doc(db, "settings", "config"), {navTabs}, {merge:true});
+            renderNav();
+        }
+        
+        window.delTab = async function(id) {
+            if(!confirm("Delete?")) return;
+            navTabs = navTabs.filter(t => t.id !== id);
+            await setDoc(doc(db, "settings", "config"), {navTabs}, {merge:true});
+            renderNav();
         }
 
-        window.delTab = async function(id, parentId) {
-            if(!confirm("Delete tab?")) return;
-            if(parentId) {
-                const p = navTabs.find(t => t.id === parentId);
-                p.children = p.children.filter(c => c.id !== id);
-            } else { navTabs = navTabs.filter(t => t.id !== id); }
-            await updateDoc(doc(db, "settings", "config"), { navTabs });
-            loadConfig();
+        window.saveData = async function() {
+            const page = document.getElementById(activeTab==='home'?'page-home':'page-'+activeTab);
+            const ref = activeTab==='home'?'home_content':'content_'+activeTab;
+            await setDoc(doc(db, "site_data", ref), {html: page.innerHTML});
+            alert("Saved!"); location.reload();
         }
 
-        // --- PROJECT DETAIL ---
-        window.openProjectDetail = function(card) {
-            if(document.body.classList.contains('editing')) return;
-            activeCard = card;
-            const modal = document.getElementById('project-modal');
-            document.getElementById('modal-hero-img').src = card.querySelector('img').src;
-            document.getElementById('modal-title').innerText = card.querySelector('h3').innerText;
-            const hiddenData = card.querySelector('.detail-data');
-            document.getElementById('modal-body').innerHTML = hiddenData ? hiddenData.innerHTML : "<p>No details. Add content in Edit Mode.</p>";
-            modal.style.display = 'block';
-            if(currentUser) document.getElementById('modalEditBtn').style.display = 'block';
-        }
-
-        window.closeProjectDetail = function() {
-            document.getElementById('project-modal').style.display = 'none';
-            if(document.getElementById('modal-body').isContentEditable) {
-                const newContent = document.getElementById('modal-body').innerHTML;
-                let hiddenDiv = activeCard.querySelector('.detail-data');
-                if(!hiddenDiv) {
-                    hiddenDiv = document.createElement('div');
-                    hiddenDiv.className = 'detail-data';
-                    hiddenDiv.style.display = 'none';
-                    activeCard.querySelector('.card-body').appendChild(hiddenDiv);
-                }
-                hiddenDiv.innerHTML = newContent;
-                savePage();
-            }
-        }
-
-        window.enableModalEdit = function() {
-            document.getElementById('modal-body').contentEditable = true;
-            document.getElementById('modal-body').style.border = "2px dashed var(--accent)";
-            document.getElementById('modal-body').focus();
-            alert("Edit Mode ON.");
-        }
-
-        // --- ADMIN ---
+        // --- AUTH ---
         window.login = async function() {
             const u = document.getElementById('u').value; const p = document.getElementById('p').value;
             const snap = await getDoc(doc(db, "settings", "admins"));
-            if(!snap.exists()) await setDoc(doc(db, "settings", "admins"), {list:[{u:'Adham', p:'20250003', role:'super_admin', img:'', bio:''}]});
+            if(!snap.exists()) await setDoc(doc(db, "settings", "admins"), {list:[{u:'Adham', p:'20250003', role:'super_admin'}]});
             const list = (await getDoc(doc(db, "settings", "admins"))).data().list;
-            const user = list.find(a => a.u === u && a.p === p);
-            if(user) { localStorage.setItem('user', JSON.stringify(user)); location.reload(); }
-            else alert("Wrong Credentials");
+            const found = list.find(a => a.u===u && a.p===p);
+            if(found) { localStorage.setItem('user', JSON.stringify(found)); location.reload(); }
+            else alert("Error");
         }
 
-        window.updateProfileInfo = async function() {
-            const name = document.getElementById('profileName').value;
-            const bio = document.getElementById('profileBio').value;
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            let list = snap.data().list;
-            const idx = list.findIndex(a => a.u === currentUser.u);
-            list[idx].u = name; list[idx].bio = bio;
-            await updateDoc(doc(db, "settings", "admins"), {list});
-            currentUser.u = name; currentUser.bio = bio;
-            localStorage.setItem('user', JSON.stringify(currentUser));
-            alert("Profile Saved!");
-        }
-
-        window.performLogout = function() {
-            document.getElementById('admin-panel').style.display='none';
-            playAnimation('Goodbye', 'Engineer');
-            setTimeout(() => { localStorage.removeItem('user'); location.reload(); }, 3000);
-        }
-
-        // --- CORE ---
-        async function savePage() {
-            const content = document.getElementById('page-content-area').innerHTML;
-            const ref = activeTab === 'home' ? "home_content" : "content_"+activeTab;
-            await setDoc(doc(db, "site_data", ref), {html: content});
+        // --- MODAL ---
+        window.openDetail = function(card) {
+            if(document.body.classList.contains('editing')) return;
+            activeCard = card;
+            document.getElementById('project-modal').style.display='block';
+            document.getElementById('modal-hero-img').src = card.querySelector('img').src;
+            document.getElementById('modal-title').innerText = card.querySelector('h3').innerText;
+            const hidden = card.querySelector('.detail-data');
+            document.getElementById('modal-body').innerHTML = hidden ? hidden.innerHTML : "No details.";
+            if(currentUser) document.getElementById('modalEditBtn').style.display='block';
         }
         
-        window.saveData = async function() { await savePage(); alert("Saved!"); location.reload(); }
+        window.editModalContent = function() {
+            const b = document.getElementById('modal-body');
+            b.contentEditable=true; b.focus(); b.style.border="2px dashed var(--accent)";
+            alert("Edit content then close to save.");
+            
+            // Save on close logic is inside close function if needed, but simplest is update DOM
+            document.querySelector('.close-modal-btn').onclick = function() {
+                let hidden = activeCard.querySelector('.detail-data');
+                if(!hidden) {
+                    hidden = document.createElement('div');
+                    hidden.className = 'detail-data';
+                    hidden.style.display='none';
+                    activeCard.querySelector('.card-body').appendChild(hidden);
+                }
+                hidden.innerHTML = b.innerHTML;
+                document.getElementById('project-modal').style.display='none';
+                saveData(); // Auto save
+            }
+        }
 
+        // --- EDITING ---
         window.enableEdit = function() {
             document.getElementById('admin-panel').style.display='none';
             document.body.classList.add('editing');
             document.getElementById('saveBtn').style.display='block';
             document.querySelectorAll('[data-db], h1, h2, h3, p').forEach(el => el.contentEditable=true);
         }
-
+        
         window.addNewProject = function() {
-            const grid = document.querySelector('.page-container.active-view .grid');
-            if(!grid) { alert("No grid found on this page."); return; }
-            const html = `
-            <div class="card" onclick="openProjectDetail(this)">
-                <button class="card-delete-btn" onclick="deleteCard(event, this)"><i class="fas fa-trash"></i></button>
-                <img data-img="new" src="https://via.placeholder.com/400">
-                <div class="card-body"><h3 contenteditable="true">Title</h3><p contenteditable="true">Description...</p></div>
-            </div>`;
+            const grid = document.querySelector('.page-container[style*="block"] .grid') || document.getElementById('grid-home');
+            const html = `<div class="card" onclick="openDetail(this)"><button class="card-delete-btn" onclick="deleteCard(event,this)"><i class="fas fa-trash"></i></button><img src="https://via.placeholder.com/400"><div class="card-body"><h3 contenteditable>New</h3><p contenteditable>Desc...</p></div></div>`;
             grid.insertAdjacentHTML('beforeend', html);
             window.enableEdit();
         }
         
-        window.deleteCard = function(e, btn) {
-            e.stopPropagation();
-            if(confirm("Delete Project?")) btn.closest('.card').remove();
+        window.deleteCard = function(e, btn) { e.stopPropagation(); btn.closest('.card').remove(); }
+
+        // --- UPLOAD ---
+        window.triggerUpload = function() { document.getElementById('imgUploadInput').click(); }
+        // Simple Base64 Upload
+        document.getElementById('imgUploadInput').onchange = function(e) {
+            const r = new FileReader();
+            r.readAsDataURL(e.target.files[0]);
+            r.onload = function(ev) {
+                const img = ev.target.result;
+                if(currentUser) {
+                    // Assuming profile upload for now as simplified
+                    document.getElementById('previewPic').src = img;
+                    document.getElementById('myNavAvatar').src = img;
+                    // In real app, save to user list in DB
+                }
+            }
         }
 
-        // --- INIT UI ---
+        // Init UI
         if(currentUser) {
             document.getElementById('loggedOutUI').style.display='none';
-            document.getElementById('loggedInUI').style.display='flex';
-            if(currentUser.img) {
-                document.getElementById('myNavAvatar').src = currentUser.img;
-                document.getElementById('previewPic').src = currentUser.img;
-            } else {
-                document.getElementById('myNavAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-            }
-            if(currentUser.role === 'super_admin') {
-                document.getElementById('superTab').style.display='flex';
-                document.getElementById('verifiedBadge').style.display='inline';
-            }
-            if(document.getElementById('profileName')) {
-                document.getElementById('profileName').value = currentUser.u;
-                document.getElementById('profileBio').value = currentUser.bio || '';
-            }
+            document.getElementById('loggedInUI').style.display='block';
+            if(currentUser.img) document.getElementById('myNavAvatar').src = currentUser.img;
+            else document.getElementById('myNavAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
         }
 
-        window.toggleTheme = function() { document.body.classList.toggle('dark-mode'); }
-        window.openDashboard = function() { document.getElementById('admin-panel').style.display='flex'; }
-        window.closeDashboard = function() { document.getElementById('admin-panel').style.display='none'; }
-        window.switchTab = function(t) { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
-        window.openLogin = function() { document.getElementById('login-modal').style.display='flex'; }
+        window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
+        window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
+        window.openLogin = () => document.getElementById('login-modal').style.display='flex';
+        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
+        window.performLogout = () => { localStorage.removeItem('user'); location.reload(); }
+        window.toggleTheme = () => document.body.classList.toggle('dark-mode');
+        window.saveTheme = async () => {
+            const color = document.getElementById('accentPicker').value;
+            const fit = document.getElementById('fitSelect').value;
+            await setDoc(doc(db, "settings", "config"), {accent:color, imgFit:fit}, {merge:true});
+            location.reload();
+        }
     </script>
 </body>
 </html>
