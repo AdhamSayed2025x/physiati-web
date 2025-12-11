@@ -3,354 +3,283 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Physiatić | Advanced Engineering</title>
+    <title>Physiatić | Engineering Hub</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2980b9">
+    <meta name="theme-color" content="#2c3e50">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. Variables & Global --- */
+        /* --- VARIABLES --- */
         :root { 
-            --primary: #2c3e50; --accent: #3498db; --bg-body: #f8f9fa; --bg-card: #ffffff;
+            --primary: #2c3e50; --accent: #3498db; --bg-body: #f4f6f8; --bg-card: #ffffff;
             --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.95);
-            --radius: 15px; --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --grad-sidebar: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); --radius: 12px;
         }
         body.dark-mode {
             --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9;
-            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.95); --shadow: 0 10px 30px rgba(0,0,0,0.4);
-            --grad-sidebar: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.95); --shadow: 0 4px 20px rgba(0,0,0,0.3);
         }
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 70px; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 60px; }
 
-        /* --- 2. Physics Background Animation --- */
-        .physics-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; overflow: hidden; opacity: 0.05; }
-        .floating-icon { position: absolute; font-size: 3rem; animation: floatIcon 10s infinite linear; color: var(--text-main); }
-        @keyframes floatIcon { 0% { transform: translateY(100vh) rotate(0deg); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(-100px) rotate(360deg); opacity: 0; } }
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
-        /* --- 3. Intro Animation (Once per Session) --- */
-        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; opacity: 0; pointer-events: none; }
+        /* --- INTRO OVERLAY --- */
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; pointer-events: none; opacity: 0; }
         #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        .intro-text { font-size: 3rem; font-weight: 900; color: white; text-align: center; }
-        .intro-text span { color: var(--accent); display: block; font-size: 1.5rem; margin-top: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        /* Energy Beams */
-        .beam { position: absolute; height: 4px; background: #fff; width: 0; top: 50%; box-shadow: 0 0 20px #fff; }
-        .beam-l { left: 0; background: cyan; } .beam-r { right: 0; background: magenta; }
-        .active .beam-l { animation: beamL 1s forwards; } .active .beam-r { animation: beamR 1s forwards; }
-        @keyframes beamL { to { width: 50%; } } @keyframes beamR { to { width: 50%; } }
+        .intro-content { text-align: center; color: white; }
+        .intro-content h1 { font-size: 3rem; margin: 0; }
+        .intro-content span { color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; }
 
-        /* --- 4. Navigation (Hamburger) --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 0 5%; background: var(--nav-bg); backdrop-filter: blur(10px); position: fixed; top: 0; width: 100%; z-index: 5000; height: 70px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; z-index: 5002; }
-        
-        /* Hamburger Button */
-        .hamburger { width: 30px; height: 25px; position: relative; cursor: pointer; z-index: 5002; display: flex; flex-direction: column; justify-content: space-between; }
-        .bar { width: 100%; height: 3px; background: var(--text-main); border-radius: 5px; transition: 0.3s; }
-        
-        /* Hamburger to X Animation */
-        .hamburger.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-        .hamburger.open .bar:nth-child(2) { opacity: 0; }
-        .hamburger.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
-
-        /* Mobile/Side Menu */
-        .side-menu { 
-            position: fixed; top: 0; left: -100%; width: 300px; height: 100vh; 
-            background: var(--bg-card); z-index: 5001; padding-top: 80px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 5px 0 30px rgba(0,0,0,0.1); border-right: 1px solid rgba(0,0,0,0.05);
+        /* --- NAVBAR --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; height: 60px; background: var(--nav-bg); 
+            backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; 
+            justify-content: space-between; padding: 0 5%; box-shadow: var(--shadow);
         }
-        .side-menu.active { left: 0; }
-        
-        .menu-item { padding: 15px 30px; font-size: 1.1rem; font-weight: 600; color: var(--text-sec); cursor: pointer; border-left: 4px solid transparent; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; }
-        .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
-        .menu-item i { margin-right: 10px; width: 25px; }
-
+        .hamburger { font-size: 1.5rem; cursor: pointer; color: var(--text-main); }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
         .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .physics-toggle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); background: transparent; }
-        .login-btn { padding: 6px 15px; border-radius: 50px; background: var(--accent); color: white; border: none; font-weight: bold; cursor: pointer; }
+        .theme-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-main); cursor: pointer; }
         .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
 
-        /* --- 5. Content Layout --- */
-        .page-header { padding: 30px 5% 10px; text-align: center; }
-        .page-title { font-size: 2rem; color: var(--text-main); font-weight: 800; }
+        /* --- SIDEBAR MENU (HAMBURGER) --- */
+        .sidebar-menu {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+            background: var(--bg-card); z-index: 4999; padding-top: 70px;
+            transition: 0.3s ease; box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+        }
+        .sidebar-menu.open { left: 0; }
+        .menu-item { padding: 15px 25px; font-weight: 500; cursor: pointer; color: var(--text-sec); display: flex; align-items: center; gap: 10px; border-left: 4px solid transparent; }
+        .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
+        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4998; display: none; }
+
+        /* --- MAIN LAYOUT --- */
+        .main-container { padding: 20px 5%; min-height: 80vh; animation: fadeIn 0.5s ease-out; }
         
-        /* Secondary Tabs Bar (Teams Style) */
-        .tabs-bar { 
-            display: flex; gap: 10px; padding: 10px 5%; overflow-x: auto; 
-            border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 20px;
+        /* Nested Tabs Bar (Teams Style) */
+        .tabs-container { 
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; 
+            border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 30px; 
             scrollbar-width: none; 
         }
-        .tab-pill { 
-            padding: 8px 20px; background: var(--bg-card); border-radius: 20px; 
-            font-size: 0.9rem; color: var(--text-sec); cursor: pointer; white-space: nowrap; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: 0.3s; border: 1px solid transparent;
+        .tab-btn { 
+            padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; 
+            color: var(--text-sec); white-space: nowrap; transition: 0.3s; 
         }
-        .tab-pill.active { background: var(--accent); color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3); }
+        .tab-btn.active { background: var(--accent); color: white; font-weight: 600; }
 
-        /* Hero Section (Home) */
-        .hero { 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 40px 5%; gap: 40px; min-height: 70vh; 
+        /* Content Areas */
+        .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 30px; margin-bottom: 50px; text-align: center; }
+        .hero-txt { flex: 1; min-width: 300px; }
+        .hero-txt h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
+        .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
+        .hero-img img { width: 100%; max-width: 500px; border-radius: 20px; animation: float 6s infinite ease-in-out; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { 
+            background: var(--bg-card); border-radius: var(--radius); overflow: hidden; 
+            box-shadow: var(--shadow); position: relative; transition: 0.3s; border: 1px solid rgba(0,0,0,0.05);
         }
-        .hero-text { flex: 1; animation: slideRight 0.8s ease-out; }
-        .hero-text h1 { font-size: 3.2rem; line-height: 1.1; margin-bottom: 20px; color: var(--text-main); }
-        .hero-text p { font-size: 1.1rem; color: var(--text-sec); margin-bottom: 30px; }
-        .hero-btn { padding: 12px 35px; background: var(--accent); color: white; border-radius: 10px; text-decoration: none; font-weight: bold; box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3); }
-        
-        .hero-img { flex: 1; display: flex; justify-content: center; animation: float 6s infinite ease-in-out; }
-        .hero-img img { width: 100%; max-width: 550px; border-radius: 20px; }
-
-        /* Content Grid */
-        .content-area { padding: 0 5% 50px; min-height: 50vh; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        
-        /* Cards & Posts */
-        .card { background: var(--bg-card); border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); transition: 0.3s; position: relative; border: 1px solid rgba(0,0,0,0.05); }
         .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card img { width: 100%; height: 180px; object-fit: cover; background: #eee; }
         .card-body { padding: 20px; }
-        .card h3 { font-size: 1.2rem; color: var(--text-main); margin-bottom: 8px; }
-        .card p { font-size: 0.9rem; color: var(--text-sec); line-height: 1.5; }
+        .card h3 { font-size: 1.1rem; color: var(--accent); margin-bottom: 5px; }
         
-        .post-card { background: var(--bg-card); padding: 20px; border-radius: 15px; box-shadow: var(--shadow); border-left: 4px solid var(--accent); margin-bottom: 15px; position: relative; }
-        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-        .post-avatar { width: 40px; height: 40px; border-radius: 50%; background: #ddd; }
+        /* Post Card */
+        .post { background: var(--bg-card); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; border-left: 4px solid var(--accent); }
+        .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-weight: bold; }
         
-        .delete-btn { position: absolute; top: 10px; right: 10px; color: #ff4757; cursor: pointer; display: none; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; color: #ff4757; cursor: pointer; display: none; background: white; padding: 5px; border-radius: 50%; }
         .editing .delete-btn { display: block; }
 
-        /* --- 6. Footer & Chatbot --- */
-        footer { background: #1e272e; color: white; padding: 50px 5%; margin-top: 50px; text-align: center; }
-        .footer-cols { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 30px; text-align: left; }
-        .ft-col h4 { color: var(--accent); margin-bottom: 15px; }
-        .ft-socials { display: flex; gap: 15px; font-size: 1.5rem; margin-top: 10px; }
-        /* Social Colors */
-        .fa-facebook { color: #1877f2; } .fa-whatsapp { color: #25d366; } .fa-phone { color: #fff; }
+        /* --- FOOTER & CHATBOT --- */
+        footer { background: #1e293b; color: white; padding: 40px 5%; margin-top: 50px; text-align: center; }
+        .footer-socials { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+        .fa-facebook { color: #1877f2; } .fa-whatsapp { color: #25d366; } .fa-phone { color: white; }
         
-        /* Chatbot */
-        .chatbot-btn { 
-            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; 
-            background: var(--accent); border-radius: 50%; display: flex; 
-            align-items: center; justify-content: center; color: white; font-size: 1.8rem;
-            box-shadow: 0 10px 30px rgba(52, 152, 219, 0.5); cursor: pointer; z-index: 4000;
-            transition: 0.3s; animation: pulse 2s infinite;
+        .chatbot-float { 
+            position: fixed; bottom: 25px; right: 25px; width: 60px; height: 60px; 
+            background: var(--accent); border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; color: white; font-size: 1.8rem; cursor: pointer; 
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4); z-index: 4000; transition: 0.3s; 
         }
-        .chatbot-btn:hover { transform: scale(1.1); }
-        .chatbot-icon { display: flex; align-items: center; justify-content: center; }
+        .chatbot-float:hover { transform: scale(1.1); }
+
+        /* --- ADMIN DASHBOARD --- */
+        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 6000; display: none; justify-content: center; align-items: center; }
+        .dash-card { background: var(--bg-card); width: 90%; max-width: 900px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .dash-sidebar { width: 220px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .dash-btn { padding: 12px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); }
+        .dash-btn.active, .dash-btn:hover { background: var(--accent); font-weight: bold; }
+        .dash-content { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
+        .dash-section { display: none; } .dash-section.active { display: block; }
         
-        /* --- 7. Admin Panel --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 6000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .dash-board { background: var(--bg-card); width: 90%; max-width: 1000px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; flex-direction: row; position: relative; }
-        .sidebar { width: 250px; background: var(--grad-sidebar); color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .dash-main { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
-        .sb-btn { padding: 12px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: #333; font-weight: bold; }
-        .dash-section { display: none; } .dash-section.active-sec { display: block; }
-        .setting-row { margin-bottom: 15px; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .setting-row input, .setting-row select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-top: 5px; }
-        .close-dash { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; color: var(--text-sec); }
+        .form-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-card); color: var(--text-main); }
+        .close-dash { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; color: #7f8c8d; cursor: pointer; }
 
         /* Login Modal */
         #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; display: none; justify-content: center; align-items: center; }
-        .modal-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 320px; text-align: center; }
-        
-        /* Animations */
-        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(52, 152, 219, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); } }
-        @keyframes slideRight { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        .login-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 320px; text-align: center; }
 
-        /* Mobile */
-        @media (max-width: 900px) {
-            .hero { flex-direction: column-reverse; text-align: center; padding-top: 30px; }
-            .hero-text { width: 100%; } .hero-img { width: 100%; }
-            .dash-board { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
-            .ft-col { width: 100%; text-align: center; margin-bottom: 20px; }
+        /* Edit Mode */
+        .editable { border: 2px dashed #f39c12; cursor: text; }
+        #saveBtn { position: fixed; bottom: 20px; right: 100px; background: #27ae60; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 7000; }
+
+        /* Responsive Fixes */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column-reverse; text-align: center; }
+            .hero-txt { width: 100%; } .hero-img { width: 100%; }
+            .dash-card { flex-direction: column; height: 100%; width: 100%; border-radius: 0; }
+            .dash-sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; white-space: nowrap; }
             .footer-cols { flex-direction: column; }
-            .footer-socials { justify-content: center; }
         }
-        
-        .editable { border: 2px dashed #e67e22; cursor: text; }
-        #saveBtn { position: fixed; bottom: 20px; right: 90px; background: #27ae60; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 6000; }
     </style>
 </head>
 <body>
 
     <div id="intro-overlay">
-        <div class="beam beam-l"></div> <div class="beam beam-r"></div>
-        <div class="intro-text" id="introMsg">Welcome <br> <span>Engineer</span></div>
+        <div class="intro-content">
+            <h1>Welcome</h1>
+            <span>Engineer</span>
+        </div>
     </div>
 
-    <div class="physics-bg">
-        <i class="fas fa-atom floating-icon" style="top:10%; left:10%; animation-duration:12s;"></i>
-        <i class="fas fa-magnet floating-icon" style="top:70%; left:80%; animation-duration:15s;"></i>
-        <i class="fas fa-microchip floating-icon" style="top:40%; left:50%; animation-duration:20s;"></i>
-        <i class="fas fa-rocket floating-icon" style="top:80%; left:20%; animation-duration:18s;"></i>
-    </div>
-
-    <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
+    <input type="file" id="imgUploadInput" style="display: none;">
 
     <nav>
-        <div class="hamburger" onclick="toggleMenu()">
-            <div class="bar"></div> <div class="bar"></div> <div class="bar"></div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <i class="fas fa-bars hamburger" onclick="toggleSidebar()"></i>
+            <div class="logo"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
         </div>
-        <div class="logo"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
-        
         <div class="nav-actions">
-            <button class="physics-toggle" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <button class="login-btn" id="loginBtnUI" onclick="openLogin()">Login</button>
-            <div id="userBadge" style="display:none;" onclick="openDashboard()">
-                <img src="" id="myAvatar" class="nav-avatar">
-            </div>
+            <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-lightbulb"></i></button>
+            <div id="loggedOut"><button onclick="openLogin()" style="padding:6px 15px; background:var(--accent); color:white; border:none; border-radius:20px; font-weight:600;">Login</button></div>
+            <div id="loggedIn" style="display:none;"><img src="" id="userAvatar" class="nav-avatar" onclick="openDashboard()"></div>
         </div>
     </nav>
 
-    <div class="side-menu" id="sideMenu">
-        <div style="padding:20px; font-weight:bold; color:var(--accent);">PAGES</div>
-        <div id="pageList">
+    <div class="overlay-bg" onclick="toggleSidebar()"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div style="padding: 20px; font-weight:bold; color:var(--accent); border-bottom:1px solid #eee;">PAGES</div>
+        <div id="pagesList">
             </div>
-        <div style="padding:20px; font-size:0.8rem; color:var(--text-sec); border-top:1px solid rgba(0,0,0,0.05); margin-top:20px;">
-            Select a page to view content.
-        </div>
     </div>
 
-    <div id="main-container">
+    <div class="main-container">
         
-        <div id="home-view" style="display:block;">
-            <div class="hero">
-                <div class="hero-text">
-                    <h1 data-db="h_t">Master the Art of <br><span style="color:var(--accent)">Physics & Robotics</span></h1>
-                    <p data-db="h_d">The ultimate platform for engineering students to explore, learn, and innovate.</p>
-                    <a href="#" onclick="selectPage('projects')" class="hero-btn">Explore Projects</a>
-                </div>
-                <div class="hero-img">
-                    <img data-img="hero" src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg">
-                </div>
-            </div>
-            
-            <div class="page-header"><h2 data-db="feat">Featured Scientists</h2></div>
-            <div class="grid" style="padding:0 5%;">
-                <div class="card"><div class="card-body" style="text-align:center;"><i class="fas fa-bolt" style="font-size:3rem; color:#f1c40f;"></i><h3>Tesla</h3><p>Master of Lightning</p></div></div>
-                <div class="card"><div class="card-body" style="text-align:center;"><i class="fas fa-apple-alt" style="font-size:3rem; color:#e74c3c;"></i><h3>Newton</h3><p>Laws of Motion</p></div></div>
-                <div class="card"><div class="card-body" style="text-align:center;"><i class="fas fa-atom" style="font-size:3rem; color:#3498db;"></i><h3>Einstein</h3><p>Relativity</p></div></div>
-            </div>
+        <div style="text-align:center; margin-bottom:20px;">
+            <h2 id="pageTitle" style="font-size:2rem; color:var(--text-main);">Home</h2>
         </div>
+        
+        <div class="tabs-container" id="tabsBar">
+            </div>
 
-        <div id="dynamic-view" style="display:none;">
-            <div class="page-header"><h2 id="pageTitle">Page Name</h2></div>
-            
-            <div class="tabs-bar" id="tabsBar"></div>
-            
-            <div class="content-area" id="contentArea"></div>
+        <div id="contentArea">
+            <div id="default-home-content">
+                <div class="hero">
+                    <div class="hero-txt">
+                        <h1 data-db="h_t">Advanced <span style="color:var(--accent)">Physics</span></h1>
+                        <p data-db="h_d">The future of engineering education starts here.</p>
+                    </div>
+                    <div class="hero-img">
+                        <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg">
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/400" data-img="p1">
+                        <div class="card-body">
+                            <h3 data-db="p1_t">Project Alpha</h3>
+                            <p data-db="p1_d">Description of the project goes here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
 
     <footer>
-        <div class="footer-cols">
-            <div class="ft-col">
-                <h4>Physiatić</h4>
-                <p>Empowering the next generation of engineers.</p>
-            </div>
-            <div class="ft-col">
-                <h4>Connect</h4>
-                <div class="ft-socials">
-                    <a id="socFb" href="#" target="_blank"><i class="fab fa-facebook"></i></a>
-                    <a id="socWa" href="#" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                    <a id="socPh" href="#"><i class="fas fa-phone"></i></a>
-                </div>
-            </div>
-        </div>
-        <div style="margin-top:30px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.1); font-size:0.8rem;">
-            &copy; 2025 All Rights Reserved | Developed by <span style="color:var(--accent); font-weight:bold;">Eng. Adham Sayed</span>
+        <h3 data-db="f_t">Physiatić Hub</h3>
+        <p>Developed by <span style="color:var(--accent)">Eng. Adham Sayed</span></p>
+        <div class="footer-socials">
+            <a id="lnkFb" href="#"><i class="fab fa-facebook"></i></a>
+            <a id="lnkWa" href="#"><i class="fab fa-whatsapp"></i></a>
+            <a id="lnkPh" href="#"><i class="fas fa-phone"></i></a>
         </div>
     </footer>
 
-    <div class="chatbot-btn" onclick="alert('Chatbot AI Coming Soon! 🤖')">
-        <div class="chatbot-icon">
-            <i class="fas fa-robot" style="font-size:1.2rem;"></i><i class="fas fa-atom" style="font-size:0.8rem; margin-left:-5px; margin-top:-10px;"></i>
-        </div>
-    </div>
-
-    <div id="login-modal" onclick="if(event.target==this)this.style.display='none'">
-        <div class="modal-box">
-            <h2>Admin Access</h2>
-            <input id="u" placeholder="Username" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
-            <input id="p" type="password" placeholder="Password" style="width:100%; padding:12px; margin:10px 0; border:1px solid #ddd; border-radius:8px;">
-            <button onclick="login()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:8px; margin-top:10px; cursor:pointer;">Login</button>
-        </div>
+    <div class="chatbot-float" onclick="alert('Chatbot AI: How can I help you, Engineer?')">
+        <i class="fas fa-robot"></i>
     </div>
 
     <div id="admin-panel">
-        <div class="dash-board">
-            <div class="close-dash" onclick="closeDashboard()"><i class="fas fa-times"></i></div>
-            <div class="sidebar">
-                <h3 style="margin-bottom:20px;">Control Panel</h3>
-                <div class="sb-btn active" onclick="switchTab('pages')"><i class="fas fa-file"></i> Pages & Tabs</div>
-                <div class="sb-btn" onclick="switchTab('content')"><i class="fas fa-pen"></i> Edit Content</div>
-                <div class="sb-btn" onclick="switchTab('socials')"><i class="fas fa-share-alt"></i> Socials</div>
-                <div class="sb-btn" onclick="switchTab('team')"><i class="fas fa-users"></i> Team</div>
-                <div class="sb-btn" onclick="switchTab('profile')"><i class="fas fa-user"></i> Profile</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;"><i class="fas fa-power-off"></i> Logout</div>
+        <div class="dash-card">
+            <i class="fas fa-times close-dash" onclick="closeDashboard()"></i>
+            <div class="dash-sidebar">
+                <h3>Admin</h3>
+                <div class="dash-btn active" onclick="switchTab('pages')">Pages & Tabs</div>
+                <div class="dash-btn" onclick="switchTab('content')">Add Content</div>
+                <div class="dash-btn" onclick="switchTab('socials')">Socials</div>
+                <div class="dash-btn" onclick="switchTab('team')">Team</div>
+                <div class="dash-btn" onclick="logout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
             </div>
             
-            <div class="dash-main">
-                <div id="tab-pages" class="dash-section active-sec">
+            <div class="dash-content">
+                
+                <div id="tab-pages" class="dash-section active">
                     <h2>Manage Pages</h2>
-                    <div class="setting-row">
-                        <input id="newPageName" placeholder="New Page Name (e.g. Lectures)">
-                        <button onclick="addPage()" style="margin-top:5px; padding:8px 15px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Page</button>
-                    </div>
-                    <div id="adminPageList" style="margin-bottom:30px;"></div>
+                    <input id="newPage" class="form-input" placeholder="Page Name">
+                    <button onclick="addPage()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Page</button>
+                    <div id="adminPagesList" style="margin:20px 0;"></div>
                     
-                    <h3>Manage Tabs (Inside Selected Page)</h3>
-                    <p style="font-size:0.9rem; color:gray;">Select a page from the menu first.</p>
-                    <div class="setting-row">
-                        <input id="newTabName" placeholder="New Tab Name (e.g. Week 1)">
-                        <button onclick="addTab()" style="margin-top:5px; padding:8px 15px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Tab to Current Page</button>
-                    </div>
+                    <h3>Tabs for Current Page</h3>
+                    <input id="newTab" class="form-input" placeholder="Tab Name">
+                    <button onclick="addTab()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Tab</button>
                 </div>
 
                 <div id="tab-content" class="dash-section">
                     <h2>Content Editor</h2>
-                    <p>Navigate to a tab, then use these buttons.</p>
-                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                        <button onclick="enableEdit()" style="padding:15px; background:#2ecc71; color:white; border:none; border-radius:10px;">Enable Live Text Edit</button>
-                        <button onclick="addContent('card')" style="padding:15px; background:var(--accent); color:white; border:none; border-radius:10px;">+ Add Card</button>
-                        <button onclick="addContent('post')" style="padding:15px; background:#9b59b6; color:white; border:none; border-radius:10px;">+ Add Post</button>
+                    <p>Go to the page/tab you want to edit first.</p>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <button onclick="enableEdit()" style="padding:15px; background:#2ecc71; color:white; border:none; border-radius:10px;">Live Edit Text</button>
+                        <button onclick="addCard()" style="padding:15px; background:var(--accent); color:white; border:none; border-radius:10px;">+ Add Card</button>
+                        <button onclick="addPost()" style="padding:15px; background:#9b59b6; color:white; border:none; border-radius:10px;">+ Add Post</button>
                     </div>
                 </div>
 
                 <div id="tab-socials" class="dash-section">
-                    <h2>Social Media Links</h2>
-                    <div class="setting-row"><label>Facebook</label><input id="inFb"></div>
-                    <div class="setting-row"><label>WhatsApp</label><input id="inWa"></div>
-                    <div class="setting-row"><label>Phone</label><input id="inPh"></div>
-                    <button onclick="saveSocials()" style="padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:5px;">Save</button>
+                    <h2>Social Links</h2>
+                    <input id="inFb" class="form-input" placeholder="Facebook Link">
+                    <input id="inWa" class="form-input" placeholder="WhatsApp Link">
+                    <input id="inPh" class="form-input" placeholder="Phone Number">
+                    <button onclick="saveSocials()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Save</button>
                 </div>
 
                 <div id="tab-team" class="dash-section">
                     <h2>Team Manager</h2>
-                    <div class="setting-row">
-                        <input id="newAdminUser" placeholder="Username" style="width:48%;">
-                        <input id="newAdminPass" placeholder="Password" style="width:48%;">
-                        <button onclick="addNewAdmin()" style="width:100%; margin-top:5px; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button>
-                    </div>
-                    <div id="teamTable"></div>
+                    <input id="newAdmUser" class="form-input" placeholder="Username">
+                    <input id="newAdmPass" class="form-input" placeholder="Password">
+                    <button onclick="addAdmin()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button>
+                    <div id="adminList" style="margin-top:20px;"></div>
                 </div>
 
-                <div id="tab-profile" class="dash-section">
-                    <h2>My Profile</h2>
-                    <div style="text-align:center; margin-bottom:20px;">
-                        <img id="previewAvatar" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">
-                        <button onclick="document.getElementById('imgUploadInput').click()" style="display:block; margin:10px auto; padding:5px 15px; border-radius:20px; border:1px solid #ddd;">Change Photo</button>
-                    </div>
-                    <div class="setting-row"><label>Display Name</label><input id="profName" onchange="updateProfile()"></div>
-                    <div class="setting-row"><label>Bio</label><input id="profBio" onchange="updateProfile()"></div>
-                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="login-modal">
+        <div class="login-box">
+            <h2>Login</h2>
+            <input id="u" class="form-input" placeholder="User">
+            <input id="p" type="password" class="form-input" placeholder="Pass">
+            <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Enter</button>
+            <button onclick="document.getElementById('login-modal').style.display='none'" style="background:none; border:none; margin-top:10px; color:#888;">Cancel</button>
         </div>
     </div>
 
@@ -373,223 +302,135 @@
         const db = getFirestore(app);
         
         let currentUser = JSON.parse(localStorage.getItem('user'));
-        let pages = [{id:'home', name:'Home'}]; // Default pages
-        let currentView = 'home';
+        let pages = [{id:'home', name:'Home'}];
+        let currentPage = 'home';
         let currentTab = 'default';
 
         // --- INIT ---
         async function init() {
-            // Intro: Session Storage
+            // Intro (Session)
             if(!sessionStorage.getItem('seenIntro')) {
-                const intro = document.getElementById('intro-overlay');
-                intro.classList.add('active');
-                setTimeout(() => intro.classList.remove('active'), 3000);
+                const overlay = document.getElementById('intro-overlay');
+                overlay.classList.add('active');
+                setTimeout(() => overlay.classList.remove('active'), 2500);
                 sessionStorage.setItem('seenIntro', 'true');
             }
 
             // Load Config
             try {
-                const docSnap = await getDoc(doc(db, "settings", "config"));
-                if(docSnap.exists()) {
-                    const data = docSnap.data();
+                const snap = await getDoc(doc(db, "settings", "config"));
+                if(snap.exists()) {
+                    const data = snap.data();
                     if(data.pages) pages = data.pages;
-                    if(data.socials) updateSocialsUI(data.socials);
+                    if(data.socials) {
+                        document.getElementById('lnkFb').href = data.socials.fb || '#';
+                        document.getElementById('inFb').value = data.socials.fb || '';
+                        document.getElementById('lnkWa').href = data.socials.wa || '#';
+                        document.getElementById('inWa').value = data.socials.wa || '';
+                        document.getElementById('lnkPh').href = data.socials.ph || '#';
+                        document.getElementById('inPh').value = data.socials.ph || '';
+                    }
                 }
-            } catch(e) { console.log("New setup"); }
-            
+            } catch(e) { console.log("Using Default Config"); }
+
             renderMenu();
             renderAdminTeam();
+            loadPage('home', 'Home'); // Load Default
         }
         init();
 
-        // --- UI LOGIC ---
-        function toggleMenu() {
-            document.querySelector('.hamburger').classList.toggle('open');
-            document.getElementById('sideMenu').classList.toggle('active');
-        }
-
+        // --- NAVIGATION LOGIC ---
         function renderMenu() {
-            const list = document.getElementById('pageList');
-            const adminList = document.getElementById('adminPageList');
-            let html = '';
-            
-            pages.forEach(p => {
-                html += `<div class="menu-item" onclick="loadPage('${p.id}', '${p.name}')"><i class="fas fa-file-alt"></i> ${p.name}</div>`;
-            });
-            
-            list.innerHTML = html;
-            if(adminList) adminList.innerHTML = html; // Reuse layout for admin
+            const html = pages.map(p => 
+                `<div class="menu-item" onclick="loadPage('${p.id}', '${p.name}')">
+                    <i class="fas fa-file-alt"></i> ${p.name}
+                </div>`
+            ).join('');
+            document.getElementById('pagesList').innerHTML = html;
+            document.getElementById('adminPagesList').innerHTML = html.replace(/menu-item/g, 'dash-btn'); // Reuse style
         }
 
-        // --- NESTED PAGE SYSTEM ---
-        window.loadPage = async function(pageId, pageName) {
-            toggleMenu(); // Close sidebar
-            currentView = pageId;
-            
-            if(pageId === 'home') {
-                document.getElementById('home-view').style.display = 'block';
-                document.getElementById('dynamic-view').style.display = 'none';
+        window.loadPage = async function(id, name) {
+            currentPage = id;
+            document.getElementById('pageTitle').innerText = name;
+            document.querySelector('.sidebar-menu').classList.remove('open');
+            document.querySelector('.overlay-bg').style.display='none';
+
+            // Show default content for Home if DB is empty
+            if(id === 'home' && !await hasDBContent('home')) {
+                document.getElementById('contentArea').innerHTML = document.getElementById('default-home-content').innerHTML;
+                document.getElementById('tabsBar').innerHTML = '';
                 return;
             }
 
-            document.getElementById('home-view').style.display = 'none';
-            document.getElementById('dynamic-view').style.display = 'block';
-            document.getElementById('pageTitle').innerText = pageName;
+            // Load Tabs
+            const tabSnap = await getDoc(doc(db, "site_data", "tabs_"+id));
+            let tabs = tabSnap.exists() ? tabSnap.data().tabs : [{id:'gen', name:'General'}];
             
-            // Load Tabs for this page
-            const snap = await getDoc(doc(db, "site_data", "tabs_"+pageId));
-            let tabs = snap.exists() ? snap.data().tabs : [{id:'default', name:'General'}];
+            const tabHTML = tabs.map(t => `<div class="tab-btn ${t.id===currentTab?'active':''}" onclick="loadTab('${t.id}')">${t.name}</div>`).join('');
+            document.getElementById('tabsBar').innerHTML = tabHTML;
             
-            renderTabs(tabs);
-            loadContent(pageId, tabs[0].id);
+            loadTab(tabs[0].id);
         }
 
-        function renderTabs(tabs) {
-            const bar = document.getElementById('tabsBar');
-            bar.innerHTML = tabs.map(t => `<div class="tab-pill ${t.id===currentTab?'active':''}" onclick="loadContent('${currentView}', '${t.id}')">${t.name}</div>`).join('');
+        async function hasDBContent(id) {
+            try { const s = await getDoc(doc(db, "site_data", "content_"+id+"_gen")); return s.exists(); } catch(e) { return false; }
         }
 
-        window.loadContent = async function(pageId, tabId) {
+        window.loadTab = async function(tabId) {
             currentTab = tabId;
-            // Update active tab UI
-            document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
-            event && event.target.classList.add('active');
+            // UI Update
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
 
-            const container = document.getElementById('contentArea');
-            const snap = await getDoc(doc(db, "site_data", `content_${pageId}_${tabId}`));
-            
-            if(snap.exists() && snap.data().html) {
-                container.innerHTML = snap.data().html;
+            const snap = await getDoc(doc(db, "site_data", `content_${currentPage}_${tabId}`));
+            if(snap.exists()) {
+                document.getElementById('contentArea').innerHTML = snap.data().html;
             } else {
-                container.innerHTML = `<div style="text-align:center; padding:40px; color:#aaa;">Empty Tab. Add content from Admin.</div><div class="grid"></div>`;
+                document.getElementById('contentArea').innerHTML = `<div class="grid"></div>`; // Empty Grid
             }
             if(document.body.classList.contains('editing')) window.enableEdit();
         }
 
         // --- ADMIN FUNCTIONS ---
         window.addPage = async function() {
-            const name = document.getElementById('newPageName').value;
+            const name = document.getElementById('newPage').value;
             if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g, '');
-            pages.push({id, name});
+            pages.push({id: name.toLowerCase().replace(/\s/g,''), name});
             await setDoc(doc(db, "settings", "config"), { pages }, {merge:true});
-            renderMenu(); alert("Page Added!");
+            renderMenu(); alert("Page Added");
         }
 
         window.addTab = async function() {
-            if(currentView === 'home') return alert("Cannot add tabs to Home");
-            const name = document.getElementById('newTabName').value;
+            const name = document.getElementById('newTab').value;
             if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g, '');
-            
-            const ref = doc(db, "site_data", "tabs_"+currentView);
+            const ref = doc(db, "site_data", "tabs_"+currentPage);
             const snap = await getDoc(ref);
-            let tabs = snap.exists() ? snap.data().tabs : [{id:'default', name:'General'}];
-            tabs.push({id, name});
-            
+            let tabs = snap.exists() ? snap.data().tabs : [{id:'gen', name:'General'}];
+            tabs.push({id: name.toLowerCase().replace(/\s/g,''), name});
             await setDoc(ref, {tabs});
-            renderTabs(tabs); alert("Tab Added!");
+            loadPage(currentPage, document.getElementById('pageTitle').innerText);
+            alert("Tab Added");
         }
 
-        window.addContent = function(type) {
+        window.addCard = function() {
             const grid = document.querySelector('#contentArea .grid') || document.querySelector('#contentArea');
-            if(!grid) return alert("Please open a page/tab first");
-            
-            let html = '';
-            if(type === 'card') {
-                html = `<div class="card"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><img src="https://via.placeholder.com/300" class="editable-img"><div class="card-body"><h3 contenteditable>Title</h3><p contenteditable>Desc...</p></div></div>`;
-            } else {
-                html = `<div class="post-card"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><div class="post-header"><div class="post-avatar"></div><div style="font-weight:bold">Admin</div></div><p contenteditable>Write post update here...</p></div>`;
-            }
-            grid.insertAdjacentHTML('beforeend', html);
+            const html = `<div class="card"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><img src="https://via.placeholder.com/400" class="editable-img"><div class="card-body"><h3 contenteditable>Title</h3><p contenteditable>Desc...</p></div></div>`;
+            if(grid.classList.contains('grid')) grid.insertAdjacentHTML('beforeend', html);
+            else grid.innerHTML = `<div class="grid">${html}</div>`;
             window.enableEdit();
         }
 
-        window.addNewAdmin = async function() {
-            const u = document.getElementById('newAdminUser').value;
-            const p = document.getElementById('newAdminPass').value;
-            if(!u || !p) return;
-            
-            const ref = doc(db, "settings", "admins");
-            // Check if exists first to avoid error
-            const snap = await getDoc(ref);
-            if(!snap.exists()) {
-                await setDoc(ref, { list: [{u, p, role:'admin'}] });
-            } else {
-                await updateDoc(ref, { list: arrayUnion({u, p, role:'admin'}) });
-            }
-            alert("Admin Added!"); renderAdminTeam();
-        }
-
-        async function renderAdminTeam() {
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) {
-                document.getElementById('teamTable').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
-            }
-        }
-
-        // --- UPLOAD & SAVE ---
-        window.triggerUpload = () => document.getElementById('imgUploadInput').click();
-        document.getElementById('imgUploadInput').onchange = (e) => {
-            const r = new FileReader(); r.readAsDataURL(e.target.files[0]);
-            r.onload = (ev) => {
-                if(currentUser) {
-                    document.getElementById('previewAvatar').src = ev.target.result;
-                    document.getElementById('myAvatar').src = ev.target.result;
-                    currentUser.img = ev.target.result;
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                }
-            }
+        window.addPost = function() {
+            const area = document.getElementById('contentArea');
+            const html = `<div class="post"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><div class="post-header"><div class="nav-avatar" style="background:#ddd"></div> Admin</div><p contenteditable>Update text...</p></div>`;
+            area.insertAdjacentHTML('afterbegin', html);
         }
 
         window.saveData = async function() {
-            const content = document.getElementById('contentArea').innerHTML;
-            await setDoc(doc(db, "site_data", `content_${currentView}_${currentTab}`), {html: content});
-            alert("Saved!"); location.reload();
-        }
-
-        window.enableEdit = function() {
-            document.getElementById('admin-panel').style.display='none';
-            document.body.classList.add('editing');
-            document.getElementById('saveBtn').style.display='block';
-            document.querySelectorAll('[contenteditable]').forEach(el => el.contentEditable = true);
-            document.querySelectorAll('img').forEach(el => {
-                el.onclick = function() {
-                    // Logic to replace image would go here (simple prompt for now)
-                    let url = prompt("Enter Image URL"); if(url) this.src = url;
-                }
-            });
-        }
-
-        // --- AUTH & HELPERS ---
-        window.login = async function() {
-            const u = document.getElementById('u').value; const p = document.getElementById('p').value;
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) {
-                const user = snap.data().list.find(a => a.u===u && a.p===p);
-                if(user) {
-                    localStorage.setItem('user', JSON.stringify(user));
-                    location.reload();
-                } else alert("Wrong!");
-            } else {
-                // Fallback for first run
-                if(u==='Adham' && p==='20250003') {
-                    const user = {u:'Adham', role:'super_admin'};
-                    localStorage.setItem('user', JSON.stringify(user));
-                    // Create DB entry
-                    setDoc(doc(db, "settings", "admins"), {list:[user]});
-                    location.reload();
-                }
-            }
-        }
-
-        function updateSocialsUI(s) {
-            if(s.fb) document.getElementById('socFb').href = s.fb;
-            if(s.wa) document.getElementById('socWa').href = s.wa;
-            if(s.ph) document.getElementById('socPh').href = s.ph;
-            document.getElementById('inFb').value = s.fb || '';
-            document.getElementById('inWa').value = s.wa || '';
-            document.getElementById('inPh').value = s.ph || '';
+            const html = document.getElementById('contentArea').innerHTML;
+            await setDoc(doc(db, "site_data", `content_${currentPage}_${currentTab}`), {html});
+            alert("Saved!");
         }
 
         window.saveSocials = async function() {
@@ -599,28 +440,91 @@
                 ph: document.getElementById('inPh').value
             };
             await setDoc(doc(db, "settings", "config"), { socials: s }, {merge:true});
-            alert("Socials Saved!");
+            alert("Saved!"); location.reload();
         }
 
-        // UI toggles
+        // --- AUTH & TEAM ---
+        window.login = async function() {
+            const u = document.getElementById('u').value; const p = document.getElementById('p').value;
+            // Admin Check Logic
+            const snap = await getDoc(doc(db, "settings", "admins"));
+            let authorized = false;
+            if(snap.exists()) {
+                const list = snap.data().list;
+                if(list.find(a => a.u===u && a.p===p)) authorized = true;
+            } else {
+                // First Run Fallback
+                if(u==='Adham' && p==='20250003') {
+                    await setDoc(doc(db, "settings", "admins"), {list:[{u,p,role:'super_admin'}]});
+                    authorized = true;
+                }
+            }
+            
+            if(authorized) {
+                localStorage.setItem('user', JSON.stringify({u, role:'admin'}));
+                location.reload();
+            } else alert("Wrong!");
+        }
+
+        window.addAdmin = async function() {
+            const u = document.getElementById('newAdmUser').value;
+            const p = document.getElementById('newAdmPass').value;
+            const ref = doc(db, "settings", "admins");
+            
+            const snap = await getDoc(ref);
+            if(snap.exists()) {
+                await updateDoc(ref, { list: arrayUnion({u, p, role:'admin'}) });
+            } else {
+                await setDoc(ref, { list: [{u, p, role:'admin'}] });
+            }
+            alert("Admin Added!"); renderAdminTeam();
+        }
+
+        async function renderAdminTeam() {
+            try {
+                const snap = await getDoc(doc(db, "settings", "admins"));
+                if(snap.exists()) {
+                    document.getElementById('adminList').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
+                }
+            } catch(e) {}
+        }
+
+        window.logout = function() {
+            document.getElementById('introMsg').innerHTML = `Goodbye <br> <span>Engineer</span>`;
+            document.getElementById('intro-overlay').classList.add('active');
+            setTimeout(() => { localStorage.removeItem('user'); sessionStorage.removeItem('seenIntro'); location.reload(); }, 2000);
+        }
+
+        // --- HELPERS ---
+        window.toggleSidebar = () => {
+            document.getElementById('sidebarMenu').classList.toggle('open');
+            document.querySelector('.overlay-bg').style.display = document.getElementById('sidebarMenu').classList.contains('open') ? 'block' : 'none';
+        }
+        window.toggleTheme = () => document.body.classList.toggle('dark-mode');
         window.openLogin = () => document.getElementById('login-modal').style.display='flex';
         window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
         window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
-        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
-        window.performLogout = () => {
+        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); }
+        
+        window.enableEdit = function() {
             document.getElementById('admin-panel').style.display='none';
-            document.getElementById('introMsg').innerHTML = `Goodbye <br> <span>Engineer</span>`;
-            document.getElementById('intro-overlay').classList.add('active');
-            setTimeout(() => { localStorage.removeItem('user'); location.reload(); }, 3000);
+            document.body.classList.add('editing');
+            document.getElementById('saveBtn').style.display='block';
+            document.querySelectorAll('[data-db], h1, h2, h3, p').forEach(el => el.contentEditable=true);
+            // Image Click Upload Logic
+            document.querySelectorAll('img').forEach(el => {
+                el.onclick = function() {
+                    const url = prompt("Enter Image URL:");
+                    if(url) this.src = url;
+                }
+            });
         }
-        window.toggleTheme = () => document.body.classList.toggle('dark-mode');
 
+        // UI STATE
         if(currentUser) {
-            document.getElementById('loggedOutUI').style.display='none';
-            document.getElementById('loggedInUI').style.display='block';
-            if(currentUser.img) document.getElementById('myAvatar').src = currentUser.img;
-            else document.getElementById('myAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-            document.getElementById('profName').value = currentUser.u;
+            document.getElementById('loggedOut').style.display='none';
+            document.getElementById('loggedIn').style.display='block';
+            document.getElementById('userAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
         }
     </script>
 </body>
