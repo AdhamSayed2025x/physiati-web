@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiatić | Advanced Physics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- 1. General & Variables --- */
+        :root { 
+            --primary: #2d3436;      
+            --accent: #2980b9;       
+            --bg-light: #ffffff; 
+            --bg-soft: #f9fbfd;
+            --nav-hover: #eaf2f8; /* اللون اللبني الخفيف */
+            --glass: rgba(255, 255, 255, 0.95);
+        }
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; font-family: 'Poppins', sans-serif; 
+            background: var(--bg-light); color: var(--primary); 
+            overflow-x: hidden; 
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animate-up { animation: fadeUp 0.8s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        /* --- 2. Login Screen --- */
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            z-index: 9999; display: flex; justify-content: center; align-items: center;
+        }
+        .login-box {
+            background: white; padding: 40px; border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); width: 350px; text-align: center;
+            animation: fadeUp 0.6s ease-out;
+        }
+        .login-box input {
+            width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd;
+            border-radius: 8px; outline: none; transition: 0.3s;
+        }
+        .login-box input:focus { border-color: var(--accent); box-shadow: 0 0 8px rgba(41, 128, 185, 0.2); }
+        .btn-main {
+            background: var(--primary); color: white; border: none; padding: 12px;
+            width: 100%; border-radius: 50px; cursor: pointer; font-weight: 600;
+            transition: 0.3s; margin-top: 10px;
+        }
+        .btn-main:hover { background: var(--accent); transform: translateY(-2px); }
+
+        /* --- 3. Navigation --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 8%; background: var(--glass); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+        }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #2c3e50; letter-spacing: -0.5px; }
+        .logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 15px; align-items: center; }
+        .nav-link {
+            text-decoration: none; color: #636e72; font-weight: 500;
+            padding: 8px 16px; border-radius: 20px; transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        /* Hover & Active State (Light Blue) */
+        .nav-link:hover, .nav-link.active-page {
+            background-color: var(--nav-hover);
+            color: var(--accent);
+        }
+
+        .user-badge { font-size: 0.9rem; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+        .logout-icon { color: #e74c3c; cursor: pointer; margin-left: 10px; transition: 0.3s; }
+        .logout-icon:hover { transform: scale(1.2); }
+
+        /* --- 4. Main Content (Home) --- */
+        #home-section { display: block; } /* Visible by default */
+        
+        .hero {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 60px 8%; min-height: 85vh;
+        }
+        .hero-text h1 { font-size: 3.5rem; line-height: 1.2; margin-bottom: 20px; color: #1e272e; }
+        .hero-text strong { color: var(--accent); }
+        .hero-img img { width: 100%; max-width: 600px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1)); transition: transform 0.5s; }
+        .hero-img:hover img { transform: translateY(-10px); }
+
+        /* Projects */
+        .projects-wrapper { padding: 60px 8%; background: var(--bg-soft); }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        
+        .card { 
+            background: white; border-radius: 16px; overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04); transition: 0.4s; cursor: pointer;
+        }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 25px; }
+        .card h3 { color: var(--accent); margin: 0 0 10px; }
+
+        /* --- 5. "Soon" Pages --- */
+        .soon-section {
+            display: none; /* Hidden by default */
+            height: 80vh; text-align: center; justify-content: center; 
+            align-items: center; flex-direction: column;
+        }
+        .soon-content i { font-size: 4rem; color: #bdc3c7; margin-bottom: 20px; }
+        .soon-content h2 { font-size: 2.5rem; color: #2d3436; }
+        .soon-content p { color: #636e72; }
+
+        /* --- 6. Admin Dashboard (Overlay) --- */
+        #admin-panel {
+            display: none; /* Hidden */
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 2000;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .admin-board {
+            background: white; width: 80%; max-width: 900px; height: 600px;
+            border-radius: 20px; display: flex; overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            animation: fadeUp 0.4s ease-out;
+        }
+        .sidebar {
+            width: 250px; background: #2c3e50; color: white; padding: 30px;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .sidebar h3 { margin: 0 0 30px; font-size: 1.5rem; border-bottom: 1px solid #34495e; padding-bottom: 15px; }
+        .sb-item {
+            padding: 12px; border-radius: 10px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px;
+        }
+        .sb-item:hover, .sb-item.active { background: var(--accent); }
+        
+        .dash-content { flex: 1; padding: 40px; background: #f8f9fa; position: relative; }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        
+        .close-dash { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: #666; }
+
+        /* Editable Highlight */
+        .editable { border: 2px dashed #e74c3c !important; background: rgba(231, 76, 60, 0.05); cursor: text; }
+        #saveBtn {
+            position: fixed; bottom: 30px; right: 30px; background: #27ae60;
+            color: white; padding: 15px 35px; border-radius: 50px; border: none;
+            font-weight: bold; cursor: pointer; box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+            display: none; z-index: 2001; animation: fadeUp 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-box">
+            <div style="font-size: 3rem; color: var(--accent); margin-bottom: 10px;"><i class="fas fa-atom"></i></div>
+            <h2>Physiatić Access</h2>
+            <p style="color:#888; font-size:0.9rem;">Please identify yourself</p>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn-main" onclick="attemptLogin()">Enter Dashboard</button>
+            <p id="errorMsg" style="color: #e74c3c; display: none; margin-top: 10px; font-size:0.85rem;">Invalid Credentials</p>
+        </div>
+    </div>
+
+    <nav id="navbar" style="display:none;">
+        <div class="logo"><i class="fas fa-atom"></i> Physiatić</div>
+        
+        <div class="nav-links">
+            <a onclick="route('home')" class="nav-link active-page" id="nav-home">Home</a>
+            <a onclick="route('topics')" class="nav-link" id="nav-topics">Topics</a>
+            <a onclick="route('resources')" class="nav-link" id="nav-resources">Resources</a>
+            <a onclick="route('articles')" class="nav-link" id="nav-articles">Articles</a>
+            <a onclick="route('about')" class="nav-link" id="nav-about">About</a>
+        </div>
+
+        <div class="user-badge">
+            <span id="welcomeMsg"></span>
+            <span id="adminBtn" onclick="openAdminPanel()" style="display:none; margin-left:10px; cursor:pointer; background:var(--accent); color:white; padding:5px 12px; border-radius:15px; font-size:0.8rem;">
+                <i class="fas fa-tools"></i> Admin
+            </span>
+            <i class="fas fa-sign-out-alt logout-icon" onclick="logout()" title="Logout"></i>
+        </div>
+    </nav>
+
+    <div id="home" class="page-section">
+        <header class="hero">
+            <div class="hero-text animate-up">
+                <h1 data-db="hero_title">Master the Art of <br><strong>Physical Science</strong></h1>
+                <p data-db="hero_desc" style="color:#636e72; font-size:1.1rem; margin-bottom:30px;">
+                    Your ultimate destination for interactive physics projects, research papers, and virtual simulations.
+                </p>
+                <a onclick="route('topics')" class="btn-main" style="display:inline-block; width:auto; padding:12px 35px;">Start Exploring</a>
+            </div>
+            <div class="hero-img animate-up delay-1">
+                <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg" alt="Physics Lab">
+            </div>
+        </header>
+
+        <section class="projects-wrapper animate-up delay-2">
+            <div class="section-header">
+                <h2 data-db="proj_header">Featured Projects</h2>
+                <p style="color:#888;">Innovative solutions by our engineering team</p>
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <img src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg" alt="Robot">
+                    <div class="card-body">
+                        <h3 data-db="p1_t">Line Follower Robot</h3>
+                        <p data-db="p1_d">Autonomous robot using IR sensors to track pathways with high precision.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://img.freepik.com/free-photo/electrical-components-circuit-board_23-2148290352.jpg" alt="Circuit">
+                    <div class="card-body">
+                        <h3 data-db="p2_t">Smart Circuitry</h3>
+                        <p data-db="p2_d">Advanced PCB design for home automation systems.</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://img.freepik.com/free-photo/futuristic-robot-arm-laboratory_23-2149122822.jpg" alt="Robotics">
+                    <div class="card-body">
+                        <h3 data-db="p3_t">Robotic Arm V2</h3>
+                        <p data-db="p3_d">5-DOF robotic arm controlled via Bluetooth application.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="soon-template" class="soon-section animate-up">
+        <div class="soon-content">
+            <i class="fas fa-rocket"></i>
+            <h2>Under Construction</h2>
+            <p>We are working hard to build this section. Stay tuned!</p>
+            <button class="btn-main" onclick="route('home')" style="width:auto; padding:10px 30px; margin-top:20px;">Back Home</button>
+        </div>
+    </div>
+
+    <div id="admin-panel">
+        <div class="admin-board">
+            <div class="sidebar">
+                <h3>Dashboard</h3>
+                <div class="sb-item active"><i class="fas fa-edit"></i> Edit Content</div>
+                <div class="sb-item" onclick="alert('File Manager coming soon!')"><i class="fas fa-folder"></i> Files</div>
+                <div class="sb-item" onclick="alert('User Settings coming soon!')"><i class="fas fa-users-cog"></i> Settings</div>
+            </div>
+            <div class="dash-content">
+                <i class="fas fa-times close-dash" onclick="closeAdminPanel()"></i>
+                <div class="dash-header">
+                    <h2>Website Control</h2>
+                </div>
+                
+                <div class="stat-card">
+                    <h4>Content Editor</h4>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:15px;">Enable this to click and edit any text on the live website.</p>
+                    <button class="btn-main" style="width: auto; padding: 10px 30px; background: #27ae60;" onclick="enableEditMode()">
+                        <i class="fas fa-pen"></i> Enable Live Edit
+                    </button>
+                </div>
+
+                <div class="stat-card">
+                    <h4>Database Status</h4>
+                    <p style="color: green;"><i class="fas fa-check-circle"></i> Connected to Physiatic Firebase</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="saveBtn" onclick="saveData()"><i class="fas fa-save"></i> Save Changes</button>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // ✅ NEW CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPTGbfFr2Cdr8d5DGDo_duwVevRxXm1bA",
+            authDomain: "physiatic.firebaseapp.com",
+            projectId: "physiatic",
+            storageBucket: "physiatic.firebasestorage.app",
+            messagingSenderId: "776862019288",
+            appId: "1:776862019288:web:61d1947138a740369bb1ad"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- Load Logic ---
+        window.loadDB = async function() {
+            try {
+                const docRef = doc(db, "site_data", "main_content");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.querySelectorAll('[data-db]').forEach(el => {
+                        const key = el.getAttribute('data-db');
+                        if(data[key]) el.innerHTML = data[key];
+                    });
+                }
+            } catch(e) { console.log("Init DB: ", e); }
+        }
+
+        // --- Save Logic ---
+        window.saveData = async function() {
+            const btn = document.getElementById('saveBtn');
+            btn.innerHTML = "Saving...";
+            let payload = {};
+            document.querySelectorAll('[data-db]').forEach(el => {
+                payload[el.getAttribute('data-db')] = el.innerHTML;
+            });
+            
+            try {
+                await setDoc(doc(db, "site_data", "main_content"), payload);
+                alert("Saved to Physiatić Database! ✅");
+                // Disable edit mode after save
+                document.querySelectorAll('[data-db]').forEach(el => {
+                    el.contentEditable = "false";
+                    el.classList.remove('editable');
+                });
+                document.getElementById('saveBtn').style.display = 'none';
+            } catch(e) { alert("Error saving: " + e.message); }
+            
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        }
+
+        loadDB();
+    </script>
+
+    <script>
+        // 1. User Database
+        const admins = [
+            { u: "AdhamSayed", p: "20250003" },
+            { u: "Abd-ElrhmanYahia", p: "20250008" },
+            { u: "RahmaAyman", p: "20250025" },
+            { u: "Mahmoud", p: "0000" },
+            { u: "Khaled", p: "1111" }
+        ];
+
+        // 2. Login System
+        function attemptLogin() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const found = admins.find(a => a.u === u && a.p === p);
+
+            if(found) {
+                // Hide Login, Show Site
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('navbar').style.display = 'flex';
+                
+                // Set Welcome Message
+                document.getElementById('welcomeMsg').innerHTML = `Welcome back Eng ${found.u}`;
+                document.getElementById('adminBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        function logout() { location.reload(); }
+
+        // 3. Routing System (SPA Feel)
+        function route(pageId) {
+            // Update Active Nav
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
+            document.getElementById('nav-' + pageId).classList.add('active-page');
+
+            // Hide all pages
+            document.getElementById('home').style.display = 'none';
+            document.getElementById('soon-template').style.display = 'none';
+
+            // Show selected
+            if(pageId === 'home') {
+                document.getElementById('home').style.display = 'block';
+                // Trigger animation again
+                document.querySelector('.hero-text').classList.remove('animate-up');
+                void document.querySelector('.hero-text').offsetWidth; // trigger reflow
+                document.querySelector('.hero-text').classList.add('animate-up');
+            } else {
+                // Show generic "Soon" page for other tabs
+                const soon = document.getElementById('soon-template');
+                soon.style.display = 'flex'; 
+            }
+        }
+
+        // 4. Admin Dashboard Functions
+        function openAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'flex';
+        }
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').style.display = 'none';
+        }
+
+        function enableEditMode() {
+            closeAdminPanel(); // Close modal
+            document.querySelectorAll('[data-db]').forEach(el => {
+                el.contentEditable = "true";
+                el.classList.add('editable');
+            });
+            document.getElementById('saveBtn').style.display = 'block';
+            alert("✏️ Live Edit Enabled! Click on text to change it.");
+        }
+    </script>
+</body>
+</html>
