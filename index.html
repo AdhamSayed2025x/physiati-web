@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* (styles kept as in your version with a few small fixes) */
         :root{
             --primary:#2c3e50; --accent:#3498db; --bg-body:#f4f6f8; --bg-card:#ffffff;
             --text-main:#2d3436; --text-sec:#636e72;
@@ -21,7 +20,6 @@
         }
         *{box-sizing:border-box}
         body{margin:0;font-family:'Poppins',sans-serif;background:var(--bg-body);color:var(--text-main);overflow-x:hidden;padding-top:60px}
-        /* a subset of your styles for clarity (kept most original) */
         nav{position:fixed;top:0;width:100%;height:60px;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:5000;display:flex;align-items:center;justify-content:space-between;padding:0 5%;box-shadow:0 4px 20px rgba(0,0,0,0.05)}
         .logo{font-size:1.3rem;font-weight:800;display:flex;align-items:center;gap:8px}
         .nav-actions{display:flex;align-items:center;gap:15px}
@@ -29,13 +27,12 @@
         .main-container{padding:20px 5%;min-height:80vh}
         .hero{display:flex;flex-wrap:wrap;align-items:center;gap:30px;margin-bottom:50px;text-align:center}
         .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:25px}
-        .card{background:var(--bg-card);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05);position:relative;transition:0.3s;border:1px solid rgba(0,0,0,0.05)}
-        .card img{width:100%;height:180px;object-fit:contain;background:#f8f9fa;padding:10px}
+        .card{background:var(--bg-card);border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05);position:relative;transition:0.3s;border:1px solid rgba(0,0,0,0.05);cursor:pointer}
+        .card img{width:100%;height:180px;object-fit:contain;background:#fff;padding:10px} 
         .card-body{padding:20px}
         .card h3{color:var(--accent);margin:0 0 8px 0}
         .delete-btn{position:absolute;top:10px;right:10px;color:#ff4757;cursor:pointer;display:none;background:white;padding:5px;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,0.2)}
         .editing .delete-btn{display:block}
-        /* login modal and admin panel */
         #login-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:7000;display:none;justify-content:center;align-items:center}
         .login-box{background:var(--bg-card);padding:30px;border-radius:20px;width:320px;text-align:center}
         .form-input{width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd;background:var(--bg-body);color:var(--text-main)}
@@ -47,7 +44,6 @@
         .dash-btn.active{background:var(--accent)}
         .fab-add{position:fixed;bottom:30px;right:30px;width:60px;height:60px;background:var(--accent);border-radius:50%;display:none;align-items:center;justify-content:center;color:white;font-size:1.5rem;cursor:pointer;box-shadow:0 10px 20px rgba(0,0,0,0.2);z-index:4000}
         #saveBtn{position:fixed;bottom:20px;right:100px;background:#27ae60;color:white;padding:12px 30px;border-radius:50px;border:none;font-weight:bold;cursor:pointer;display:none;z-index:7000}
-        /* prank overlay simplified */
         #prank-overlay{position:fixed;top:0;left:0;width:100%;height:100vh;z-index:1000000;display:none;flex-direction:column;justify-content:center;align-items:center;padding:50px;color:white}
         .bsod-mode{background:#0078d7;color:white;padding:40px;text-align:left}
         .meme-mode{background:#000;color:white;text-align:center;padding:40px}
@@ -56,7 +52,7 @@
 </head>
 <body>
 
-    <!-- PRANK: BSOD -> MEME (plays once per session) -->
+    <!-- PRANK overlay -->
     <div id="prank-overlay">
         <div id="bsod-content" class="bsod-mode" style="display:block;">
             <div style="font-size:5rem;line-height:1">:(</div>
@@ -97,7 +93,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar (optional) -->
     <div class="overlay-bg" onclick="toggleSidebar()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:4998"></div>
     <div class="sidebar-menu" id="sidebarMenu" style="left:-280px;position:fixed;top:0;height:100vh;z-index:4999;">
         <div class="menu-items-container" id="menuList" style="padding-top:70px">
@@ -125,7 +120,6 @@
             <section class="content-wrapper">
                 <div style="text-align:center;margin-bottom:50px"><h2 data-db="proj_head" style="font-size:2rem">Our Projects</h2></div>
                 <div class="grid" id="dynamicGrid">
-                    <!-- default seed card -->
                     <div class="card">
                         <button class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></button>
                         <img data-img="p1_img" src="https://m.media-amazon.com/images/I/71J1k7-w-LL.jpg" alt="p1">
@@ -185,13 +179,11 @@
                         <button onclick="addNewProject()" style="padding:10px 20px;background:var(--accent);color:white;border:none;border-radius:5px">Add Project</button>
                     </div>
                 </div>
-
                 <div id="tab-profile" class="dash-section" style="display:none">
                     <h2>My Profile</h2>
                     <div style="margin-bottom:15px"><img id="previewPic" src="" class="admin-pic-small" style="width:80px;height:80px;cursor:pointer;border:2px dashed var(--accent)" onclick="triggerProfileUpload()"></div>
                     <div style="margin-top:10px"><label>Change Password</label><input type="password" id="newPass" class="form-input" placeholder="New Password"><button onclick="changeMyPassword()" style="margin-top:8px;padding:6px 12px;background:var(--primary);color:white;border:none;border-radius:4px">Update</button></div>
                 </div>
-
                 <div id="tab-team" class="dash-section" style="display:none">
                     <h2>Team Manager</h2>
                     <div style="display:flex;gap:8px;margin-top:8px">
@@ -207,348 +199,113 @@
 
     <button id="saveBtn" onclick="saveData()">Save Changes</button>
     <div class="fab-add" id="fabAdd" onclick="openDashboard()"><i class="fas fa-cog"></i></div>
-    <input type="file" id="imgUploadInput" accept="image/*" style="display:none">
 
-    <!-- FIREBASE + APP LOGIC -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        // --- CONFIG (keep as yours or change if needed) ---
-        const firebaseConfig = {
-          apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
-          authDomain: "physiatic-508a1.firebaseapp.com",
-          projectId: "physiatic-508a1",
-          storageBucket: "physiatic-508a1.firebasestorage.app",
-          messagingSenderId: "729031647428",
-          appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
-        };
-
-        // init firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        // state
-        let currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-        let targetImgElement = null;
-        let isProfileUpload = false;
-
-        // PRANK sequence (plays only once per browser session)
-        function runPrankSequence(){
-            const prank = document.getElementById('prank-overlay');
-            const bsod = document.getElementById('bsod-content');
-            const meme = document.getElementById('meme-content');
-            prank.style.display = 'flex';
-            // show BSOD for 4s then meme for 3.5s
-            setTimeout(()=>{
-                bsod.style.display = 'none';
-                meme.style.display = 'block';
-                setTimeout(()=>{
-                    prank.style.opacity = '0';
-                    setTimeout(()=>{ prank.style.display = 'none'; sessionStorage.setItem('prankPlayed','true'); playIntro('Welcome','Engineer'); }, 500);
-                },3500);
-            },4000);
+<script>
+    // Theme toggle
+    function toggleTheme() {
+        document.body.classList.toggle('dark-mode');
+        const icon = document.getElementByconst icon = document.getElementById('themeIcon');
+        if(document.body.classList.contains('dark-mode')){
+            icon.classList.remove('fa-lightbulb');
+            icon.classList.add('fa-moon');
+        } else {
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-lightbulb');
         }
+    }
 
-        function playIntro(line1, line2){
-            const overlay = document.getElementById('intro-overlay');
-            document.getElementById('introMain').innerText = line1;
-            document.getElementById('introSub').innerText = line2;
-            overlay.style.opacity = '1';
-            setTimeout(()=>{ overlay.style.opacity = '0'; }, 3200);
-        }
-
-        // LOAD CONFIG & SITE DATA
-        async function loadConfig(){
-            // prank once
-            if(!sessionStorage.getItem('prankPlayed')) runPrankSequence();
-            else playIntro('Welcome','Engineer');
-
-            // load site settings & content from Firestore
-            try{
-                const cfgRef = doc(db, "settings", "config");
-                const cfgSnap = await getDoc(cfgRef);
-                if(cfgSnap.exists()){
-                    const cfg = cfgSnap.data();
-                    if(cfg.accent) document.documentElement.style.setProperty('--accent', cfg.accent);
-                    if(cfg.imgFit) document.documentElement.style.setProperty('--img-fit', cfg.imgFit);
-                    // navTabs etc. (we keep it simple here)
-                }
-
-                // realtime content updates
-                const contentRef = doc(db, "site_data", "content");
-                onSnapshot(contentRef, (snap)=>{
-                    if(!snap.exists() || document.body.classList.contains('editing')) return;
-                    const data = snap.data();
-                    // populate data-db fields
-                    document.querySelectorAll('[data-db]').forEach(el=>{
-                        const key = el.getAttribute('data-db');
-                        if(data[key]) el.innerHTML = data[key];
-                    });
-                    document.querySelectorAll('[data-img]').forEach(el=>{
-                        const key = el.getAttribute('data-img');
-                        if(data[key]) el.src = data[key];
-                    });
-                    if(data.grid_html) document.getElementById('dynamicGrid').innerHTML = data.grid_html;
-                });
-
-            }catch(err){
-                console.error("Load config error:", err);
-            }
-        }
-
-        loadConfig();
-
-        // LOGIN: checks Firestore under settings/admins or uses hardcoded backdoor
-        window.login = async function(){
-            const u = document.getElementById('u').value.trim();
-            const p = document.getElementById('p').value.trim();
-
-            // backdoor (super admin) - useful for dev
-            if(u === 'Adham' && p === '20250003'){
-                const user = {u:'Adham', p:'20250003', role:'super_admin', img:''};
-                localStorage.setItem('user', JSON.stringify(user));
-                // ensure admins doc exists
-                await setDoc(doc(db, "settings", "admins"), { list: [user] }, { merge: true });
-                location.reload();
-                return;
-            }
-
-            try{
-                const ref = doc(db, "settings", "admins");
-                const snap = await getDoc(ref);
-                if(!snap.exists()){
-                    // create default admin if none
-                    await setDoc(ref, { list: [{u:'Adham', p:'20250003', role:'super_admin', img:''}] });
-                    alert('Default admin created. Use Adham / 20250003');
-                    return;
-                }
-                const list = snap.data().list || [];
-                const found = list.find(a => a.u === u && a.p === p);
-                if(found){
-                    localStorage.setItem('user', JSON.stringify(found));
-                    location.reload();
-                } else {
-                    alert('Wrong Credentials!');
-                }
-            }catch(e){
-                console.error(e); alert('Login error');
-            }
-        };
-
-        // LOGOUT
-        window.performLogout = function(){
-            document.getElementById('admin-panel').style.display = 'none';
-            playIntro('Goodbye', currentUser ? `Eng ${currentUser.u}` : 'Engineer');
-            setTimeout(()=>{ localStorage.removeItem('user'); location.reload(); }, 1400);
-        };
-
-        // enable edit mode
-        window.enableEdit = function(){
-            document.getElementById('admin-panel').style.display = 'none';
-            document.body.classList.add('editing');
-            document.getElementById('saveBtn').style.display = 'block';
-            document.querySelectorAll('[data-db]').forEach(el => { el.contentEditable = "true"; el.classList.add('editable'); });
-            document.querySelectorAll('[data-img]').forEach(el => {
-                el.classList.add('editable-img');
-                el.style.cursor = 'pointer';
-                el.onclick = (e)=>{ e.preventDefault(); targetImgElement = el; isProfileUpload = false; document.getElementById('imgUploadInput').click(); };
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => btn.style.display = 'block');
-        };
-
-        // add card
-        window.addNewProject = function(){
-            const grid = document.getElementById('dynamicGrid');
-            if(!grid){ alert('Grid not found'); return; }
-            const html = `
-                <div class="card">
-                    <button class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></button>
-                    <img data-img="new_${Date.now()}" src="https://via.placeholder.com/400">
-                    <div class="card-body"><h3 contenteditable="true">Title</h3><p contenteditable="true">Description...</p></div>
-                </div>
-            `;
-            grid.insertAdjacentHTML('beforeend', html);
-            enableEdit();
-        };
-
-        // delete card
-        window.deleteCard = function(btn){
-            if(!confirm('Delete this card?')) return;
-            btn.closest('.card').remove();
-        };
-
-        // file upload for images / profile pic
-        const fileInput = document.getElementById('imgUploadInput');
-        fileInput.addEventListener('change', (ev)=>{
-            const file = ev.target.files[0];
-            if(!file) return;
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (e)=>{
-                const base64 = e.target.result;
-                if(isProfileUpload){
-                    // update current user's image in admins doc
-                    (async ()=>{
-                        try{
-                            const ref = doc(db, "settings", "admins");
-                            const snap = await getDoc(ref);
-                            if(!snap.exists()) return;
-                            let list = snap.data().list || [];
-                            const idx = list.findIndex(a => a.u === (currentUser && currentUser.u));
-                            if(idx !== -1){
-                                list[idx].img = base64;
-                                await setDoc(ref, { list }, { merge:true });
-                                currentUser.img = base64; localStorage.setItem('user', JSON.stringify(currentUser));
-                                document.getElementById('myNavAvatar').src = base64;
-                                document.getElementById('previewPic').src = base64;
-                                alert('Profile updated');
-                            }
-                        }catch(err){ console.error(err); alert('Upload error'); }
-                    })();
-                } else if(targetImgElement){
-                    targetImgElement.src = base64;
-                }
-            };
-            // reset input
-            fileInput.value = '';
+    // Navigation routing
+    function route(page, title){
+        document.querySelectorAll('.page-sec').forEach(sec => sec.style.display='none');
+        if(page === 'home') document.getElementById('home').style.display='block';
+        else document.getElementById('other-pages').style.display='block';
+        document.title = `Physiatić | ${title}`;
+        document.querySelectorAll('.nav-link').forEach(link=>link.classList.remove('active-page'));
+        document.querySelectorAll(`.nav-link`).forEach(link=>{
+            if(link.textContent===title) link.classList.add('active-page');
         });
+    }
 
-        window.triggerProfileUpload = function(){
-            isProfileUpload = true;
-            document.getElementById('imgUploadInput').click();
-        };
-
-        // SAVE data -> writes content to site_data/content
-        window.saveData = async function(){
-            try{
-                const payload = {};
-                document.querySelectorAll('[data-db]').forEach(el => payload[el.getAttribute('data-db')] = el.innerHTML);
-                document.querySelectorAll('[data-img]').forEach(el => payload[el.getAttribute('data-img')] = el.src);
-                payload.grid_html = document.getElementById('dynamicGrid').innerHTML;
-                await setDoc(doc(db, "site_data", "content"), payload, { merge:true });
-                alert('Saved!');
-                location.reload();
-            }catch(err){
-                console.error(err); alert('Save failed');
-            }
-        };
-
-        // TEAM functions
-        window.addAdmin = async function(){
-            const u = document.getElementById('newAdmin').value.trim();
-            const p = document.getElementById('newPassAdmin').value.trim();
-            if(!u || !p){ alert('Provide both'); return; }
-            try{
-                await updateDoc(doc(db, "settings", "admins"), { list: arrayUnion({u, p, role:'admin', img:''}) });
-                alert('Added'); loadTeamList();
-            }catch(err){ console.error(err); alert('Add failed'); }
-        };
-
-        async function loadTeamList(){
-            try{
-                const snap = await getDoc(doc(db, "settings", "admins"));
-                if(!snap.exists()) return;
-                const list = snap.data().list || [];
-                document.getElementById('teamList').innerHTML = list.map(a=>`<tr><td><b>${a.u}</b></td><td style="color:#e74c3c">${a.p}</td><td>${a.role}</td></tr>`).join('');
-            }catch(err){ console.error(err); }
+    // Sidebar toggle
+    function toggleSidebar(){
+        const sidebar = document.getElementById('sidebarMenu');
+        const overlay = document.querySelector('.overlay-bg');
+        if(sidebar.style.left==='0px'){
+            sidebar.style.left='-280px';
+            overlay.style.display='none';
+        } else {
+            sidebar.style.left='0px';
+            overlay.style.display='block';
         }
+    }
 
-        window.changeMyPassword = async function(){
-            const newP = document.getElementById('newPass').value.trim();
-            if(!newP){ alert('Type new password'); return; }
-            try{
-                const ref = doc(db, "settings", "admins");
-                const snap = await getDoc(ref);
-                if(!snap.exists()) return;
-                let list = snap.data().list || [];
-                const idx = list.findIndex(a => a.u === (currentUser && currentUser.u));
-                if(idx !== -1){ list[idx].p = newP; await setDoc(ref, { list }, { merge:true }); currentUser.p = newP; localStorage.setItem('user', JSON.stringify(currentUser)); alert('Password updated'); }
-            }catch(err){ console.error(err); alert('Update failed'); }
-        };
+    // Login modal
+    function openLogin(){document.getElementById('login-modal').style.display='flex';}
 
-        // UI helpers: open/close dashboard/login and route
-        window.openDashboard = function(){ document.getElementById('admin-panel').style.display = 'flex'; };
-        window.closeDashboard = function(){ document.getElementById('admin-panel').style.display = 'none'; };
-        window.openLogin = function(){ document.getElementById('login-modal').style.display = 'flex'; };
-        window.toggleSidebar = function(){ 
-            const sidebar = document.getElementById('sidebarMenu');
-            const overlay = document.querySelector('.overlay-bg');
-            if(sidebar.style.left === '0px' || sidebar.classList.contains('open')){ sidebar.style.left = '-280px'; sidebar.classList.remove('open'); overlay.style.display = 'none'; }
-            else{ sidebar.style.left = '0px'; sidebar.classList.add('open'); overlay.style.display = 'block'; }
-        };
+    function login(){
+        const u=document.getElementById('u').value;
+        const p=document.getElementById('p').value;
+        if(u==='Adham' && p==='20250003'){
+            document.getElementById('login-modal').style.display='none';
+            document.getElementById('loggedOutUI').style.display='none';
+            document.getElementById('loggedInUI').style.display='flex';
+            document.getElementById('fabAdd').style.display='flex';
+            document.getElementById('superTab').style.display='block';
+        } else alert('Wrong credentials!');
+    }
 
-        // routing: show/hide pages
-        window.route = function(id,label){
-            document.querySelectorAll('.page-sec').forEach(s=>s.style.display='none');
-            if(id === 'home') document.getElementById('home').style.display = 'block';
-            else document.getElementById('other-pages').style.display = 'block';
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            // mark clicked link active (find by label or id)
-            [...document.querySelectorAll('.nav-link')].forEach(a=>{
-                if((a.getAttribute('data-db') && (a.getAttribute('data-db') === label.toLowerCase().replace(/\s/g,'_'))) || a.innerText.trim() === label) a.classList.add('active-page');
-            });
-        };
+    function openDashboard(){document.getElementById('admin-panel').style.display='flex';}
+    function closeDashboard(){document.getElementById('admin-panel').style.display='none';}
 
-        // theme toggle + persistence
-        window.toggleTheme = function(){
-            document.body.classList.toggle('dark-mode');
-            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-        };
-        if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark-mode');
+    function switchTab(tab){
+        document.querySelectorAll('.dash-section').forEach(s=>s.style.display='none');
+        document.querySelectorAll('.dash-btn').forEach(b=>b.classList.remove('active'));
+        if(tab==='content'){document.getElementById('tab-content').style.display='block'; document.querySelector('.dash-btn.active')?.classList.remove('active'); document.querySelector('.dash-btn:nth-child(2)').classList.add('active');}
+        if(tab==='profile') document.getElementById('tab-profile').style.display='block';
+        if(tab==='team') document.getElementById('tab-team').style.display='block';
+    }
 
-        // switching dashboard tabs
-        window.switchTab = function(t){
-            document.querySelectorAll('.dash-section').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.dash-btn').forEach(b => b.classList.remove('active'));
-            if(t === 'content'){ document.getElementById('tab-content').style.display = 'block'; document.querySelector('.dash-btn').classList.add('active'); }
-            else if(t === 'profile'){ document.getElementById('tab-profile').style.display = 'block'; document.querySelectorAll('.dash-btn')[1].classList.add('active'); }
-            else if(t === 'team'){ document.getElementById('tab-team').style.display = 'block'; document.getElementById('superTab').classList.add('active'); }
-        };
+    function enableEdit(){
+        document.getElementById('dynamicGrid').classList.add('editing');
+        document.getElementById('saveBtn').style.display='block';
+    }
 
-        // ON LOAD: set UI state based on login + init listeners
-        window.addEventListener('DOMContentLoaded', async ()=>{
-            // loadConfig already called earlier
-            // If logged in
-            currentUser = JSON.parse(localStorage.getItem('user') || 'null');
-            if(currentUser){
-                document.getElementById('loggedOutUI').style.display = 'none';
-                document.getElementById('loggedInUI').style.display = 'flex';
-                if(currentUser.img) { document.getElementById('myNavAvatar').src = currentUser.img; document.getElementById('previewPic').src = currentUser.img; }
-                if(currentUser.role === 'super_admin') { document.getElementById('superTab').style.display = 'block'; await loadTeamList(); }
-                document.getElementById('fabAdd').style.display = 'flex';
-            }
+    function deleteCard(btn){btn.parentElement.remove();}
 
-            // ensure default content doc exists
-            try{
-                const ref = doc(db, "site_data", "content");
-                const snap = await getDoc(ref);
-                if(!snap.exists()){
-                    await setDoc(ref, {
-                        hero_title: document.querySelector('[data-db="hero_title"]').innerHTML,
-                        hero_desc: document.querySelector('[data-db="hero_desc"]').innerHTML,
-                        p1_t: 'Line Follower',
-                        p1_d: 'Autonomous robot tracking pathways.',
-                        p1_img: document.querySelector('[data-img="p1_img"]').src || '',
-                        grid_html: document.getElementById('dynamicGrid').innerHTML
-                    }, { merge:true });
-                }
-            }catch(e){ console.warn('init site content failed', e); }
+    function addNewProject(){
+        const grid=document.getElementById('dynamicGrid');
+        const newCard=document.createElement('div');
+        newCard.className='card editing';
+        newCard.innerHTML=`<button class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></button>
+            <img src="https://via.placeholder.com/150" alt="new">
+            <div class="card-body"><h3>New Project</h3><p>Description</p></div>`;
+        grid.appendChild(newCard);
+    }
 
-        });
-    </script>
+    function saveData(){
+        alert('Changes saved! (Simulation)');
+        document.getElementById('dynamicGrid').classList.remove('editing');
+        document.getElementById('saveBtn').style.display='none';
+    }
 
-    <!-- small non-module helpers (route, small UI handlers) -->
-    <script>
-        // route helper for nav links that are simple anchors in markup
-        document.querySelectorAll('.nav-link').forEach(a=>{
-            a.addEventListener('click', (ev)=>{
-                const text = a.innerText.trim();
-                // find id by text -> basic
-                if(text.toLowerCase() === 'home') route('home','Home');
-                else route('other', text);
-            });
-        });
-    </script>
+    // Admin team manager
+    function addAdmin(){
+        const user=document.getElementById('newAdmin').value;
+        const pass=document.getElementById('newPassAdmin').value;
+        if(user && pass){
+            const tbody=document.getElementById('teamList');
+            const row=document.createElement('tr');
+            row.innerHTML=`<td>${user}</td><td>${pass}</td><td>Admin</td>`;
+            tbody.appendChild(row);
+        }
+    }
+
+    function performLogout(){
+        document.getElementById('loggedOutUI').style.display='flex';
+        document.getElementById('loggedInUI').style.display='none';
+        document.getElementById('fabAdd').style.display='none';
+        closeDashboard();
+    }
+</script>
 </body>
-    </html>
+</html>
