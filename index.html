@@ -1,482 +1,488 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Physiatić | Engineering Hub</title>
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2c3e50">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiatić | المنصة الأكاديمية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. CORE VARIABLES --- */
-        :root { 
-            --primary: #2c3e50; --accent: #3498db; --bg-body: #f4f6f8; --bg-card: #ffffff;
-            --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.95);
-            --shadow: 0 4px 20px rgba(0,0,0,0.05); --radius: 12px;
-            --sidebar-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* === 1. CSS VARIABLES & RESET === */
+        :root {
+            --bg-dark: #0f172a;
+            --bg-light: #f1f5f9;
+            --text-dark: #f8fafc;
+            --text-light: #1e293b;
+            --accent: #3b82f6;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-glass: rgba(15, 23, 42, 0.6);
+            --success: #10b981;
+            --danger: #ef4444;
         }
-        body.dark-mode {
-            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9;
-            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.95); --shadow: 0 4px 20px rgba(0,0,0,0.3);
-            --sidebar-grad: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        }
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 60px; }
 
-        /* --- 2. INTRO --- */
-        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; pointer-events: none; opacity: 0; }
-        #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        .intro-content { text-align: center; color: white; }
-        .intro-content h1 { font-size: 3rem; margin: 0; }
-        .intro-content span { color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; }
-
-        /* --- 3. NAVBAR --- */
-        nav { 
-            position: fixed; top: 0; width: 100%; height: 60px; background: var(--nav-bg); 
-            backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; 
-            justify-content: space-between; padding: 0 5%; box-shadow: var(--shadow);
+        [data-theme="light"] {
+            --bg-color: var(--bg-light);
+            --text-color: var(--text-light);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(0, 0, 0, 0.05);
+            --card-glass: rgba(255, 255, 255, 0.7);
         }
-        .hamburger { font-size: 1.5rem; cursor: pointer; color: var(--text-main); display: block; }
-        .logo { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .theme-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-main); cursor: pointer; }
-        .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
 
-        /* --- 4. SIDEBAR MENU --- */
-        .sidebar-menu {
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
-            background: var(--bg-card); z-index: 4999; padding-top: 70px;
-            transition: 0.3s ease; box-shadow: 5px 0 20px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+        [data-theme="dark"] {
+            --bg-color: var(--bg-dark);
+            --text-color: var(--text-dark);
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --card-glass: rgba(30, 41, 59, 0.7);
         }
-        .sidebar-menu.open { left: 0; }
-        .menu-items-container { flex: 1; overflow-y: auto; }
-        .menu-item { padding: 15px 25px; font-weight: 500; cursor: pointer; color: var(--text-sec); display: flex; align-items: center; gap: 10px; border-left: 4px solid transparent; }
-        .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
+
+        * { box-sizing: border-box; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg-color); color: var(--text-color); overflow-x: hidden; height: 100vh; }
+
+        /* === 2. PARTICLES BACKGROUND === */
+        #tsparticles { position: fixed; width: 100%; height: 100%; z-index: -1; top: 0; left: 0; }
+
+        /* === 3. LAYOUT STRUCTURE === */
+        .app-container { display: flex; height: 100vh; position: relative; z-index: 1; }
+
+        /* Sidebar (Years) */
+        .sidebar {
+            width: 260px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--glass-border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(59, 130, 246, 0.15);
+            opacity: 1;
+            transform: translateX(-5px);
+            border-right: 3px solid var(--accent);
+        }
+
+        /* Main Content */
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; }
+
+        /* Top Header (Categories) */
+        .header-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+
+        /* Cards Grid (Materials) */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .material-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-up;
+        }
         
-        /* SIDEBAR FOOTER (NEW REQUEST) */
-        .sidebar-footer {
-            padding: 20px; border-top: 1px solid rgba(0,0,0,0.1); 
-            font-size: 0.75rem; color: var(--text-sec); text-align: center;
-            background: rgba(0,0,0,0.02);
-        }
-        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4998; display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 5. MAIN CONTENT --- */
-        .main-container { padding: 20px 5%; min-height: 80vh; }
+        .card-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .card-title { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; }
+        .card-meta { font-size: 0.85em; opacity: 0.6; display: flex; justify-content: space-between; }
         
-        .tabs-container { 
-            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; 
-            border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 30px; 
-            scrollbar-width: none; 
+        .action-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--accent);
+            cursor: pointer;
+            font-weight: bold;
         }
-        .tab-btn { 
-            padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; 
-            color: var(--text-sec); white-space: nowrap; transition: 0.3s; 
+        .action-btn:hover { background: var(--accent); color: white; }
+
+        .delete-btn { position: absolute; top: 15px; left: 15px; color: var(--danger); cursor: pointer; opacity: 0; }
+        .material-card:hover .delete-btn { opacity: 1; }
+
+        /* === 4. FAB (Floating Action Button) for Admin === */
+        .fab {
+            position: fixed;
+            bottom: 40px;
+            left: 40px;
+            width: 60px;
+            height: 60px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+            cursor: pointer;
+            z-index: 100;
         }
-        .tab-btn.active { background: var(--accent); color: white; font-weight: 600; }
+        .fab:hover { transform: scale(1.1) rotate(90deg); }
 
-        .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 30px; margin-bottom: 50px; text-align: center; }
-        .hero-txt { flex: 1; min-width: 300px; }
-        .hero-txt h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
-        .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
-        .hero-img img { width: 100%; max-width: 500px; border-radius: 20px; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { 
-            background: var(--bg-card); border-radius: var(--radius); overflow: hidden; 
-            box-shadow: var(--shadow); position: relative; transition: 0.3s; border: 1px solid rgba(0,0,0,0.05);
+        /* === 5. MODAL === */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(5px);
+            z-index: 200; display: none; align-items: center; justify-content: center;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .card img { width: 100%; height: 180px; object-fit: contain; background: #f8f9fa; padding: 10px; }
-        .card-body { padding: 20px; }
-        .card h3 { font-size: 1.1rem; color: var(--accent); margin-bottom: 5px; }
-        
-        .delete-btn { position: absolute; top: 10px; right: 10px; color: #ff4757; cursor: pointer; display: none; background: white; padding: 5px; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .editing .delete-btn { display: block; }
-
-        /* --- 6. ADMIN DASHBOARD --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 6000; display: none; justify-content: center; align-items: center; }
-        .dash-card { background: var(--bg-card); width: 90%; max-width: 900px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
-        .dash-sidebar { width: 220px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .dash-btn { padding: 12px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); }
-        .dash-btn.active, .dash-btn:hover { background: var(--accent); font-weight: bold; }
-        .dash-content { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
-        .dash-section { display: none; } .dash-section.active { display: block; }
-        .close-dash { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; color: #7f8c8d; cursor: pointer; }
-
-        /* Login Modal */
-        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; display: none; justify-content: center; align-items: center; }
-        .login-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 320px; text-align: center; }
-        .form-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
-
-        /* FAB Button */
-        .fab-add { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 4000; }
-
-        .editable { border: 2px dashed #f39c12; cursor: text; }
-        #saveBtn { position: fixed; bottom: 20px; right: 100px; background: #27ae60; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 7000; }
-        
-        /* Mobile */
-        @media (max-width: 768px) {
-            .hero { flex-direction: column-reverse; }
-            .dash-card { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
-            .dash-sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
+        .modal-content {
+            background: #1e293b; width: 90%; max-width: 500px;
+            padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border);
         }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 8px; color: #94a3b8; }
+        .form-input { 
+            width: 100%; padding: 12px; background: #0f172a; 
+            border: 1px solid #334155; border-radius: 8px; color: white; outline: none; 
+        }
+        .upload-area {
+            border: 2px dashed #334155; padding: 30px; text-align: center;
+            border-radius: 10px; cursor: pointer; margin-bottom: 15px;
+        }
+        .upload-area:hover { border-color: var(--accent); background: rgba(59, 130, 246, 0.05); }
+
     </style>
 </head>
-<body>
+<body data-theme="dark">
 
-    <div id="intro-overlay">
-        <div class="intro-content">
-            <h1 id="introMain">Welcome</h1>
-            <span id="introSub">Engineer</span>
-        </div>
-    </div>
+    <div id="tsparticles"></div>
 
-    <nav>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <i class="fas fa-bars hamburger" onclick="toggleSidebar()"></i>
-            <div class="logo"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
-        </div>
-        <div class="nav-actions">
-            <button class="theme-btn" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="authBtnArea">
-                <button onclick="openLogin()" style="padding:5px 15px; background:var(--accent); color:white; border:none; border-radius:20px; cursor:pointer;">Login</button>
-            </div>
-        </div>
-    </nav>
-
-    <div class="overlay-bg" onclick="toggleSidebar()"></div>
-    <div class="sidebar-menu" id="sidebarMenu">
-        <div class="menu-items-container" id="menuList">
-            <div class="menu-item active" onclick="loadPage('home', 'Home')">Home</div>
-        </div>
-        
-        <div class="sidebar-footer">
-            <p>All Rights Reserved &copy; 2025</p>
-            <p style="margin-top:5px; color:var(--accent); font-weight:600;">Under Supervision of <br> Dr. Ahmed Khaled</p>
-        </div>
-    </div>
-
-    <div class="main-container">
-        <div style="text-align:center; margin-bottom:20px;">
-            <h2 id="pageTitle" style="font-size:2rem; color:var(--text-main);">Home</h2>
-        </div>
-        
-        <div class="tabs-container" id="tabsBar"></div>
-
-        <div id="contentArea">
-            <div id="default-home">
-                <div class="hero">
-                    <div class="hero-txt">
-                        <h1 data-db="h_t">Advanced <span style="color:var(--accent)">Physics</span></h1>
-                        <p data-db="h_d">The future of engineering education starts here.</p>
-                    </div>
-                    <div class="hero-img">
-                        <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg">
-                    </div>
-                </div>
-                <div class="grid" id="homeGrid">
-                    <div class="card">
-                        <img src="https://img.freepik.com/free-photo/robot-arm-smart-factory-background-technology_53876-103940.jpg">
-                        <div class="card-body">
-                            <h3>Line Follower</h3>
-                            <p>Autonomous robot tracking pathways.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="fab-add" id="fabAdd" onclick="openDashboard()"><i class="fas fa-cog"></i></div>
-
-    <div id="login-modal">
-        <div class="login-box">
-            <h2>Login</h2>
-            <input id="u" class="form-input" placeholder="User">
-            <input id="p" type="password" class="form-input" placeholder="Pass">
-            <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Enter</button>
-            <button onclick="document.getElementById('login-modal').style.display='none'" style="background:none; border:none; margin-top:10px; color:#888;">Cancel</button>
-        </div>
-    </div>
-
-    <div id="admin-panel">
-        <div class="dash-card">
-            <i class="fas fa-times close-dash" onclick="closeDashboard()"></i>
-            <div class="dash-sidebar">
-                <h3>Admin</h3>
-                <div class="dash-btn active" onclick="switchTab('pages')">Pages</div>
-                <div class="dash-btn" onclick="switchTab('content')">Content</div>
-                <div class="dash-btn" onclick="switchTab('team')">Team</div>
-                <div class="dash-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
-            </div>
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h2 style="margin-top: 0; color: white;">إضافة محتوى جديد <i class="fas fa-atom fa-spin" style="color:var(--accent)"></i></h2>
             
-            <div class="dash-content">
-                <div id="tab-pages" class="dash-section active">
-                    <h2>Manage Pages</h2>
-                    <input id="newPage" class="form-input" placeholder="Page Name (e.g. First Year)">
-                    <button onclick="addPage()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Page</button>
-                    <div id="adminPagesList" style="margin:20px 0;"></div>
-                    <h3>Add Tab</h3>
-                    <input id="newTab" class="form-input" placeholder="Tab Name (e.g. Lectures)">
-                    <button onclick="addTab()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Tab</button>
-                </div>
-                <div id="tab-content" class="dash-section">
-                    <h2>Content Editor</h2>
-                    <p>Go to the page you want to edit first.</p>
-                    <div style="display:flex; gap:10px; margin-top:20px;">
-                        <button onclick="enableEdit()" style="padding:15px; background:#2ecc71; color:white; border:none; border-radius:10px;">Live Edit</button>
-                        <button onclick="addCard()" style="padding:15px; background:var(--accent); color:white; border:none; border-radius:10px;">+ Add Card</button>
-                    </div>
-                </div>
-                <div id="tab-team" class="dash-section">
-                    <h2>Team</h2>
-                    <input id="newAdmUser" class="form-input" placeholder="Username">
-                    <input id="newAdmPass" class="form-input" placeholder="Password">
-                    <button onclick="addNewAdmin()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button>
-                    <div id="adminListUI" style="margin-top:20px;"></div>
-                </div>
+            <div class="form-group">
+                <label>عنوان الملف / الفيديو</label>
+                <input type="text" id="fileTitle" class="form-input" placeholder="مثال: محاضرة الفيزياء النووية 1">
             </div>
+
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 30px; color: var(--accent);"></i>
+                <p>اضغط لرفع ملف (PDF, PPT, IMG)</p>
+                <input type="file" id="fileInput" style="display: none">
+                <span id="fileName" style="font-size: 12px; color: var(--success);"></span>
+            </div>
+
+            <div class="form-group">
+                <label>أو رابط خارجي (يوتيوب / درايف)</label>
+                <input type="text" id="fileUrl" class="form-input" placeholder="https://...">
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button onclick="saveContent()" class="action-btn" style="background: var(--accent); color: white;">نشر الآن</button>
+                <button onclick="closeModal()" class="action-btn" style="background: var(--danger); color: white;">إلغاء</button>
+            </div>
+            <p id="uploadStatus" style="text-align: center; margin-top: 10px; font-size: 0.9em;"></p>
         </div>
     </div>
 
-    <button id="saveBtn" onclick="saveData()">Save Changes</button>
+    <div class="app-container">
+        
+        <aside class="sidebar">
+            <div class="logo">PHYSIATIĆ</div>
+            
+            <div class="nav-item active" onclick="setYear('prep')">
+                <i class="fas fa-graduation-cap"></i> إعدادي هندسة
+            </div>
+            <div class="nav-item" onclick="setYear('year1')">
+                <i class="fas fa-1"></i> الفرقة الأولى
+            </div>
+            <div class="nav-item" onclick="setYear('year2')">
+                <i class="fas fa-2"></i> الفرقة الثانية
+            </div>
+            <div class="nav-item" onclick="setYear('year3')">
+                <i class="fas fa-3"></i> الفرقة الثالثة
+            </div>
+            <div class="nav-item" onclick="setYear('year4')">
+                <i class="fas fa-4"></i> الفرقة الرابعة
+            </div>
 
+            <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid var(--glass-border);">
+                 <div class="nav-item" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIcon"></i> وضع الرؤية
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="header-tabs">
+                <div class="tab active" onclick="setCategory('lectures')">محاضرات</div>
+                <div class="tab" onclick="setCategory('sections')">سكاشن</div>
+                <div class="tab" onclick="setCategory('assignments')">شيتات وأبحاث</div>
+                <div class="tab" onclick="setCategory('projects')">مشاريع</div>
+                <div class="tab" onclick="setCategory('grades')">درجات أعمال السنة</div>
+            </div>
+
+            <div id="contentGrid" class="content-grid">
+                <div style="grid-column: 1/-1; text-align: center; margin-top: 50px; opacity: 0.5;">
+                    <i class="fas fa-spinner fa-spin fa-3x"></i>
+                    <p>جارِ تحميل البيانات من السيرفر...</p>
+                </div>
+            </div>
+        </main>
+
+        <div class="fab" onclick="openModal()">
+            <i class="fas fa-plus"></i>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+    
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, where, onSnapshot, orderBy, deleteDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
+        // 1. Firebase Configuration
         const firebaseConfig = {
-          apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
-          authDomain: "physiatic-508a1.firebaseapp.com",
-          projectId: "physiatic-508a1",
-          storageBucket: "physiatic-508a1.firebasestorage.app",
-          messagingSenderId: "729031647428",
-          appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
+            apiKey: "AIzaSyAAFzkX2hAgi6XXpZOGTeSQ5BBDwoyegCc",
+            authDomain: "physics-84810.firebaseapp.com",
+            projectId: "physics-84810",
+            storageBucket: "physics-84810.firebasestorage.app",
+            messagingSenderId: "402521782464",
+            appId: "1:402521782464:web:b8887e4464b6055c70d525"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        // Defaults
-        let navPages = [
-            {id:'home', name:'Home'},
-            {id:'prep', name:'Preparatory Class'},
-            {id:'first', name:'First Division'},
-            {id:'second', name:'Second Division'},
-            {id:'third', name:'Third Division'},
-            {id:'fourth', name:'Fourth Division'}
-        ];
-        let currentPage = 'home';
-        let currentTab = 'default';
-        let currentUser = JSON.parse(localStorage.getItem('user'));
+        const storage = getStorage(app);
 
-        // --- INIT ---
-        async function init() {
-            // Intro
-            if(!sessionStorage.getItem('seenIntro')) {
-                const overlay = document.getElementById('intro-overlay');
-                overlay.classList.add('active');
-                setTimeout(() => overlay.classList.remove('active'), 2500);
-                sessionStorage.setItem('seenIntro', 'true');
-            }
+        // 2. State Management (المتغيرات الحالية)
+        let currentYear = 'prep';
+        let currentCategory = 'lectures';
 
-            // Load Config
-            try {
-                const snap = await getDoc(doc(db, "settings", "config"));
-                if(snap.exists() && snap.data().pages) {
-                    navPages = snap.data().pages;
+        // 3. UI Functions (التحكم في الواجهة)
+        window.setYear = (year) => {
+            currentYear = year;
+            updateUIState('.nav-item', year);
+            loadContent();
+        }
+
+        window.setCategory = (cat) => {
+            currentCategory = cat;
+            // تحديث كلاس active
+            document.querySelectorAll('.tab').forEach(el => {
+                if(el.innerText.includes(getCatName(cat))) el.classList.add('active'); // تبسيط
+                else el.classList.remove('active');
+            });
+            // إعادة تلوين التابات يدوياً للسهولة في المثال
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach((t, index) => {
+                const categories = ['lectures', 'sections', 'assignments', 'projects', 'grades'];
+                if(categories[index] === cat) {
+                    tabs.forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
                 }
-            } catch(e) {}
-            
-            renderMenu();
-            checkAuth();
-        }
-        init();
-
-        // --- NAV ---
-        function renderMenu() {
-            const html = navPages.map(p => 
-                `<div class="menu-item" onclick="loadPage('${p.id}', '${p.name}')">
-                    <i class="fas fa-folder"></i> ${p.name}
-                 </div>`
-            ).join('');
-            document.getElementById('menuList').innerHTML = html;
-            document.getElementById('adminPagesList').innerHTML = html; // reuse logic
+            });
+            loadContent();
         }
 
-        window.loadPage = async function(id, name) {
-            currentPage = id;
-            document.getElementById('pageTitle').innerText = name;
-            document.getElementById('sidebarMenu').classList.remove('open');
-            document.querySelector('.overlay-bg').style.display = 'none';
+        function getCatName(cat) {
+            // دالة مساعدة
+            return ''; 
+        }
 
-            if(id === 'home') {
-                document.getElementById('contentArea').innerHTML = document.getElementById('default-home').innerHTML;
-                document.getElementById('tabsBar').innerHTML = '';
-                // Check DB for Home updates
-                const snap = await getDoc(doc(db, "site_data", "home_content"));
-                if(snap.exists()) document.getElementById('contentArea').innerHTML = snap.data().html;
-                return;
+        function updateUIState(selector, value) {
+            // تحديث بسيط للقوائم
+            document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+            // في تطبيق حقيقي نستخدم IDs
+            event.currentTarget.classList.add('active');
+        }
+
+        // 4. Modal Functions (النافذة المنبثقة)
+        window.openModal = () => document.getElementById('addModal').style.display = 'flex';
+        window.closeModal = () => document.getElementById('addModal').style.display = 'none';
+
+        // 5. Logic: Upload & Save (قلب المشروع)
+        window.saveContent = async () => {
+            const title = document.getElementById('fileTitle').value;
+            const fileInput = document.getElementById('fileInput').files[0];
+            const urlInput = document.getElementById('fileUrl').value;
+            const status = document.getElementById('uploadStatus');
+
+            if (!title) { alert('اكتب عنوان للملف يا دكتور!'); return; }
+
+            status.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> جارِ الرفع والحفظ...';
+
+            try {
+                let finalUrl = urlInput;
+                let fileType = 'link';
+
+                // لو اختار ملف، نرفعه الأول للستورج
+                if (fileInput) {
+                    fileType = 'file';
+                    const storageRef = ref(storage, `materials/${currentYear}/${fileInput.name}`);
+                    await uploadBytes(storageRef, fileInput);
+                    finalUrl = await getDownloadURL(storageRef);
+                }
+
+                // حفظ البيانات في قاعدة البيانات
+                await addDoc(collection(db, "materials"), {
+                    title: title,
+                    url: finalUrl,
+                    type: fileType,
+                    year: currentYear,
+                    category: currentCategory,
+                    createdAt: serverTimestamp()
+                });
+
+                status.innerHTML = 'تم الحفظ بنجاح!';
+                closeModal();
+                // تنظيف الفورم
+                document.getElementById('fileTitle').value = '';
+                document.getElementById('fileUrl').value = '';
+                document.getElementById('fileName').innerText = '';
+
+            } catch (error) {
+                console.error("Error:", error);
+                status.innerHTML = 'حصل خطأ: ' + error.message;
             }
+        };
 
-            // Load Tabs
-            const tSnap = await getDoc(doc(db, "site_data", "tabs_"+id));
-            let tabs = tSnap.exists() ? tSnap.data().tabs : [{id:'gen', name:'General'}];
-            
-            document.getElementById('tabsBar').innerHTML = tabs.map(t => 
-                `<div class="tab-btn ${t.id==='gen'?'active':''}" onclick="loadTab('${t.id}')">${t.name}</div>`
-            ).join('');
-            
-            loadTab(tabs[0].id);
-        }
+        // عرض اسم الملف عند الاختيار
+        document.getElementById('fileInput').addEventListener('change', function(){
+            if(this.files[0]) document.getElementById('fileName').innerText = this.files[0].name;
+        });
 
-        window.loadTab = async function(tabId) {
-            currentTab = tabId;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            if(event) event.target.classList.add('active');
+        // 6. Logic: Load Content (قراءة البيانات)
+        function loadContent() {
+            const grid = document.getElementById('contentGrid');
+            grid.innerHTML = ''; // تفريغ القديم
 
-            const snap = await getDoc(doc(db, "site_data", `content_${currentPage}_${tabId}`));
-            if(snap.exists()) document.getElementById('contentArea').innerHTML = snap.data().html;
-            else document.getElementById('contentArea').innerHTML = `<div class="grid"></div>`;
-            
-            if(document.body.classList.contains('editing')) window.enableEdit();
-        }
+            // الاستعلام: هاتلي المواد بتاعت السنة دي والقسم ده
+            const q = query(
+                collection(db, "materials"), 
+                where("year", "==", currentYear),
+                where("category", "==", currentCategory),
+                orderBy("createdAt", "desc")
+            );
 
-        // --- AUTH (THE FIX) ---
-        window.login = async function() {
-            const u = document.getElementById('u').value;
-            const p = document.getElementById('p').value;
-            
-            // HARDCODED BACKDOOR (Ensures entry even if DB empty)
-            if(u === 'Adham' && p === '20250003') {
-                const user = {u:'Adham', role:'super_admin'};
-                localStorage.setItem('user', JSON.stringify(user));
-                // Sync to DB for future
-                await setDoc(doc(db, "settings", "admins"), {list:[user]}, {merge:true});
-                location.reload();
-                return;
-            }
-
-            // DB Check
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) {
-                const found = snap.data().list.find(a => a.u===u && a.p===p);
-                if(found) {
-                    localStorage.setItem('user', JSON.stringify(found));
-                    location.reload();
-                } else alert("Wrong Credentials");
-            } else alert("System Empty. Use Super Admin.");
-        }
-
-        window.performLogout = function() {
-            document.getElementById('admin-panel').style.display='none';
-            document.getElementById('introMain').innerText = "Goodbye";
-            document.getElementById('introSub').innerText = currentUser.u;
-            document.getElementById('intro-overlay').classList.add('active');
-            setTimeout(() => { localStorage.removeItem('user'); location.reload(); }, 2500);
-        }
-
-        function checkAuth() {
-            if(currentUser) {
-                document.getElementById('authBtnArea').innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openDashboard()">
-                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="nav-avatar">
+            // استماع لحظي (Realtime)
+            onSnapshot(q, (snapshot) => {
+                grid.innerHTML = '';
+                if(snapshot.empty) {
+                    grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; color:#64748b">
+                        <i class="fas fa-box-open fa-3x"></i><br>لا يوجد محتوى مضاف هنا بعد
                     </div>`;
-                document.getElementById('fabAdd').style.display = 'flex';
-                loadAdminList();
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const icon = data.type === 'file' ? 'fa-file-pdf' : 'fa-video';
+                    
+                    const card = `
+                        <div class="material-card">
+                            <i class="fas fa-trash delete-btn" onclick="deleteMaterial('${docSnap.id}')"></i>
+                            <div class="card-icon"><i class="fas ${icon}"></i></div>
+                            <div class="card-title">${data.title}</div>
+                            <div class="card-meta">
+                                <span>${new Date(data.createdAt?.seconds * 1000).toLocaleDateString('ar-EG')}</span>
+                                <span>${data.type === 'file' ? 'تحميل' : 'مشاهدة'}</span>
+                            </div>
+                            <a href="${data.url}" target="_blank">
+                                <button class="action-btn">فتح المحتوى</button>
+                            </a>
+                        </div>
+                    `;
+                    grid.innerHTML += card;
+                });
+            });
+        }
+
+        // حذف المحتوى
+        window.deleteMaterial = async (id) => {
+            if(confirm('هل أنت متأكد أنك تريد حذف هذا الملف؟')) {
+                await deleteDoc(doc(db, "materials", id));
             }
         }
 
-        // --- ADMIN ---
-        window.addPage = async function() {
-            const name = document.getElementById('newPage').value;
-            if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g,'');
-            navPages.push({id, name});
-            await setDoc(doc(db, "settings", "config"), { pages: navPages }, {merge:true});
-            renderMenu(); alert("Page Added!");
-        }
+        // تشغيل التحميل الأولي
+        loadContent();
 
-        window.addTab = async function() {
-            const name = document.getElementById('newTab').value;
-            if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g,'');
-            const ref = doc(db, "site_data", "tabs_"+currentPage);
-            const snap = await getDoc(ref);
-            let tabs = snap.exists() ? snap.data().tabs : [{id:'gen', name:'General'}];
-            tabs.push({id, name});
-            await setDoc(ref, {tabs});
-            loadPage(currentPage, document.getElementById('pageTitle').innerText);
-            alert("Tab Added!");
-        }
-
-        window.addCard = function() {
-            const grid = document.querySelector('#contentArea .grid');
-            if(!grid) {
-                document.getElementById('contentArea').innerHTML = `<div class="grid"></div>`;
-                window.addCard(); return;
+        // 7. Particles Config (الخلفية المتحركة)
+        tsParticles.load("tsparticles", {
+            fpsLimit: 60,
+            particles: {
+                color: { value: "#3b82f6" }, // لون الذرات
+                links: { color: "#3b82f6", distance: 150, enable: true, opacity: 0.3, width: 1 },
+                move: { enable: true, speed: 1.5 },
+                number: { value: 70 },
+                opacity: { value: 0.5 },
+                size: { value: { min: 1, max: 3 } }
+            },
+            interactivity: {
+                events: { onHover: { enable: true, mode: "grab" } },
+                modes: { grab: { distance: 140, links: { opacity: 1 } } }
             }
-            const html = `<div class="card"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><img src="https://via.placeholder.com/400" class="editable-img"><div class="card-body"><h3 contenteditable>New Title</h3><p contenteditable>Description...</p></div></div>`;
-            grid.insertAdjacentHTML('beforeend', html);
-            window.enableEdit();
-        }
+        });
 
-        window.addNewAdmin = async function() {
-            const u = document.getElementById('newAdmUser').value;
-            const p = document.getElementById('newAdmPass').value;
-            await updateDoc(doc(db, "settings", "admins"), { list: arrayUnion({u, p, role:'admin'}) });
-            loadAdminList(); alert("Admin Added");
-        }
-
-        async function loadAdminList() {
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) {
-                document.getElementById('adminListUI').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
-            }
-        }
-
-        window.saveData = async function() {
-            const content = document.getElementById('contentArea').innerHTML;
-            if(currentPage === 'home') {
-                 await setDoc(doc(db, "site_data", "home_content"), {html: content});
-            } else {
-                 await setDoc(doc(db, "site_data", `content_${currentPage}_${currentTab}`), {html: content});
-            }
-            alert("Saved!");
-        }
-
-        // --- HELPERS ---
-        window.toggleSidebar = () => {
-            document.getElementById('sidebarMenu').classList.toggle('open');
-            document.querySelector('.overlay-bg').style.display = document.getElementById('sidebarMenu').classList.contains('open') ? 'block' : 'none';
-        }
-        window.toggleTheme = () => document.body.classList.toggle('dark-mode');
-        window.openLogin = () => document.getElementById('login-modal').style.display='flex';
-        window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
-        window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
-        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); }
-        
-        window.enableEdit = function() {
-            document.getElementById('admin-panel').style.display='none';
-            document.body.classList.add('editing');
-            document.getElementById('saveBtn').style.display='block';
-            document.querySelectorAll('[contenteditable]').forEach(el => el.contentEditable = true);
+        // Toggle Theme
+        window.toggleTheme = () => {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeIcon').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
         }
     </script>
-    
-    <style>
-        .sidebar-menu { box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
-        .overlay-bg { display: none; }
-        @media(max-width: 768px) {
-            .sidebar-menu.open + .overlay-bg { display: block; }
-        }
-    </style>
-    
-    <div class="overlay-bg" onclick="toggleSidebar()"></div>
-
 </body>
 </html>
