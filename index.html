@@ -3,253 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Physiatić | Advanced Physics</title>
+    <title>Physiatić | Academic Hub</title>
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2980b9">
+    <meta name="theme-color" content="#0f2027">
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. Variables & Modern Theme --- */
-        :root { 
-            --primary: #2d3436; --accent: #3498db; --bg-body: #f0f2f5; --bg-card: #ffffff;
-            --text-main: #2c3e50; --text-sec: #7f8c8d; --nav-bg: rgba(255, 255, 255, 0.85);
-            --img-fit: contain; --radius: 20px; --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --sidebar-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* --- 1. CORE VARIABLES & RESET --- */
+        :root {
+            --primary: #0f2027; 
+            --secondary: #203a43; 
+            --accent: #2c5364;
+            --highlight: #00d2ff;
+            --text-light: #ffffff;
+            --text-dim: #a8b2b7;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --card-radius: 16px;
         }
-        body.dark-mode {
-            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
-            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.85); --shadow: 0 10px 30px rgba(0,0,0,0.3);
-            --sidebar-grad: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background: #0f2027; /* Dark Physics Theme */
+            color: var(--text-light);
+            overflow: hidden; /* App-like feel */
+            height: 100vh;
+            display: flex;
         }
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; }
 
-        /* --- 2. Animations --- */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Intro Animation - FIXED Z-INDEX */
-        #intro-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: #000; z-index: 999999; display: flex; justify-content: center; align-items: center; 
-            pointer-events: none; opacity: 0; transition: opacity 0.5s;
+        /* --- 2. PHYSICS BACKGROUND (PARTICLES) --- */
+        #particles-js {
+            position: absolute; width: 100%; height: 100%; z-index: 0;
+            background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
         }
-        #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .intro-content { position: relative; text-align: center; }
-        .intro-text { font-size: 3.5rem; font-weight: 900; color: white; opacity: 0; transform: scale(0.9); }
-        .intro-text span { color: var(--accent); display: block; font-size: 1.8rem; margin-top: 10px; }
-        
-        /* Electric Bolts */
-        .bolt { position: absolute; top: 50%; width: 0%; height: 8px; background: white; box-shadow: 0 0 20px #fff; z-index: 2; transition: width 0.1s; }
-        .bolt-left { left: 0; background: linear-gradient(90deg, transparent, #00f2ff); box-shadow: 0 0 20px #00f2ff; }
-        .bolt-right { right: 0; background: linear-gradient(-90deg, transparent, #ff0055); box-shadow: 0 0 20px #ff0055; }
-        
-        /* Animation Classes */
-        .active .bolt-left { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .bolt-right { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .intro-text { animation: textReveal 0.5s ease-out 0.8s forwards; }
-        
-        @keyframes strike { 0% { width: 0%; opacity: 0; } 50% { opacity: 1; } 100% { width: 51%; opacity: 1; } }
-        @keyframes textReveal { 0% { opacity: 0; transform: scale(1.5); filter: blur(10px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
 
-        /* --- 3. UI Components --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); box-shadow: 0 4px 30px rgba(0,0,0,0.03); }
-        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        /* --- 3. SIDEBAR (YEARS) --- */
+        .sidebar {
+            width: 260px; height: 100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border); z-index: 10; display: flex; flex-direction: column;
+            transition: 0.3s;
+        }
         
-        .nav-center { display: flex; gap: 20px; align-items: center; }
-        .nav-item-wrapper { position: relative; }
-        .nav-link { color: var(--text-sec); font-weight: 500; padding: 8px 16px; border-radius: 12px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 5px; }
-        .nav-link:hover, .nav-link.active-page { background: rgba(52, 152, 219, 0.1); color: var(--accent); }
+        .brand { padding: 30px; font-size: 1.5rem; font-weight: 700; color: var(--highlight); display: flex; align-items: center; gap: 10px; }
+        .brand i { animation: spin 10s infinite linear; }
         
-        .dropdown-menu { position: absolute; top: 120%; left: 50%; transform: translateX(-50%); background: var(--bg-card); min-width: 180px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); padding: 10px; display: none; flex-direction: column; gap: 5px; z-index: 1001; animation: slideUp 0.2s ease-out; border: 1px solid rgba(255,255,255,0.1); }
-        .nav-item-wrapper:hover .dropdown-menu { display: flex; }
-        .dropdown-item { padding: 10px 15px; border-radius: 8px; cursor: pointer; color: var(--text-sec); font-size: 0.9rem; transition: 0.2s; }
-        .dropdown-item:hover { background: var(--bg-body); color: var(--accent); }
+        .year-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .year-item {
+            padding: 15px 20px; margin-bottom: 8px; border-radius: 12px; cursor: pointer;
+            color: var(--text-dim); transition: 0.3s; font-weight: 500; display: flex; justify-content: space-between;
+        }
+        .year-item:hover, .year-item.active { background: var(--glass); color: var(--highlight); border: 1px solid var(--glass-border); }
+        .year-item.active { background: rgba(0, 210, 255, 0.1); }
 
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .physics-toggle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); background: transparent; transition: 0.3s; }
-        .physics-toggle:hover { background: var(--accent); color: white; transform: rotate(15deg); }
+        .admin-controls { padding: 20px; border-top: 1px solid var(--glass-border); }
         
-        .user-nav-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .nav-avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 10px rgba(52, 152, 219, 0.3); }
-
-        /* --- Content --- */
-        #main-container { min-height: 90vh; }
-        .page-container { padding: 60px 5%; animation: slideUp 0.5s ease-out; display: none; }
-        .active-view { display: block; }
-
-        .hero-section { display: flex; align-items: center; justify-content: space-between; margin-bottom: 60px; gap: 40px; flex-wrap: wrap; }
-        .hero-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; color: var(--text-main); background: -webkit-linear-gradient(45deg, var(--text-main), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero-img img { width: 100%; max-width: 550px; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.15)); animation: float 6s infinite ease-in-out; }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
-        .card { background: var(--bg-card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: 0.4s; position: relative; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.15); border-color: var(--accent); }
-        .card img { width: 100%; height: 220px; object-fit: var(--img-fit); background: var(--bg-body); padding: 10px; }
-        .card-body { padding: 25px; }
-        .card h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.4rem; }
-        .card p { color: var(--text-sec); font-size: 0.95rem; line-height: 1.6; }
+        /* --- 4. MAIN AREA --- */
+        .main-content { flex: 1; position: relative; z-index: 5; display: flex; flex-direction: column; height: 100vh; }
         
-        .card-delete-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-        .editing .card-delete-btn { display: flex; }
+        /* Header & Tabs */
+        .top-bar {
+            padding: 20px 40px; display: flex; flex-direction: column; gap: 20px;
+            background: rgba(15, 32, 39, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
+        }
+        .page-title h1 { font-size: 1.8rem; margin: 0; }
+        .page-title span { font-size: 0.9rem; color: var(--highlight); }
 
-        /* --- PROJECT DETAIL MODAL --- */
-        #project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 2000; overflow-y: auto; display: none; animation: slideUp 0.4s ease-out; }
-        .project-detail-header { position: sticky; top: 0; background: var(--nav-bg); backdrop-filter: blur(15px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 2001; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .close-modal-btn { background: #ff4757; color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; }
-        .project-detail-content { max-width: 900px; margin: 40px auto; padding: 0 20px; }
-        .detail-hero { width: 100%; height: 400px; object-fit: contain; border-radius: 25px; margin-bottom: 30px; box-shadow: var(--shadow); background: var(--bg-card); }
-        .detail-title { font-size: 2.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 15px; }
-        .detail-body { font-size: 1.1rem; line-height: 1.8; color: var(--text-sec); }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; margin: 30px 0; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); background: black; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .tabs-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .tab-btn {
+            padding: 8px 25px; border-radius: 50px; background: rgba(255,255,255,0.05);
+            color: var(--text-dim); cursor: pointer; transition: 0.3s; border: 1px solid transparent; white-space: nowrap;
+        }
+        .tab-btn:hover, .tab-btn.active { background: var(--highlight); color: #000; font-weight: 700; box-shadow: 0 0 15px rgba(0, 210, 255, 0.4); }
 
-        /* --- DASHBOARD --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 5000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .dash-board { background: var(--bg-card); width: 90%; max-width: 1200px; height: 85vh; border-radius: 30px; display: flex; overflow: hidden; box-shadow: 0 50px 100px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); }
-        .sidebar { width: 280px; background: var(--sidebar-grad); color: white; padding: 30px; display: flex; flex-direction: column; gap: 10px; }
-        .sidebar-header { font-size: 1.5rem; font-weight: 800; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
-        .sb-btn { padding: 12px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: #333; transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-weight: 600; }
-        .dash-main { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); position: relative; }
-        .dash-section { display: none; animation: fadeIn 0.4s; }
-        .dash-section.active-sec { display: block; }
-        .close-dash-x { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; background: #ff4757; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); z-index: 100; font-size: 1.2rem; }
-        .setting-card { background: var(--bg-card); padding: 25px; border-radius: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-main); }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
-        .verified-badge { color: #3498db; margin-left: 5px; font-size: 0.9em; }
-        .editable { border: 2px dashed #ff9f43; cursor: text; min-height: 1em; }
-        #saveBtn { position: fixed; bottom: 30px; right: 30px; background: #2ed573; color: white; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; z-index: 6000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        /* Content Grid */
+        .content-area { flex: 1; overflow-y: auto; padding: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        
+        /* Cards */
+        .card {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius); padding: 20px; position: relative;
+            transition: 0.3s; cursor: pointer; overflow: hidden;
+        }
+        .card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.07); border-color: var(--highlight); }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--highlight);
+        }
+        
+        .card-icon { font-size: 2.5rem; color: var(--highlight); margin-bottom: 15px; }
+        .card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.5; }
+        .card-meta { margin-top: 15px; font-size: 0.8rem; color: #666; display: flex; justify-content: space-between; }
+        
+        .delete-btn {
+            position: absolute; top: 15px; right: 15px; color: #ff4757;
+            cursor: pointer; opacity: 0; transition: 0.3s;
+        }
+        .card:hover .delete-btn { opacity: 1; }
 
-        @media (max-width: 900px) {
-            .dash-board { flex-direction: column; width: 100%; height: 100vh; border-radius: 0; }
-            .sidebar { width: 100%; height: auto; padding: 15px; flex-direction: row; overflow-x: auto; }
-            .sidebar-header { display: none; }
-            .sb-btn { white-space: nowrap; font-size: 0.8rem; padding: 8px 12px; }
-            .dash-main { padding: 20px 15px 80px 15px; }
-            .hero-section { flex-direction: column; text-align: center; }
-            .hero-img { order: 2; width: 100%; } .hero-text { order: 1; }
+        /* --- 5. FAB (Floating Action Button) --- */
+        .fab-add {
+            position: fixed; bottom: 40px; right: 40px; width: 60px; height: 60px;
+            background: var(--highlight); border-radius: 50%; display: none; /* Hidden by default */
+            align-items: center; justify-content: center; font-size: 1.5rem; color: #000;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); cursor: pointer; z-index: 100;
+            transition: 0.3s; animation: pulse 2s infinite;
+        }
+        .fab-add:hover { transform: scale(1.1) rotate(90deg); }
+
+        /* --- 6. MODALS --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .modal-box { background: #1e2a30; width: 400px; padding: 30px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .modal-header { font-size: 1.5rem; margin-bottom: 20px; color: var(--highlight); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-dim); }
+        .input-group input, .input-group select, .input-group textarea { 
+            width: 100%; padding: 12px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); 
+            border-radius: 8px; color: white; 
+        }
+        .btn-action { width: 100%; padding: 12px; background: var(--highlight); color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        
+        /* Animations */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 210, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 210, 255, 0); } }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .sidebar { position: fixed; left: -100%; width: 280px; }
+            .sidebar.open { left: 0; }
+            .hamburger { display: block; position: fixed; top: 20px; right: 20px; z-index: 2000; color: white; font-size: 1.5rem; }
+            .main-content { width: 100%; }
+            .top-bar { padding: 20px; }
+            .content-area { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div id="intro-overlay">
-        <div class="bolt bolt-left"></div> <div class="bolt bolt-right"></div>
-        <div class="intro-content">
-            <div class="intro-text" id="introMsg">Welcome <br> <span>Engineer</span></div>
+    <div id="particles-js"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand"><i class="fas fa-atom"></i> Dr. Portal</div>
+        <div class="year-list" id="yearList">
+            </div>
+        <div class="admin-controls">
+            <button onclick="openLogin()" style="width:100%; padding:10px; background:rgba(255,255,255,0.1); border:none; color:white; border-radius:8px; cursor:pointer;" id="loginBtn">
+                <i class="fas fa-lock"></i> Doctor Access
+            </button>
+            <button onclick="logout()" style="width:100%; padding:10px; background:rgba(255,71,87,0.2); border:none; color:#ff4757; border-radius:8px; cursor:pointer; display:none; margin-top:10px;" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
     </div>
+
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="page-title">
+                <h1 id="viewTitle">Select a Year</h1>
+                <span id="viewSubtitle">Academic Content Hub</span>
+            </div>
+            <div class="tabs-container" id="categoryTabs">
+                </div>
+        </div>
+
+        <div class="content-area">
+            <div class="grid" id="contentGrid">
+                <div style="text-align:center; grid-column:1/-1; padding-top:50px; color:var(--text-dim);">
+                    <i class="fas fa-hand-pointer" style="font-size:3rem; margin-bottom:20px;"></i>
+                    <p>Please select an academic year from the sidebar.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fab-add" id="fabAdd" onclick="openAddModal()">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <div class="modal" id="addModal" onclick="if(event.target==this)this.style.display='none'">
+        <div class="modal-box">
+            <div class="modal-header">Add New Material</div>
+            <div class="input-group">
+                <label>Title</label>
+                <input id="inpTitle" placeholder="e.g. Lecture 1: Thermodynamics">
+            </div>
+            <div class="input-group">
+                <label>Description / Notes</label>
+                <textarea id="inpDesc" rows="3" placeholder="Brief details..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Link (Drive, YouTube, etc.)</label>
+                <input id="inpLink" placeholder="https://...">
+            </div>
+            <div class="input-group">
+                <label>Type</label>
+                <select id="inpType">
+                    <option value="pdf">PDF / File</option>
+                    <option value="video">Video Lecture</option>
+                    <option value="task">Assignment / Project</option>
+                    <option value="alert">Announcement</option>
+                </select>
+            </div>
+            <button class="btn-action" onclick="saveContent()">Upload to System</button>
+        </div>
+    </div>
+
+    <div class="modal" id="loginModal" onclick="if(event.target==this)this.style.display='none'">
+        <div class="modal-box" style="text-align:center;">
+            <i class="fas fa-user-shield" style="font-size:3rem; color:var(--highlight); margin-bottom:20px;"></i>
+            <div class="input-group"><input id="adminPass" type="password" placeholder="Enter Access Code"></div>
+            <button class="btn-action" onclick="performLogin()">Access Dashboard</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     
-    <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
-
-    <nav>
-        <div class="logo" onclick="route('home')"><i class="fas fa-atom" style="color:var(--accent)"></i> <span data-db="site_name">Physiatić</span></div>
-        <div class="nav-center" id="dynamicNav"></div>
-        <div class="nav-actions">
-            <button class="physics-toggle" onclick="toggleTheme()" id="themeBtn"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="loggedOutUI"><button style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:50px; cursor:pointer; font-weight:600;" onclick="openLogin()">Login</button></div>
-            <div id="loggedInUI" style="display:none;" onclick="openDashboard()"><div class="user-nav-area"><img src="" id="myNavAvatar" class="nav-avatar"></div></div>
-        </div>
-    </nav>
-
-    <div id="main-container">
-        <div id="page-content-area" class="page-container active-view"></div> 
-    </div>
-
-    <div id="project-modal">
-        <div class="project-detail-header">
-            <h3 style="margin:0; font-size:1.2rem;">Details</h3>
-            <button class="close-modal-btn" onclick="closeProjectDetail()"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="project-detail-content">
-            <img id="modal-hero-img" class="detail-hero" src="">
-            <h1 id="modal-title" class="detail-title"></h1>
-            <div id="modal-body" class="detail-body"></div>
-            <button id="modalEditBtn" onclick="enableModalEdit()" style="margin-top:30px; padding:12px 25px; background:var(--accent); color:white; border:none; border-radius:10px; cursor:pointer; display:none; font-weight:600; width:100%;"><i class="fas fa-edit"></i> Edit Content</button>
-        </div>
-    </div>
-
-    <div id="admin-panel">
-        <div class="dash-board">
-            <div class="close-dash-x" onclick="closeDashboard()"><i class="fas fa-times"></i></div>
-            <div class="sidebar">
-                <div class="sidebar-header"><i class="fas fa-cubes"></i> Control</div>
-                <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-laptop-code"></i> Content</div>
-                <div class="sb-btn" onclick="switchTab('menu')"><i class="fas fa-sitemap"></i> Menu</div>
-                <div class="sb-btn" onclick="switchTab('profile')"><i class="fas fa-id-badge"></i> Profile</div>
-                <div class="sb-btn" onclick="switchTab('theme')"><i class="fas fa-brush"></i> Theme</div>
-                <div class="sb-btn" id="superTab" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users-cog"></i> Team</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; background:rgba(231, 76, 60, 0.2); color:#ff6b6b;"><i class="fas fa-power-off"></i> Logout</div>
-                <div class="sb-btn" onclick="replayIntro()" style="background:rgba(255,255,255,0.1); font-size:0.8rem;"><i class="fas fa-play"></i> Replay Intro</div>
-            </div>
-            <div class="dash-main">
-                <div id="tab-content" class="dash-section active-sec">
-                    <h2>Edit: <span id="lblCurrentPage" style="color:var(--accent)">Home</span></h2>
-                    <div class="setting-card" style="display:flex; gap:15px; flex-wrap:wrap;">
-                        <button onclick="enableEdit()" style="padding:15px 30px; background:#2ed573; color:white; border:none; border-radius:12px; cursor:pointer; font-weight:600;"><i class="fas fa-magic"></i> Live Edit</button>
-                        <button onclick="addNewProject()" style="padding:15px 30px; background:var(--accent); color:white; border:none; border-radius:12px; cursor:pointer; font-weight:600;"><i class="fas fa-plus-circle"></i> Add Card</button>
-                    </div>
-                </div>
-                <div id="tab-menu" class="dash-section">
-                    <h2>Menu Structure</h2>
-                    <div class="setting-card">
-                        <div class="form-group"><label>Tab Name</label><input id="newTabName" placeholder="e.g. Gallery"></div>
-                        <div class="form-group"><label>Parent</label><select id="parentTabSelect"><option value="">Main Tab</option></select></div>
-                        <button onclick="addTab()" style="background:var(--accent); color:white; border:none; padding:10px 20px; border-radius:8px;">Add</button>
-                    </div>
-                    <div id="menuList" style="margin-top:20px;"></div>
-                </div>
-                <div id="tab-profile" class="dash-section">
-                    <h2>Profile <span id="verifiedBadge" style="display:none;"><i class="fas fa-check-circle verified-badge"></i></span></h2>
-                    <div class="setting-card">
-                        <div style="text-align:center; margin-bottom:15px;"><img id="previewPic" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:3px solid var(--accent); display:block; margin:0 auto 10px;"><button onclick="triggerProfileUpload()" style="padding:5px 15px; background:var(--primary); color:white; border:none; border-radius:20px; font-size:0.8rem;">Change Photo</button></div>
-                        <div class="form-group"><label>Name</label><input id="profileName" onchange="updateProfileInfo()"></div>
-                        <div class="form-group"><label>Bio</label><input id="profileBio" placeholder="Bio..." onchange="updateProfileInfo()"></div>
-                        <div class="form-group"><label>Password</label><input type="password" id="newPass"><button onclick="changeMyPassword()" style="margin-top:5px; background:#ff4757; color:white; border:none; padding:8px; border-radius:5px;">Update</button></div>
-                    </div>
-                </div>
-                <div id="tab-team" class="dash-section">
-                    <h2>Team</h2>
-                    <div class="setting-card">
-                        <div style="display:flex; gap:5px;"><input id="newAdmin" placeholder="User" style="flex:1;"><input id="newPassAdmin" placeholder="Pass" style="flex:1;"></div>
-                        <button onclick="addAdmin()" style="background:var(--accent); color:white; border:none; padding:10px; border-radius:8px; width:100%; margin-top:10px;">Add Admin</button>
-                    </div>
-                    <div id="teamList"></div>
-                </div>
-                <div id="tab-theme" class="dash-section">
-                    <h2>Theme</h2>
-                    <div class="setting-card">
-                        <div class="form-group"><label>Accent Color</label><input type="color" id="accentColorPicker" value="#3498db" style="height:40px;"></div>
-                        <div class="form-group"><label>Image Fit</label><select id="imgFitSelect"><option value="contain">Contain</option><option value="cover">Cover</option></select></div>
-                        <button onclick="saveThemeSettings()" style="width:100%; padding:10px; background:var(--primary); color:white; border:none; border-radius:8px;">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:6000; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-        <div style="background:var(--bg-card); padding:40px; border-radius:25px; width:350px; text-align:center;">
-            <h2 style="color:var(--text-main); margin-bottom:20px;">Login</h2>
-            <input id="u" placeholder="Username" style="width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #ddd; background:var(--bg-body);">
-            <input id="p" type="password" placeholder="Password" style="width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #ddd; background:var(--bg-body);">
-            <button onclick="login()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:12px; font-weight:bold; cursor:pointer; margin-top:10px;">Enter</button>
-            <p onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; color:var(--text-sec); cursor:pointer;">Cancel</p>
-        </div>
-    </div>
-
-    <button id="saveBtn" onclick="saveData()">Save Changes</button>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
@@ -262,249 +238,227 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        
-        let currentUser = JSON.parse(localStorage.getItem('user'));
-        let navTabs = [{id: 'home', label: 'Home', children: []}];
-        let activeTab = 'home';
-        let activeCard = null; 
 
-        // --- INIT & ANIMATION ---
-        async function loadConfig() {
-            // Force Animation EVERY TIME for presentation
-            playAnimation('Welcome', 'Engineer');
+        // --- STATE MANAGEMENT ---
+        let currentYear = null;
+        let currentCat = null;
+        let isAdmin = localStorage.getItem('isDoctor') === 'true';
+
+        // --- DATA STRUCTURE ---
+        const academicYears = [
+            { id: 'prep', name: 'Preparatory Year' },
+            { id: 'year1', name: 'First Year' },
+            { id: 'year2', name: 'Second Year' },
+            { id: 'year3', name: 'Third Year' },
+            { id: 'year4', name: 'Fourth Year' }
+        ];
+
+        const categories = [
+            { id: 'lectures', name: 'Lectures', icon: 'fas fa-chalkboard-teacher' },
+            { id: 'sections', name: 'Sections', icon: 'fas fa-users-cog' },
+            { id: 'assignments', name: 'Assignments', icon: 'fas fa-tasks' },
+            { id: 'projects', name: 'Projects', icon: 'fas fa-project-diagram' },
+            { id: 'grades', name: 'Grades & Results', icon: 'fas fa-chart-line' }
+        ];
+
+        // --- INIT ---
+        function init() {
+            renderSidebar();
+            checkAdmin();
             
-            const docSnap = await getDoc(doc(db, "settings", "config"));
-            if(docSnap.exists()) {
-                const data = docSnap.data();
-                if(data.accent) document.documentElement.style.setProperty('--accent', data.accent);
-                if(data.imgFit) document.documentElement.style.setProperty('--img-fit', data.imgFit);
-                if(data.navTabs) navTabs = data.navTabs;
-                renderNav(); updateParentSelect();
-            }
-            loadTabContent('home');
+            // Particle Config
+            particlesJS("particles-js", {
+                "particles": { "number": { "value": 80 }, "color": { "value": "#00d2ff" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5 }, "size": { "value": 3 }, "line_linked": { "enable": true, "distance": 150, "color": "#2c5364", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 2 } },
+                "interactivity": { "events": { "onhover": { "enable": true, "mode": "grab" } } }
+            });
         }
-        loadConfig();
+        init();
 
-        function playAnimation(t1, t2) {
-            const overlay = document.getElementById('intro-overlay');
-            const msg = document.getElementById('introMsg');
-            msg.innerHTML = `${t1} <br> <span>${t2}</span>`;
-            overlay.classList.add('active');
-            setTimeout(() => { overlay.classList.remove('active'); }, 3000);
+        // --- RENDER SIDEBAR ---
+        function renderSidebar() {
+            const list = document.getElementById('yearList');
+            list.innerHTML = academicYears.map(y => 
+                `<div class="year-item" onclick="selectYear('${y.id}', '${y.name}')" id="year-${y.id}">
+                    <span>${y.name}</span> <i class="fas fa-chevron-right" style="font-size:0.8rem;"></i>
+                </div>`
+            ).join('');
         }
-        window.replayIntro = () => playAnimation('Welcome', 'Engineer');
 
-        // --- NAV SYSTEM ---
-        function renderNav() {
-            const nav = document.getElementById('dynamicNav');
-            nav.innerHTML = navTabs.map(tab => {
-                if(tab.children && tab.children.length > 0) {
-                    return `
-                    <div class="nav-item-wrapper">
-                        <span class="nav-link">${tab.label} <i class="fas fa-chevron-down" style="font-size:0.7em; margin-left:5px;"></i></span>
-                        <div class="dropdown-menu">
-                            ${tab.children.map(child => `<div class="dropdown-item" onclick="route('${child.id}', '${child.label}')">${child.label}</div>`).join('')}
-                        </div>
-                    </div>`;
+        // --- NAVIGATION LOGIC ---
+        window.selectYear = function(id, name) {
+            currentYear = id;
+            document.querySelectorAll('.year-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`year-${id}`).classList.add('active');
+            
+            document.getElementById('viewTitle').innerText = name;
+            
+            // Render Tabs
+            renderTabs();
+            // Default select first tab
+            selectCategory(categories[0].id);
+        }
+
+        function renderTabs() {
+            const bar = document.getElementById('categoryTabs');
+            bar.innerHTML = categories.map(c => 
+                `<div class="tab-btn" onclick="selectCategory('${c.id}')" id="tab-${c.id}">
+                    <i class="${c.icon}"></i> ${c.name}
+                </div>`
+            ).join('');
+        }
+
+        window.selectCategory = function(id) {
+            currentCat = id;
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${id}`).classList.add('active');
+            
+            document.getElementById('viewSubtitle').innerText = categories.find(c => c.id === id).name;
+            
+            // LISTEN TO FIREBASE DATA (The Tree Logic)
+            listenToContent();
+        }
+
+        // --- FIREBASE CONTENT LOGIC ---
+        let unsubscribe = null;
+
+        function listenToContent() {
+            if(unsubscribe) unsubscribe(); // Detach previous listener
+            
+            const docId = `data_${currentYear}_${currentCat}`;
+            const docRef = doc(db, "academic_content", docId);
+            
+            document.getElementById('contentGrid').innerHTML = '<div style="color:var(--text-dim); padding:20px;">Loading data...</div>';
+
+            unsubscribe = onSnapshot(docRef, (docSnap) => {
+                const grid = document.getElementById('contentGrid');
+                if (docSnap.exists() && docSnap.data().items && docSnap.data().items.length > 0) {
+                    const items = docSnap.data().items;
+                    grid.innerHTML = items.map((item, index) => createCardHTML(item, index)).join('');
                 } else {
-                    return `<a onclick="route('${tab.id}', '${tab.label}')" class="nav-link ${tab.id === activeTab ? 'active-page' : ''}">${tab.label}</a>`;
+                    grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:50px; border:2px dashed var(--glass-border); border-radius:20px; color:var(--text-dim);">
+                        <i class="fas fa-folder-open" style="font-size:3rem; margin-bottom:20px;"></i>
+                        <p>No content uploaded in this section yet.</p>
+                        ${isAdmin ? '<p style="color:var(--highlight)">Click the + button to add content.</p>' : ''}
+                    </div>`;
                 }
-            }).join('');
+            });
         }
 
-        window.route = function(id, label) {
-            activeTab = id;
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            if(document.getElementById('lblCurrentPage')) document.getElementById('lblCurrentPage').innerText = label || id;
-            loadTabContent(id);
-            renderNav();
-        }
+        function createCardHTML(item, index) {
+            let icon = 'fas fa-file-alt';
+            if(item.type === 'video') icon = 'fas fa-play-circle';
+            if(item.type === 'task') icon = 'fas fa-clipboard-check';
+            if(item.type === 'alert') icon = 'fas fa-bullhorn';
 
-        async function loadTabContent(id) {
-            const container = document.getElementById('page-content-area');
-            let contentHTML = "";
-            if(id === 'home') {
-                const snap = await getDoc(doc(db, "site_data", "home_content"));
-                if(snap.exists()) contentHTML = snap.data().html;
-                else contentHTML = `
-                    <div class="hero-section">
-                        <div class="hero-text"><h1 data-db="h_t">Welcome</h1><p data-db="h_d">To Physics World</p></div>
-                        <div class="hero-img"><img src="https://via.placeholder.com/600" data-img="hero_img"></div>
-                    </div>
-                    <div style="text-align:center;"><h2 data-db="s_t">Featured</h2></div>
-                    <div class="grid" id="grid-home"></div>`;
-            } else {
-                const snap = await getDoc(doc(db, "site_data", "content_"+id));
-                if(snap.exists()) contentHTML = snap.data().html;
-                else contentHTML = `<div style="text-align:center; padding:40px;"><h2>${id}</h2></div><div class="grid" id="grid-${id}"></div>`;
-            }
-            container.innerHTML = contentHTML;
-            if(document.body.classList.contains('editing')) window.enableEdit();
-        }
-
-        // --- MENU BUILDER ---
-        function updateParentSelect() {
-            const sel = document.getElementById('parentTabSelect');
-            if(sel) {
-                sel.innerHTML = '<option value="">No Parent (Main Tab)</option>' + navTabs.map(t => `<option value="${t.id}">${t.label}</option>`).join('');
-                const list = document.getElementById('menuList');
-                list.innerHTML = navTabs.map(t => {
-                    let html = `<div style="padding:15px; background:rgba(0,0,0,0.03); margin-bottom:10px; border-radius:10px;"><b>${t.label}</b> ${t.id!=='home'?`<i class="fas fa-trash" style="color:#ff4757; cursor:pointer; float:right;" onclick="delTab('${t.id}')"></i>`:''}</div>`;
-                    if(t.children) html += t.children.map(c => `<div style="padding:10px 10px 10px 40px; border-left:3px solid var(--accent); margin-bottom:5px;">- ${c.label} <i class="fas fa-trash" style="color:#ff4757; cursor:pointer; float:right; font-size:0.9em;" onclick="delTab('${c.id}', '${t.id}')"></i></div>`).join('');
-                    return html;
-                }).join('');
-            }
-        }
-
-        window.addTab = async function() {
-            const name = document.getElementById('newTabName').value;
-            const parent = document.getElementById('parentTabSelect').value;
-            if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g, '');
-            if(parent) {
-                const pIndex = navTabs.findIndex(t => t.id === parent);
-                if(!navTabs[pIndex].children) navTabs[pIndex].children = [];
-                navTabs[pIndex].children.push({id, label: name});
-            } else { navTabs.push({id, label: name, children: []}); }
-            await updateDoc(doc(db, "settings", "config"), { navTabs });
-            alert("Menu Updated!"); loadConfig();
-        }
-
-        window.delTab = async function(id, parentId) {
-            if(!confirm("Delete tab?")) return;
-            if(parentId) {
-                const p = navTabs.find(t => t.id === parentId);
-                p.children = p.children.filter(c => c.id !== id);
-            } else { navTabs = navTabs.filter(t => t.id !== id); }
-            await updateDoc(doc(db, "settings", "config"), { navTabs });
-            loadConfig();
-        }
-
-        // --- PROJECT DETAIL ---
-        window.openProjectDetail = function(card) {
-            if(document.body.classList.contains('editing')) return;
-            activeCard = card;
-            const modal = document.getElementById('project-modal');
-            document.getElementById('modal-hero-img').src = card.querySelector('img').src;
-            document.getElementById('modal-title').innerText = card.querySelector('h3').innerText;
-            const hiddenData = card.querySelector('.detail-data');
-            document.getElementById('modal-body').innerHTML = hiddenData ? hiddenData.innerHTML : "<p>No details. Add content in Edit Mode.</p>";
-            modal.style.display = 'block';
-            if(currentUser) document.getElementById('modalEditBtn').style.display = 'block';
-        }
-
-        window.closeProjectDetail = function() {
-            document.getElementById('project-modal').style.display = 'none';
-            if(document.getElementById('modal-body').isContentEditable) {
-                const newContent = document.getElementById('modal-body').innerHTML;
-                let hiddenDiv = activeCard.querySelector('.detail-data');
-                if(!hiddenDiv) {
-                    hiddenDiv = document.createElement('div');
-                    hiddenDiv.className = 'detail-data';
-                    hiddenDiv.style.display = 'none';
-                    activeCard.querySelector('.card-body').appendChild(hiddenDiv);
-                }
-                hiddenDiv.innerHTML = newContent;
-                savePage();
-            }
-        }
-
-        window.enableModalEdit = function() {
-            document.getElementById('modal-body').contentEditable = true;
-            document.getElementById('modal-body').style.border = "2px dashed var(--accent)";
-            document.getElementById('modal-body').focus();
-            alert("Edit Mode ON.");
-        }
-
-        // --- ADMIN ---
-        window.login = async function() {
-            const u = document.getElementById('u').value; const p = document.getElementById('p').value;
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(!snap.exists()) await setDoc(doc(db, "settings", "admins"), {list:[{u:'Adham', p:'20250003', role:'super_admin', img:'', bio:''}]});
-            const list = (await getDoc(doc(db, "settings", "admins"))).data().list;
-            const user = list.find(a => a.u === u && a.p === p);
-            if(user) { localStorage.setItem('user', JSON.stringify(user)); location.reload(); }
-            else alert("Wrong Credentials");
-        }
-
-        window.updateProfileInfo = async function() {
-            const name = document.getElementById('profileName').value;
-            const bio = document.getElementById('profileBio').value;
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            let list = snap.data().list;
-            const idx = list.findIndex(a => a.u === currentUser.u);
-            list[idx].u = name; list[idx].bio = bio;
-            await updateDoc(doc(db, "settings", "admins"), {list});
-            currentUser.u = name; currentUser.bio = bio;
-            localStorage.setItem('user', JSON.stringify(currentUser));
-            alert("Profile Saved!");
-        }
-
-        window.performLogout = function() {
-            document.getElementById('admin-panel').style.display='none';
-            playAnimation('Goodbye', 'Engineer');
-            setTimeout(() => { localStorage.removeItem('user'); location.reload(); }, 3000);
-        }
-
-        // --- CORE ---
-        async function savePage() {
-            const content = document.getElementById('page-content-area').innerHTML;
-            const ref = activeTab === 'home' ? "home_content" : "content_"+activeTab;
-            await setDoc(doc(db, "site_data", ref), {html: content});
-        }
-        
-        window.saveData = async function() { await savePage(); alert("Saved!"); location.reload(); }
-
-        window.enableEdit = function() {
-            document.getElementById('admin-panel').style.display='none';
-            document.body.classList.add('editing');
-            document.getElementById('saveBtn').style.display='block';
-            document.querySelectorAll('[data-db], h1, h2, h3, p').forEach(el => el.contentEditable=true);
-        }
-
-        window.addNewProject = function() {
-            const grid = document.querySelector('.page-container.active-view .grid');
-            if(!grid) { alert("No grid found on this page."); return; }
-            const html = `
-            <div class="card" onclick="openProjectDetail(this)">
-                <button class="card-delete-btn" onclick="deleteCard(event, this)"><i class="fas fa-trash"></i></button>
-                <img data-img="new" src="https://via.placeholder.com/400">
-                <div class="card-body"><h3 contenteditable="true">Title</h3><p contenteditable="true">Description...</p></div>
+            return `
+            <div class="card" onclick="window.open('${item.link}', '_blank')">
+                ${isAdmin ? `<i class="fas fa-trash delete-btn" onclick="deleteItem(event, ${index})"></i>` : ''}
+                <div class="card-icon"><i class="${icon}"></i></div>
+                <h3>${item.title}</h3>
+                <p>${item.desc}</p>
+                <div class="card-meta">
+                    <span>${new Date(item.date).toLocaleDateString()}</span>
+                    <span><i class="fas fa-external-link-alt"></i> Open</span>
+                </div>
             </div>`;
-            grid.insertAdjacentHTML('beforeend', html);
-            window.enableEdit();
         }
-        
-        window.deleteCard = function(e, btn) {
+
+        // --- ADMIN ACTIONS ---
+        window.saveContent = async function() {
+            if(!currentYear || !currentCat) return alert("Select a Year and Category first!");
+            
+            const title = document.getElementById('inpTitle').value;
+            const desc = document.getElementById('inpDesc').value;
+            const link = document.getElementById('inpLink').value;
+            const type = document.getElementById('inpType').value;
+            
+            if(!title || !link) return alert("Title and Link are required!");
+
+            const newItem = {
+                title, desc, link, type,
+                date: new Date().toISOString()
+            };
+
+            const docId = `data_${currentYear}_${currentCat}`;
+            const docRef = doc(db, "academic_content", docId);
+
+            // Using arrayUnion to add to list
+            try {
+                // Check if doc exists first (or setDoc with merge)
+                await setDoc(docRef, { 
+                    items: arrayUnion(newItem),
+                    meta: { year: currentYear, cat: currentCat }
+                }, { merge: true });
+                
+                document.getElementById('addModal').style.display = 'none';
+                // Clear inputs
+                document.getElementById('inpTitle').value = '';
+                document.getElementById('inpDesc').value = '';
+                document.getElementById('inpLink').value = '';
+            } catch(e) {
+                alert("Error: " + e.message);
+            }
+        }
+
+        window.deleteItem = async function(e, index) {
             e.stopPropagation();
-            if(confirm("Delete Project?")) btn.closest('.card').remove();
+            if(!confirm("Delete this item permanently?")) return;
+            
+            const docId = `data_${currentYear}_${currentCat}`;
+            const docRef = doc(db, "academic_content", docId);
+            
+            // To remove array item by index, we need to read, splice, write (Firestore limit)
+            // Or simpler: remove by exact object match if we had it.
+            // For stability here, we'll read then write.
+            
+            const snap = await getDoc(docRef);
+            let items = snap.data().items;
+            items.splice(index, 1);
+            
+            await updateDoc(docRef, { items: items });
         }
 
-        // --- INIT UI ---
-        if(currentUser) {
-            document.getElementById('loggedOutUI').style.display='none';
-            document.getElementById('loggedInUI').style.display='flex';
-            if(currentUser.img) {
-                document.getElementById('myNavAvatar').src = currentUser.img;
-                document.getElementById('previewPic').src = currentUser.img;
+        // --- AUTH ---
+        window.performLogin = function() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === "20250003") { // Dr. Password
+                localStorage.setItem('isDoctor', 'true');
+                isAdmin = true;
+                checkAdmin();
+                document.getElementById('loginModal').style.display='none';
+                if(currentYear && currentCat) listenToContent(); // Refresh view
             } else {
-                document.getElementById('myNavAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-            }
-            if(currentUser.role === 'super_admin') {
-                document.getElementById('superTab').style.display='flex';
-                document.getElementById('verifiedBadge').style.display='inline';
-            }
-            if(document.getElementById('profileName')) {
-                document.getElementById('profileName').value = currentUser.u;
-                document.getElementById('profileBio').value = currentUser.bio || '';
+                alert("Incorrect Access Code");
             }
         }
 
-        window.toggleTheme = function() { document.body.classList.toggle('dark-mode'); }
-        window.openDashboard = function() { document.getElementById('admin-panel').style.display='flex'; }
-        window.closeDashboard = function() { document.getElementById('admin-panel').style.display='none'; }
-        window.switchTab = function(t) { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
-        window.openLogin = function() { document.getElementById('login-modal').style.display='flex'; }
+        window.logout = function() {
+            localStorage.removeItem('isDoctor');
+            isAdmin = false;
+            checkAdmin();
+            location.reload();
+        }
+
+        function checkAdmin() {
+            if(isAdmin) {
+                document.getElementById('fabAdd').style.display = 'flex';
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'block';
+            } else {
+                document.getElementById('fabAdd').style.display = 'none';
+                document.getElementById('loginBtn').style.display = 'block';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+        }
+
+        // --- UI HELPERS ---
+        window.openAddModal = () => {
+            if(!currentYear) return alert("Please select a Year first.");
+            document.getElementById('addModal').style.display='flex';
+        }
+        window.openLogin = () => document.getElementById('loginModal').style.display='flex';
+
     </script>
 </body>
-                                  </html>
+</html>
