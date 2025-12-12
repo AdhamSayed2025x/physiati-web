@@ -15,9 +15,7 @@
         :root { 
             --primary: #2d3436; --accent: #2980b9; --bg-body: #ffffff; --bg-card: #ffffff;
             --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.95);
-            /* HERE IS THE CHANGE: Default is now 'contain' to show full image */
-            --img-fit: contain; 
-            --radius: 16px; --glow: 0 0 10px rgba(41, 128, 185, 0.3);
+            --img-fit: contain; --radius: 16px; --glow: 0 0 10px rgba(41, 128, 185, 0.3);
         }
         body.dark-mode {
             --primary: #dfe6e9; --bg-body: #1e272e; --bg-card: #2d3436; --text-main: #f1f2f6;
@@ -51,10 +49,13 @@
         /* --- 3. UI Components --- */
         nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; background: var(--nav-bg); backdrop-filter: blur(10px); position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
         .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        
         .nav-center { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 0px; max-width: 60%; }
         .nav-center::-webkit-scrollbar { height: 0; width: 0; }
+        
         .nav-link { text-decoration: none; color: var(--text-sec); font-weight: 500; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; white-space: nowrap; transition: 0.3s; }
         .nav-link:hover, .nav-link.active-page { background: var(--accent); color: white; transform: translateY(-2px); }
+        
         .nav-actions { display: flex; align-items: center; gap: 10px; }
         .physics-toggle { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); font-size: 1rem; box-shadow: var(--glow); background: transparent; transition: 0.3s; }
         .login-btn { border: 2px solid var(--accent); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-weight: 600; cursor: pointer; background: transparent; font-size: 0.9rem; }
@@ -70,21 +71,18 @@
         .content-wrapper { padding: 60px 5%; }
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         
-        /* CARD STYLES UPDATED FOR FULL IMAGE */
         .card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: 0.4s; position: relative; animation: popIn 0.5s ease-out; }
         .card:hover { transform: translateY(-10px); }
         .card img { 
-            width: 100%; 
-            height: 220px; /* Taller area for image */
-            object-fit: var(--img-fit); /* Controlled by Admin */
-            background: #f8f9fa; /* Nice background for contained images */
-            padding: 10px; /* Space inside so image doesn't touch edges */
+            width: 100%; height: 220px; 
+            object-fit: var(--img-fit); 
+            background: #f8f9fa; 
+            padding: 10px; 
         }
         .card-body { padding: 20px; }
         .card-delete-btn { position: absolute; top: 10px; right: 10px; background: #e74c3c; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: none; z-index: 10; align-items: center; justify-content: center; }
         .editing .card-delete-btn { display: flex; }
 
-        /* Coming Soon Page */
         .soon-page { text-align: center; padding: 100px 20px; animation: slideIn 0.5s; display: none; }
         .soon-icon { font-size: 4rem; color: var(--text-sec); margin-bottom: 20px; animation: float 3s infinite; }
 
@@ -114,8 +112,11 @@
         .setting-row label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; }
         .setting-row input, .setting-row select { padding: 10px; border-radius: 6px; border: 1px solid #ddd; width: 100%; margin-top: 5px; background: var(--bg-card); color: var(--text-main); }
 
+        /* TABLE & ADMIN PIC FIX (ADDED) */
         .team-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .team-table td { padding: 12px 5px; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .admin-pic-small { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        
         .nav-item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.02); margin-bottom: 5px; border-radius: 5px; }
 
         .editable { border: 2px dashed #ff7675; cursor: pointer; position: relative; }
@@ -276,8 +277,7 @@
                     <h2>Design</h2>
                     <div class="setting-row"><label>Main Color</label><input type="color" id="accentColorPicker" value="#2980b9"></div>
                     <div class="setting-row"><label>Image Fit</label><select id="imgFitSelect"><option value="contain">Contain (Full Image)</option><option value="cover">Cover (Fill Box)</option></select></div>
-                    <div class="setting-row"><label>Light Icon</label><input type="text" id="iconLightInput"></div>
-                    <div class="setting-row"><label>Dark Icon</label><input type="text" id="iconDarkInput"></div>
+                    <div class="setting-row"><label>Light Icon</label><input type="text" id="iconLightInput"></div><div class="setting-row"><label>Dark Icon</label><input type="text" id="iconDarkInput"></div>
                     <button onclick="saveThemeSettings()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer;">Save Theme</button>
                 </div>
 
