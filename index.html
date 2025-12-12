@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google" content="notranslate"> 
+    
     <title>Physiatić | Engineering Hub</title>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#2c3e50">
@@ -42,7 +44,6 @@
         
         /* MEME Style */
         .meme-mode { background-color: #000; color: white; text-align: center; cursor: default; }
-        .meme-img { max-width: 100%; height: auto; border-radius: 10px; border: 5px solid #fff; margin-bottom: 20px; }
         .meme-text { font-family: 'Cairo', sans-serif; font-size: 2.5rem; font-weight: 900; color: #f1c40f; text-shadow: 0 0 10px red; }
 
         /* --- 3. Intro Animation --- */
@@ -64,9 +65,17 @@
         nav { position: fixed; top: 0; width: 100%; height: 60px; background: var(--nav-bg); backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; box-shadow: var(--shadow); }
         .hamburger { font-size: 1.5rem; cursor: pointer; color: var(--text-main); display: block; }
         .logo { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .nav-center { display: flex; gap: 20px; }
+        .nav-link { cursor: pointer; font-weight: 500; color: var(--text-sec); transition: 0.3s; }
+        .nav-link:hover, .nav-link.active-page { color: var(--accent); font-weight: 700; }
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         .theme-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-main); cursor: pointer; }
         .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .nav-center { display: none; }
+            .hamburger { display: block !important; margin-left: 10px; }
+        }
 
         /* --- 5. Sidebar --- */
         .sidebar-menu { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: var(--bg-card); z-index: 4999; padding-top: 70px; transition: 0.3s ease; box-shadow: 5px 0 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
@@ -174,14 +183,17 @@
             <div id="loggedInUI" style="display:none;" onclick="openDashboard()">
                 <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" id="myNavAvatar" class="nav-avatar">
             </div>
+            <i class="fas fa-bars hamburger" onclick="toggleSidebar()" style="display:none; margin-left:10px;"></i>
         </div>
-        <i class="fas fa-bars hamburger" onclick="toggleSidebar()" style="display:none; margin-left:10px;"></i>
     </nav>
 
     <div class="overlay-bg" onclick="toggleSidebar()"></div>
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="menu-items-container" id="menuList">
              <div class="menu-item active" onclick="route('home', 'Home')">Home</div>
+             <div class="menu-item" onclick="route('topics')">Topics</div>
+             <div class="menu-item" onclick="route('resources')">Resources</div>
+             <div class="menu-item" onclick="route('about')">About</div>
         </div>
         <div class="sidebar-footer">
             <p>All Rights Reserved &copy; 2025</p>
@@ -316,17 +328,10 @@
         }
 
         async function loadConfig() {
-            // Prank Check (Only once per browser session)
             if(!sessionStorage.getItem('prankPlayed')) {
                 runPrankSequence();
-            } else {
-                // If prank already played, check normal intro logic
-                // If user logged out, play intro again?
-                // Just keeping it simple: Prank runs once.
             }
-            
             const docSnap = await getDoc(doc(db, "settings", "config"));
-            // ... (rest of config loading)
         }
         loadConfig();
 
@@ -356,8 +361,10 @@
             document.getElementById('admin-panel').style.display = 'none';
             // Goodbye Animation
             const overlay = document.getElementById('intro-overlay');
-            const txt = document.getElementById('introMsg');
-            txt.innerHTML = `Goodbye <br> <span>Eng ${currentUser.u}</span>`;
+            const txt = document.getElementById('introMain');
+            const sub = document.getElementById('introSub');
+            txt.innerHTML = `Goodbye`;
+            sub.innerHTML = `${currentUser.u}`;
             overlay.classList.add('active');
             
             setTimeout(() => { 
@@ -433,6 +440,28 @@
             await setDoc(doc(db, "site_data", "content"), payload, {merge:true}); alert("Saved!"); location.reload();
         }
 
+        window.addNewProject = function() {
+            const grid = document.getElementById('dynamicGrid');
+            const newCard = document.createElement('div');
+            newCard.className = 'card';
+            newCard.innerHTML = `
+                <button class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></button>
+                <img data-img="new_p_img_${Date.now()}" src="https://via.placeholder.com/300" class="editable-img">
+                <div class="card-body">
+                    <h3 data-db="new_p_t_${Date.now()}" class="editable" contenteditable="true">Project Title</h3>
+                    <p data-db="new_p_d_${Date.now()}" class="editable" contenteditable="true">Short description...</p>
+                </div>
+            `;
+            grid.appendChild(newCard);
+            newCard.querySelector('img').onclick = (e) => { e.preventDefault(); targetImgElement = e.target; isProfileUpload = false; fileInput.click(); };
+        }
+        
+        window.deleteCard = function(btn) {
+            if(confirm("Are you sure?")) {
+                btn.parentElement.remove();
+            }
+        }
+
         onSnapshot(doc(db, "site_data", "content"), (doc) => {
             if(doc.exists() && !document.body.classList.contains('editing')) {
                 const data = doc.data();
@@ -449,7 +478,15 @@
             document.getElementById('fabAdd').style.display='flex';
         }
 
-        function playAnimation(line1, line2) { const overlay = document.getElementById('intro-overlay'); document.getElementById('introMsg').innerHTML = `${line1} <br> <span>${line2}</span>`; overlay.classList.remove('active'); void overlay.offsetWidth; overlay.classList.add('active'); setTimeout(() => { overlay.classList.remove('active'); }, 3500); }
+        function playAnimation(line1, line2) { 
+            const overlay = document.getElementById('intro-overlay'); 
+            document.getElementById('introMain').innerHTML = line1;
+            document.getElementById('introSub').innerHTML = line2;
+            overlay.classList.remove('active'); 
+            void overlay.offsetWidth; 
+            overlay.classList.add('active'); 
+            setTimeout(() => { overlay.classList.remove('active'); }, 3500); 
+        }
         window.closeDashboard = function() { document.getElementById('admin-panel').style.display = 'none'; }
     </script>
 
