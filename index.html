@@ -3,323 +3,243 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Physiatić | Academic Hub</title>
+    <title>Physiatić | Engineering Hub</title>
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#2c3e50">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- 1. CORE VARIABLES --- */
         :root { 
-            --primary: #2c3e50; --accent: #3498db; --gold: #f1c40f; 
-            --bg-body: #f4f7f6; --bg-card: #ffffff;
-            --text-main: #2d3436; --text-sec: #636e72; 
-            --nav-bg: rgba(255, 255, 255, 0.95);
-            --radius: 16px; --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --primary: #2c3e50; --accent: #3498db; --bg-body: #f4f6f8; --bg-card: #ffffff;
+            --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.95);
+            --shadow: 0 4px 20px rgba(0,0,0,0.05); --radius: 12px;
             --sidebar-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         body.dark-mode {
-            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; 
-            --text-main: #f8fafc; --text-sec: #94a3b8; 
-            --nav-bg: rgba(15, 23, 42, 0.95); --shadow: 0 10px 30px rgba(0,0,0,0.4);
+            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f1f5f9;
+            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.95); --shadow: 0 4px 20px rgba(0,0,0,0.3);
             --sidebar-grad: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 70px; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg-body); color: var(--text-main); overflow-x: hidden; padding-top: 60px; }
 
-        /* --- 2. CINEMATIC INTRO --- */
-        #intro-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: #000; z-index: 999999; display: flex; justify-content: center; align-items: center; 
-            pointer-events: none; opacity: 0; transition: opacity 0.5s;
-        }
+        /* --- 2. INTRO --- */
+        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; pointer-events: none; opacity: 0; }
         #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .intro-content { text-align: center; position: relative; z-index: 10; }
-        .intro-text { font-size: 3rem; font-weight: 900; color: white; opacity: 0; transform: scale(0.9); text-transform: uppercase; letter-spacing: 2px; }
-        .intro-sub { display: block; font-size: 1.5rem; margin-top: 10px; color: var(--accent); font-weight: 600; opacity: 0; }
-        
-        /* Standard Beams */
-        .beam { position: absolute; height: 4px; background: #fff; width: 0; top: 50%; box-shadow: 0 0 20px #fff; transition: 0.3s; }
-        .beam-l { left: 0; background: cyan; } .beam-r { right: 0; background: magenta; }
-        
-        /* SUPER ADMIN GOLD MODE */
-        #intro-overlay.super-mode .beam-l { background: #f1c40f; box-shadow: 0 0 30px #f1c40f; }
-        #intro-overlay.super-mode .beam-r { background: #f39c12; box-shadow: 0 0 30px #f39c12; }
-        #intro-overlay.super-mode .intro-sub { color: #f1c40f; text-shadow: 0 0 10px rgba(241, 196, 15, 0.5); }
+        .intro-content { text-align: center; color: white; }
+        .intro-content h1 { font-size: 3rem; margin: 0; }
+        .intro-content span { color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; }
 
-        /* Animation Classes */
-        .active .beam-l { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .beam-r { width: 50%; animation: strike 0.8s ease-in-out forwards; }
-        .active .intro-text { animation: textReveal 0.5s ease-out 0.8s forwards; }
-        .active .intro-sub { animation: textReveal 0.5s ease-out 1s forwards; }
-        
-        @keyframes strike { 0% { width: 0%; opacity: 0; } 50% { opacity: 1; } 100% { width: 51%; opacity: 1; } }
-        @keyframes textReveal { 0% { opacity: 0; transform: scale(1.5); filter: blur(10px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+        /* --- 3. NAVBAR --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; height: 60px; background: var(--nav-bg); 
+            backdrop-filter: blur(10px); z-index: 5000; display: flex; align-items: center; 
+            justify-content: space-between; padding: 0 5%; box-shadow: var(--shadow);
+        }
+        .hamburger { font-size: 1.5rem; cursor: pointer; color: var(--text-main); display: block; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .theme-btn { background: none; border: none; font-size: 1.2rem; color: var(--text-main); cursor: pointer; }
+        .nav-avatar { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
 
-        /* --- 3. UI Components --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 5%; background: var(--nav-bg); backdrop-filter: blur(10px); position: fixed; top: 0; left: 0; width: 100%; z-index: 5000; box-shadow: 0 2px 10px rgba(0,0,0,0.05); height: 70px; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; z-index: 5002; }
+        /* --- 4. SIDEBAR MENU --- */
+        .sidebar-menu {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
+            background: var(--bg-card); z-index: 4999; padding-top: 70px;
+            transition: 0.3s ease; box-shadow: 5px 0 20px rgba(0,0,0,0.1); display: flex; flex-direction: column;
+        }
+        .sidebar-menu.open { left: 0; }
+        .menu-items-container { flex: 1; overflow-y: auto; }
+        .menu-item { padding: 15px 25px; font-weight: 500; cursor: pointer; color: var(--text-sec); display: flex; align-items: center; gap: 10px; border-left: 4px solid transparent; }
+        .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
         
-        .hamburger { width: 30px; height: 25px; position: relative; cursor: pointer; z-index: 5002; display: none; flex-direction: column; justify-content: space-between; }
-        .bar { width: 100%; height: 3px; background: var(--text-main); border-radius: 5px; transition: 0.3s; }
-        .hamburger.open .bar:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
-        .hamburger.open .bar:nth-child(2) { opacity: 0; }
-        .hamburger.open .bar:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+        /* SIDEBAR FOOTER (NEW REQUEST) */
+        .sidebar-footer {
+            padding: 20px; border-top: 1px solid rgba(0,0,0,0.1); 
+            font-size: 0.75rem; color: var(--text-sec); text-align: center;
+            background: rgba(0,0,0,0.02);
+        }
+        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4998; display: none; }
 
-        .nav-center { display: flex; gap: 10px; overflow-x: auto; flex: 1; margin: 0 15px; scrollbar-width: none; white-space: nowrap; }
-        .nav-link { color: var(--text-sec); font-weight: 600; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 0.9rem; transition: 0.3s; }
-        .nav-link:hover, .nav-link.active-page { background: rgba(52, 152, 219, 0.1); color: var(--accent); }
-        .dropdown-menu { position: absolute; top: 100%; left: 0; background: var(--bg-card); min-width: 180px; border-radius: 10px; box-shadow: var(--shadow); display: none; flex-direction: column; padding: 5px; z-index: 5003; }
-        .nav-item-wrapper { position: relative; }
-        .nav-item-wrapper:hover .dropdown-menu { display: flex; animation: fadeIn 0.2s; }
-        .dropdown-item { padding: 10px; color: var(--text-sec); cursor: pointer; font-size: 0.9rem; border-radius: 5px; }
-        .dropdown-item:hover { background: var(--bg-body); color: var(--accent); }
-
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .physics-toggle { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid var(--accent); color: var(--accent); background: transparent; transition: 0.5s; }
-        .physics-toggle:hover { transform: rotate(180deg); }
+        /* --- 5. MAIN CONTENT --- */
+        .main-container { padding: 20px 5%; min-height: 80vh; }
         
-        .user-nav-area { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
-        .super-admin-glow { border-color: #f1c40f; box-shadow: 0 0 10px #f1c40f; } /* GOLD BORDER */
+        .tabs-container { 
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; 
+            border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 30px; 
+            scrollbar-width: none; 
+        }
+        .tab-btn { 
+            padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; 
+            color: var(--text-sec); white-space: nowrap; transition: 0.3s; 
+        }
+        .tab-btn.active { background: var(--accent); color: white; font-weight: 600; }
 
-        /* --- 4. Content --- */
-        .page-container { padding: 30px 5%; min-height: 80vh; display: none; animation: slideUp 0.5s; }
-        .active-view { display: block; }
-        
-        .hero { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 30px; margin-bottom: 50px; text-align: left; }
-        .hero-text { flex: 1; min-width: 300px; }
-        .hero-text h1 { font-size: 3rem; line-height: 1.1; margin-bottom: 20px; color: var(--text-main); }
+        .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 30px; margin-bottom: 50px; text-align: center; }
+        .hero-txt { flex: 1; min-width: 300px; }
+        .hero-txt h1 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
         .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
-        .hero-img img { width: 100%; max-width: 550px; border-radius: 20px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.1)); }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: var(--bg-card); border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); position: relative; transition: 0.3s; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .card img { width: 100%; height: 200px; object-fit: var(--img-fit); background: #f8f9fa; padding: 10px; }
+        .hero-img img { width: 100%; max-width: 500px; border-radius: 20px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card { 
+            background: var(--bg-card); border-radius: var(--radius); overflow: hidden; 
+            box-shadow: var(--shadow); position: relative; transition: 0.3s; border: 1px solid rgba(0,0,0,0.05);
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .card img { width: 100%; height: 180px; object-fit: contain; background: #f8f9fa; padding: 10px; }
         .card-body { padding: 20px; }
-        .card h3 { color: var(--accent); margin-bottom: 10px; font-size: 1.2rem; }
-        .card p { font-size: 0.9rem; color: var(--text-sec); }
+        .card h3 { font-size: 1.1rem; color: var(--accent); margin-bottom: 5px; }
         
-        .card-delete-btn { position: absolute; top: 10px; right: 10px; background: #ff4757; color: white; width: 30px; height: 30px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; }
-        .editing .card-delete-btn { display: flex; }
+        .delete-btn { position: absolute; top: 10px; right: 10px; color: #ff4757; cursor: pointer; display: none; background: white; padding: 5px; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .editing .delete-btn { display: block; }
 
-        /* --- 5. Footer & Admin --- */
-        footer { background: #1e272e; color: white; padding: 50px 5%; margin-top: 50px; text-align: center; }
-        .ft-socials { display: flex; justify-content: center; gap: 20px; margin: 20px 0; font-size: 1.5rem; }
-        .fa-facebook { color: #1877f2; } .fa-whatsapp { color: #25d366; } .fa-phone { color: #fff; }
-        
-        /* Admin Dashboard */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 6000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .dash-board { background: var(--bg-card); width: 90%; max-width: 1200px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
-        .close-dash-x { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; cursor: pointer; z-index: 100; color: var(--text-sec); }
-        
-        .sidebar { width: 250px; background: var(--sidebar-grad); color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .dash-main { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
-        .sb-btn { padding: 12px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: #333; font-weight: bold; }
-        
-        .dash-section { display: none; animation: fadeIn 0.3s; }
-        .dash-section.active-sec { display: block; }
-        .setting-row { margin-bottom: 15px; background: white; padding: 15px; border-radius: 10px; box-shadow: var(--shadow); }
-        .setting-row label { display: block; font-weight: 600; margin-bottom: 5px; color: #333; }
-        .setting-row input, .setting-row select { width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ddd; }
+        /* --- 6. ADMIN DASHBOARD --- */
+        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 6000; display: none; justify-content: center; align-items: center; }
+        .dash-card { background: var(--bg-card); width: 90%; max-width: 900px; height: 85vh; border-radius: 20px; display: flex; overflow: hidden; position: relative; }
+        .dash-sidebar { width: 220px; background: #2c3e50; color: white; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .dash-btn { padding: 12px; cursor: pointer; border-radius: 8px; background: rgba(255,255,255,0.1); }
+        .dash-btn.active, .dash-btn:hover { background: var(--accent); font-weight: bold; }
+        .dash-content { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-body); }
+        .dash-section { display: none; } .dash-section.active { display: block; }
+        .close-dash { position: absolute; top: 15px; right: 15px; font-size: 1.5rem; color: #7f8c8d; cursor: pointer; }
 
-        /* Modals */
-        #project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 7000; overflow-y: auto; display: none; animation: slideUp 0.3s; }
-        .project-content { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        .close-modal-btn { float: right; padding: 8px 20px; background: #ff4757; color: white; border-radius: 20px; border: none; font-weight: bold; cursor: pointer; }
-        
-        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 8000; display: none; justify-content: center; align-items: center; }
-        .login-box { background: white; padding: 40px; border-radius: 20px; width: 350px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+        /* Login Modal */
+        #login-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; display: none; justify-content: center; align-items: center; }
+        .login-box { background: var(--bg-card); padding: 30px; border-radius: 20px; width: 320px; text-align: center; }
+        .form-input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
 
-        /* Mobile Side Menu */
-        .side-menu { position: fixed; top: 0; left: -100%; width: 280px; height: 100vh; background: var(--bg-card); z-index: 5001; padding-top: 80px; transition: 0.3s; box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
-        .side-menu.active { left: 0; }
-        .menu-item { padding: 15px 25px; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; color: var(--text-sec); font-weight: 600; }
+        /* FAB Button */
+        .fab-add { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 4000; }
 
-        /* Animations */
-        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Edit Mode */
         .editable { border: 2px dashed #f39c12; cursor: text; }
-        #saveBtn { position: fixed; bottom: 30px; right: 30px; background: #27ae60; color: white; padding: 15px 35px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 8000; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-
-        @media (max-width: 900px) {
-            .nav-center { display: none; } .hamburger { display: flex; }
-            .hero { flex-direction: column-reverse; text-align: center; }
-            .dash-board { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
-            .sb-btn { padding: 8px 15px; font-size: 0.8rem; }
+        #saveBtn { position: fixed; bottom: 20px; right: 100px; background: #27ae60; color: white; padding: 12px 30px; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; display: none; z-index: 7000; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column-reverse; }
+            .dash-card { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
+            .dash-sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; white-space: nowrap; padding: 10px; }
         }
     </style>
 </head>
 <body>
 
     <div id="intro-overlay">
-        <div class="beam beam-l"></div> <div class="beam beam-r"></div>
         <div class="intro-content">
-            <div class="intro-text" id="introMain">Welcome</div>
-            <span class="intro-sub" id="introSub">Engineer</span>
+            <h1 id="introMain">Welcome</h1>
+            <span id="introSub">Engineer</span>
         </div>
     </div>
-    
-    <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
 
     <nav>
         <div style="display:flex; align-items:center; gap:15px;">
-            <div class="hamburger" onclick="toggleMenu()">
-                <div class="bar"></div> <div class="bar"></div> <div class="bar"></div>
-            </div>
+            <i class="fas fa-bars hamburger" onclick="toggleSidebar()"></i>
             <div class="logo"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
         </div>
-        
-        <div class="nav-center" id="dynamicNav"></div>
-
         <div class="nav-actions">
-            <button class="physics-toggle" onclick="toggleTheme()" id="themeBtn"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="loggedOutUI"><button style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:50px; cursor:pointer; font-weight:600;" onclick="openLogin()">Login</button></div>
-            <div id="loggedInUI" style="display:none;" onclick="openDashboard()"><div class="user-nav-area"><img src="" id="myNavAvatar" class="nav-avatar"></div></div>
+            <button class="theme-btn" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
+            <div id="authBtnArea">
+                <button onclick="openLogin()" style="padding:5px 15px; background:var(--accent); color:white; border:none; border-radius:20px; cursor:pointer;">Login</button>
+            </div>
         </div>
     </nav>
 
-    <div class="side-menu" id="sideMenu">
-        <div style="padding:20px; font-weight:bold; color:var(--accent); border-bottom:1px solid #eee;">MENU</div>
-        <div id="menuListMobile"></div>
+    <div class="overlay-bg" onclick="toggleSidebar()"></div>
+    <div class="sidebar-menu" id="sidebarMenu">
+        <div class="menu-items-container" id="menuList">
+            <div class="menu-item active" onclick="loadPage('home', 'Home')">Home</div>
+        </div>
+        
+        <div class="sidebar-footer">
+            <p>All Rights Reserved &copy; 2025</p>
+            <p style="margin-top:5px; color:var(--accent); font-weight:600;">Under Supervision of <br> Dr. Ahmed Khaled</p>
+        </div>
     </div>
 
-    <div id="main-container">
-        <div id="page-home" class="page-container active-view">
-            <div class="hero">
-                <div class="hero-text">
-                    <h1 data-db="h_t">Master the Art of <br><span style="color:var(--accent)">Robotics</span></h1>
-                    <p data-db="h_d">The ultimate platform for engineering students. Explore projects, learn concepts, and innovate.</p>
-                    <a href="#" class="hero-btn">Explore Now</a>
+    <div class="main-container">
+        <div style="text-align:center; margin-bottom:20px;">
+            <h2 id="pageTitle" style="font-size:2rem; color:var(--text-main);">Home</h2>
+        </div>
+        
+        <div class="tabs-container" id="tabsBar"></div>
+
+        <div id="contentArea">
+            <div id="default-home">
+                <div class="hero">
+                    <div class="hero-txt">
+                        <h1 data-db="h_t">Advanced <span style="color:var(--accent)">Physics</span></h1>
+                        <p data-db="h_d">The future of engineering education starts here.</p>
+                    </div>
+                    <div class="hero-img">
+                        <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg">
+                    </div>
                 </div>
-                <div class="hero-img">
-                    <img data-img="hero" src="https://img.freepik.com/free-vector/robot-artificial-intelligence-technology_1308-79525.jpg">
-                </div>
-            </div>
-            
-            <div style="text-align:center; margin-bottom:40px;"><h2 data-db="s_t">Featured Projects</h2></div>
-            <div class="grid" id="grid-home">
-                <div class="card" onclick="openProjectDetail(this)">
-                    <button class="card-delete-btn" onclick="deleteCard(event, this)"><i class="fas fa-trash"></i></button>
-                    <img data-img="p1_img" src="https://img.freepik.com/free-photo/robot-arm-smart-factory-background-technology_53876-103940.jpg">
-                    <div class="card-body">
-                        <h3 data-db="p1_t">Line Follower</h3>
-                        <p data-db="p1_d">Autonomous robot tracking pathways.</p>
-                        <div class="detail-data" style="display:none;"><p><b>Details:</b> Full project documentation here...</p></div>
+                <div class="grid" id="homeGrid">
+                    <div class="card">
+                        <img src="https://img.freepik.com/free-photo/robot-arm-smart-factory-background-technology_53876-103940.jpg">
+                        <div class="card-body">
+                            <h3>Line Follower</h3>
+                            <p>Autonomous robot tracking pathways.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div id="page-dynamic" class="page-container">
-            <div style="text-align:center; margin-bottom:30px;"><h2 id="dynTitle">Page</h2></div>
-            <div class="grid" id="dynGrid"></div>
-        </div>
     </div>
 
-    <footer>
-        <h3 data-db="f_t">Physiatić Hub</h3>
-        <div class="ft-socials">
-            <a id="socFb" href="#"><i class="fab fa-facebook"></i></a>
-            <a id="socWa" href="#"><i class="fab fa-whatsapp"></i></a>
-            <a id="socPh" href="#"><i class="fas fa-phone"></i></a>
-        </div>
-        <div style="margin-top:20px; font-size:0.8rem; opacity:0.7;">Developed by <span data-db="dev">Eng. Adham Sayed</span></div>
-    </footer>
+    <div class="fab-add" id="fabAdd" onclick="openDashboard()"><i class="fas fa-cog"></i></div>
 
-    <div class="chatbot-btn" onclick="alert('Chatbot AI Coming Soon! 🤖')" style="position:fixed; bottom:30px; right:30px; width:60px; height:60px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:1.8rem; box-shadow:0 10px 30px rgba(0,0,0,0.2); cursor:pointer; z-index:4000;">
-        <i class="fas fa-robot"></i>
-    </div>
-
-    <div id="project-modal">
-        <div class="project-detail-header">
-            <h3>Details</h3>
-            <button class="close-modal-btn" onclick="closeProjectDetail()">Close</button>
-        </div>
-        <div class="project-content">
-            <img id="modal-img" style="width:100%; height:300px; object-fit:contain; border-radius:20px; background:white; margin-bottom:20px;">
-            <h1 id="modal-title" style="margin-bottom:20px; color:var(--accent);"></h1>
-            <div id="modal-body" style="font-size:1.1rem; line-height:1.8;"></div>
-            <button id="modalEditBtn" onclick="enableModalEdit()" style="width:100%; padding:15px; background:var(--accent); color:white; border:none; border-radius:10px; margin-top:30px; font-weight:bold; display:none;">Edit Details</button>
+    <div id="login-modal">
+        <div class="login-box">
+            <h2>Login</h2>
+            <input id="u" class="form-input" placeholder="User">
+            <input id="p" type="password" class="form-input" placeholder="Pass">
+            <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Enter</button>
+            <button onclick="document.getElementById('login-modal').style.display='none'" style="background:none; border:none; margin-top:10px; color:#888;">Cancel</button>
         </div>
     </div>
 
     <div id="admin-panel">
-        <div class="dash-board">
-            <div class="close-dash-x" onclick="closeDashboard()"><i class="fas fa-times"></i></div>
-            <div class="sidebar">
+        <div class="dash-card">
+            <i class="fas fa-times close-dash" onclick="closeDashboard()"></i>
+            <div class="dash-sidebar">
                 <h3>Admin</h3>
-                <div class="sb-btn active" onclick="switchTab('content')">Content</div>
-                <div class="sb-btn" onclick="switchTab('menu')">Menu</div>
-                <div class="sb-btn" onclick="switchTab('profile')">Profile</div>
-                <div class="sb-btn" onclick="switchTab('socials')">Socials</div>
-                <div class="sb-btn" onclick="switchTab('team')" id="teamTab" style="display:none;">Team</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
+                <div class="dash-btn active" onclick="switchTab('pages')">Pages</div>
+                <div class="dash-btn" onclick="switchTab('content')">Content</div>
+                <div class="dash-btn" onclick="switchTab('team')">Team</div>
+                <div class="dash-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
             </div>
             
-            <div class="dash-main">
-                <div id="tab-content" class="dash-section active-sec">
-                    <h2>Edit Content</h2>
-                    <div style="display:flex; gap:10px; margin-top:15px;">
-                        <button onclick="enableEdit()" style="flex:1; padding:15px; background:#2ed573; color:white; border:none; border-radius:10px;">Live Edit</button>
-                        <button onclick="addNewProject()" style="flex:1; padding:15px; background:var(--accent); color:white; border:none; border-radius:10px;">+ Add Project</button>
+            <div class="dash-content">
+                <div id="tab-pages" class="dash-section active">
+                    <h2>Manage Pages</h2>
+                    <input id="newPage" class="form-input" placeholder="Page Name (e.g. First Year)">
+                    <button onclick="addPage()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Page</button>
+                    <div id="adminPagesList" style="margin:20px 0;"></div>
+                    <h3>Add Tab</h3>
+                    <input id="newTab" class="form-input" placeholder="Tab Name (e.g. Lectures)">
+                    <button onclick="addTab()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Tab</button>
+                </div>
+                <div id="tab-content" class="dash-section">
+                    <h2>Content Editor</h2>
+                    <p>Go to the page you want to edit first.</p>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <button onclick="enableEdit()" style="padding:15px; background:#2ecc71; color:white; border:none; border-radius:10px;">Live Edit</button>
+                        <button onclick="addCard()" style="padding:15px; background:var(--accent); color:white; border:none; border-radius:10px;">+ Add Card</button>
                     </div>
                 </div>
-
-                <div id="tab-menu" class="dash-section">
-                    <h2>Menu Builder</h2>
-                    <div class="setting-row">
-                        <input id="newTabName" placeholder="Tab Name">
-                        <select id="parentTabSelect"><option value="">Main Tab</option></select>
-                        <button onclick="addTab()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; margin-top:5px;">Add</button>
-                    </div>
-                    <div id="menuList"></div>
-                </div>
-
-                <div id="tab-socials" class="dash-section">
-                    <h2>Socials</h2>
-                    <div class="setting-row"><label>Facebook</label><input id="inFb"></div>
-                    <div class="setting-row"><label>WhatsApp</label><input id="inWa"></div>
-                    <div class="setting-row"><label>Phone</label><input id="inPh"></div>
-                    <button onclick="saveSocials()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none;">Save</button>
-                </div>
-
-                <div id="tab-profile" class="dash-section">
-                    <h2>Profile</h2>
-                    <div style="text-align:center;">
-                        <img id="previewPic" src="" style="width:80px; height:80px; border-radius:50%; margin-bottom:10px; object-fit:cover;">
-                        <button onclick="triggerUpload()" style="padding:5px 15px; border-radius:20px; border:1px solid #ddd;">Change Photo</button>
-                    </div>
-                    <div class="setting-row"><label>Name</label><input id="profName" onchange="updateProfile()"></div>
-                </div>
-                
                 <div id="tab-team" class="dash-section">
                     <h2>Team</h2>
-                    <div class="setting-row">
-                        <input id="newAdminUser" placeholder="User" style="width:48%;">
-                        <input id="newAdminPass" placeholder="Pass" style="width:48%;">
-                        <button onclick="addNewAdmin()" style="width:100%; margin-top:5px; padding:10px; background:var(--accent); color:white; border:none;">Add</button>
-                    </div>
-                    <div id="teamTable"></div>
+                    <input id="newAdmUser" class="form-input" placeholder="Username">
+                    <input id="newAdmPass" class="form-input" placeholder="Password">
+                    <button onclick="addNewAdmin()" style="padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button>
+                    <div id="adminListUI" style="margin-top:20px;"></div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="login-modal" onclick="if(event.target==this)this.style.display='none'">
-        <div class="login-box">
-            <h2>Login</h2>
-            <input id="u" placeholder="User" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
-            <input id="p" type="password" placeholder="Pass" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
-            <button onclick="login()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:8px; font-weight:bold;">Enter</button>
         </div>
     </div>
 
@@ -341,319 +261,222 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         
-        let currentUser = JSON.parse(localStorage.getItem('user'));
-        let navTabs = [
-            {id:'home', label:'Home'},
-            {id:'prep', label:'Preparatory'},
-            {id:'first', label:'First Division'},
-            {id:'second', label:'Second Division'},
-            {id:'third', label:'Third Division'},
-            {id:'fourth', label:'Fourth Division'}
+        // Defaults
+        let navPages = [
+            {id:'home', name:'Home'},
+            {id:'prep', name:'Preparatory Class'},
+            {id:'first', name:'First Division'},
+            {id:'second', name:'Second Division'},
+            {id:'third', name:'Third Division'},
+            {id:'fourth', name:'Fourth Division'}
         ];
-        let activeTab = 'home';
-        let activeCard = null;
+        let currentPage = 'home';
+        let currentTab = 'default';
+        let currentUser = JSON.parse(localStorage.getItem('user'));
 
-        // --- INIT & INTRO ---
+        // --- INIT ---
         async function init() {
-            // Intro Logic (The Boss Request)
-            if(!sessionStorage.getItem('seenSession')) {
-                // Determine text based on user
-                let mainText = "Welcome";
-                let subText = "Engineer";
-                let isSuper = false;
-
-                if(currentUser) {
-                    // Check if already visited before (Local Storage for persistent history)
-                    if(localStorage.getItem('hasVisitedBefore')) {
-                        mainText = "Welcome Back";
-                        subText = "Eng " + currentUser.u;
-                    } else {
-                        mainText = "Welcome";
-                        subText = "Engineer " + currentUser.u;
-                        localStorage.setItem('hasVisitedBefore', 'true');
-                    }
-                    if(currentUser.role === 'super_admin') isSuper = true;
-                } else {
-                    mainText = "Welcome";
-                    subText = "Engineer";
-                }
-                
-                triggerIntro(mainText, subText, isSuper);
-                sessionStorage.setItem('seenSession', 'true');
+            // Intro
+            if(!sessionStorage.getItem('seenIntro')) {
+                const overlay = document.getElementById('intro-overlay');
+                overlay.classList.add('active');
+                setTimeout(() => overlay.classList.remove('active'), 2500);
+                sessionStorage.setItem('seenIntro', 'true');
             }
 
             // Load Config
             try {
                 const snap = await getDoc(doc(db, "settings", "config"));
-                if(snap.exists()) {
-                    const data = snap.data();
-                    if(data.navTabs) navTabs = data.navTabs;
-                    if(data.socials) updateSocialsUI(data.socials);
+                if(snap.exists() && snap.data().pages) {
+                    navPages = snap.data().pages;
                 }
-            } catch(e) { console.log("Default"); }
+            } catch(e) {}
             
-            renderNav();
-            updateParentSelect();
-            if(currentUser && currentUser.role === 'super_admin') renderAdminTeam();
+            renderMenu();
+            checkAuth();
         }
         init();
 
-        function triggerIntro(t1, t2, isSuper) {
-            const overlay = document.getElementById('intro-overlay');
-            const main = document.getElementById('introMain');
-            const sub = document.getElementById('introSub');
-            
-            main.innerText = t1;
-            sub.innerText = t2;
-            
-            if(isSuper) overlay.classList.add('super-mode'); // Gold effects
-            else overlay.classList.remove('super-mode');
-            
-            overlay.classList.add('active');
-            setTimeout(() => overlay.classList.remove('active'), 3500);
-        }
-
         // --- NAV ---
-        function renderNav() {
-            const nav = document.getElementById('dynamicNav');
-            const mob = document.getElementById('menuListMobile');
-            
-            // Desktop
-            let html = navTabs.map(t => {
-                if(t.children && t.children.length > 0) {
-                    return `
-                    <div class="nav-item-wrapper">
-                        <span class="nav-link">${t.label} <i class="fas fa-chevron-down" style="font-size:0.7em; margin-left:5px;"></i></span>
-                        <div class="dropdown-menu">
-                            ${t.children.map(child => `<div class="dropdown-item" onclick="route('${child.id}', '${child.label}')">${child.label}</div>`).join('')}
-                        </div>
-                    </div>`;
-                } else {
-                    return `<a onclick="route('${t.id}', '${t.label}')" class="nav-link ${t.id===activeTab?'active-page':''}">${t.label}</a>`;
-                }
-            }).join('');
-            nav.innerHTML = html;
-
-            // Mobile & Admin
-            let simpleHtml = navTabs.map(t => {
-                let h = `<div class="menu-item" onclick="route('${t.id}', '${t.label}')">${t.label} ${t.id!=='home'?`<i class="fas fa-trash" style="float:right; color:red;" onclick="delTab('${t.id}')"></i>`:''}</div>`;
-                if(t.children) h += t.children.map(c => `<div style="padding:10px 20px;">- ${c.label} <i class="fas fa-trash" style="float:right; color:red; cursor:pointer;" onclick="delTab('${c.id}', '${t.id}')"></i></div>`).join('');
-                return h;
-            }).join('');
-            
-            if(mob) mob.innerHTML = simpleHtml;
-            document.getElementById('menuList').innerHTML = simpleHtml; // Sync Admin
+        function renderMenu() {
+            const html = navPages.map(p => 
+                `<div class="menu-item" onclick="loadPage('${p.id}', '${p.name}')">
+                    <i class="fas fa-folder"></i> ${p.name}
+                 </div>`
+            ).join('');
+            document.getElementById('menuList').innerHTML = html;
+            document.getElementById('adminPagesList').innerHTML = html; // reuse logic
         }
 
-        window.route = function(id, label) {
-            activeTab = id;
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            
-            // Hide Home, Show Dynamic
+        window.loadPage = async function(id, name) {
+            currentPage = id;
+            document.getElementById('pageTitle').innerText = name;
+            document.getElementById('sidebarMenu').classList.remove('open');
+            document.querySelector('.overlay-bg').style.display = 'none';
+
             if(id === 'home') {
-                document.getElementById('page-home').style.display = 'block';
-                document.getElementById('page-dynamic').style.display = 'none';
-            } else {
-                document.getElementById('page-home').style.display = 'none';
-                document.getElementById('page-dynamic').style.display = 'block';
-                document.getElementById('dynTitle').innerText = label || id;
-                loadDynamicContent(id);
+                document.getElementById('contentArea').innerHTML = document.getElementById('default-home').innerHTML;
+                document.getElementById('tabsBar').innerHTML = '';
+                // Check DB for Home updates
+                const snap = await getDoc(doc(db, "site_data", "home_content"));
+                if(snap.exists()) document.getElementById('contentArea').innerHTML = snap.data().html;
+                return;
             }
-            document.getElementById('sideMenu').classList.remove('active');
-            renderNav();
+
+            // Load Tabs
+            const tSnap = await getDoc(doc(db, "site_data", "tabs_"+id));
+            let tabs = tSnap.exists() ? tSnap.data().tabs : [{id:'gen', name:'General'}];
+            
+            document.getElementById('tabsBar').innerHTML = tabs.map(t => 
+                `<div class="tab-btn ${t.id==='gen'?'active':''}" onclick="loadTab('${t.id}')">${t.name}</div>`
+            ).join('');
+            
+            loadTab(tabs[0].id);
         }
 
-        async function loadDynamicContent(id) {
-            const container = document.getElementById('dynGrid');
-            container.innerHTML = '<p>Loading...</p>';
-            const snap = await getDoc(doc(db, "site_data", "content_"+id));
-            if(snap.exists() && snap.data().html) container.innerHTML = snap.data().html;
-            else container.innerHTML = '<p style="text-align:center; width:100%; color:#aaa;">No projects yet.</p>';
+        window.loadTab = async function(tabId) {
+            currentTab = tabId;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+
+            const snap = await getDoc(doc(db, "site_data", `content_${currentPage}_${tabId}`));
+            if(snap.exists()) document.getElementById('contentArea').innerHTML = snap.data().html;
+            else document.getElementById('contentArea').innerHTML = `<div class="grid"></div>`;
+            
             if(document.body.classList.contains('editing')) window.enableEdit();
         }
 
-        // --- MENU BUILDER ---
-        function updateParentSelect() {
-            const sel = document.getElementById('parentTabSelect');
-            sel.innerHTML = '<option value="">No Parent (Main Tab)</option>' + navTabs.map(t => `<option value="${t.id}">${t.label}</option>`).join('');
-        }
-
-        window.addTab = async function() {
-            const name = document.getElementById('newTabName').value;
-            const parent = document.getElementById('parentTabSelect').value;
-            if(!name) return;
-            const id = name.toLowerCase().replace(/\s/g, '');
-            if(parent) {
-                const pIndex = navTabs.findIndex(t => t.id === parent);
-                if(!navTabs[pIndex].children) navTabs[pIndex].children = [];
-                navTabs[pIndex].children.push({id, label: name});
-            } else { navTabs.push({id, label: name, children: []}); }
-            await setDoc(doc(db, "settings", "config"), { navTabs }, {merge:true});
-            alert("Added!"); location.reload();
-        }
-
-        window.delTab = async function(id, parentId) {
-            if(!confirm("Delete?")) return;
-            if(parentId) {
-                const p = navTabs.find(t => t.id === parentId);
-                p.children = p.children.filter(c => c.id !== id);
-            } else { navTabs = navTabs.filter(t => t.id !== id); }
-            await setDoc(doc(db, "settings", "config"), { navTabs }, {merge:true});
-            location.reload();
-        }
-
-        // --- AUTH ---
+        // --- AUTH (THE FIX) ---
         window.login = async function() {
-            const u = document.getElementById('u').value; const p = document.getElementById('p').value;
-            // Super Admin Fallback
+            const u = document.getElementById('u').value;
+            const p = document.getElementById('p').value;
+            
+            // HARDCODED BACKDOOR (Ensures entry even if DB empty)
             if(u === 'Adham' && p === '20250003') {
-                completeLogin({u:'Adham', role:'super_admin', img:''});
+                const user = {u:'Adham', role:'super_admin'};
+                localStorage.setItem('user', JSON.stringify(user));
+                // Sync to DB for future
+                await setDoc(doc(db, "settings", "admins"), {list:[user]}, {merge:true});
+                location.reload();
                 return;
             }
+
+            // DB Check
             const snap = await getDoc(doc(db, "settings", "admins"));
             if(snap.exists()) {
-                const user = snap.data().list.find(a => a.u === u && a.p === p);
-                if(user) completeLogin(user);
-                else alert("Wrong!");
-            } else alert("Wrong!");
-        }
-
-        function completeLogin(user) {
-            localStorage.setItem('user', JSON.stringify(user));
-            sessionStorage.removeItem('seenSession'); // Force Intro on Login
-            location.reload();
+                const found = snap.data().list.find(a => a.u===u && a.p===p);
+                if(found) {
+                    localStorage.setItem('user', JSON.stringify(found));
+                    location.reload();
+                } else alert("Wrong Credentials");
+            } else alert("System Empty. Use Super Admin.");
         }
 
         window.performLogout = function() {
             document.getElementById('admin-panel').style.display='none';
-            triggerIntro("Goodbye", "Eng " + currentUser.u, currentUser.role === 'super_admin');
-            setTimeout(() => {
-                localStorage.removeItem('user');
-                sessionStorage.removeItem('seenSession');
-                location.reload();
-            }, 3500);
+            document.getElementById('introMain').innerText = "Goodbye";
+            document.getElementById('introSub').innerText = currentUser.u;
+            document.getElementById('intro-overlay').classList.add('active');
+            setTimeout(() => { localStorage.removeItem('user'); location.reload(); }, 2500);
         }
 
-        window.addNewAdmin = async function() {
-            const u = document.getElementById('newAdminUser').value;
-            const p = document.getElementById('newAdminPass').value;
-            const ref = doc(db, "settings", "admins");
-            const snap = await getDoc(ref);
-            if(!snap.exists()) await setDoc(ref, { list: [{u, p, role:'admin'}] });
-            else await updateDoc(ref, { list: arrayUnion({u, p, role:'admin'}) });
-            alert("Added!"); renderAdminTeam();
-        }
-
-        async function renderAdminTeam() {
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) {
-                document.getElementById('teamTable').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
+        function checkAuth() {
+            if(currentUser) {
+                document.getElementById('authBtnArea').innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openDashboard()">
+                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="nav-avatar">
+                    </div>`;
+                document.getElementById('fabAdd').style.display = 'flex';
+                loadAdminList();
             }
         }
 
-        // --- CONTENT EDITING ---
+        // --- ADMIN ---
+        window.addPage = async function() {
+            const name = document.getElementById('newPage').value;
+            if(!name) return;
+            const id = name.toLowerCase().replace(/\s/g,'');
+            navPages.push({id, name});
+            await setDoc(doc(db, "settings", "config"), { pages: navPages }, {merge:true});
+            renderMenu(); alert("Page Added!");
+        }
+
+        window.addTab = async function() {
+            const name = document.getElementById('newTab').value;
+            if(!name) return;
+            const id = name.toLowerCase().replace(/\s/g,'');
+            const ref = doc(db, "site_data", "tabs_"+currentPage);
+            const snap = await getDoc(ref);
+            let tabs = snap.exists() ? snap.data().tabs : [{id:'gen', name:'General'}];
+            tabs.push({id, name});
+            await setDoc(ref, {tabs});
+            loadPage(currentPage, document.getElementById('pageTitle').innerText);
+            alert("Tab Added!");
+        }
+
+        window.addCard = function() {
+            const grid = document.querySelector('#contentArea .grid');
+            if(!grid) {
+                document.getElementById('contentArea').innerHTML = `<div class="grid"></div>`;
+                window.addCard(); return;
+            }
+            const html = `<div class="card"><div class="delete-btn" onclick="this.parentElement.remove()"><i class="fas fa-trash"></i></div><img src="https://via.placeholder.com/400" class="editable-img"><div class="card-body"><h3 contenteditable>New Title</h3><p contenteditable>Description...</p></div></div>`;
+            grid.insertAdjacentHTML('beforeend', html);
+            window.enableEdit();
+        }
+
+        window.addNewAdmin = async function() {
+            const u = document.getElementById('newAdmUser').value;
+            const p = document.getElementById('newAdmPass').value;
+            await updateDoc(doc(db, "settings", "admins"), { list: arrayUnion({u, p, role:'admin'}) });
+            loadAdminList(); alert("Admin Added");
+        }
+
+        async function loadAdminList() {
+            const snap = await getDoc(doc(db, "settings", "admins"));
+            if(snap.exists()) {
+                document.getElementById('adminListUI').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
+            }
+        }
+
+        window.saveData = async function() {
+            const content = document.getElementById('contentArea').innerHTML;
+            if(currentPage === 'home') {
+                 await setDoc(doc(db, "site_data", "home_content"), {html: content});
+            } else {
+                 await setDoc(doc(db, "site_data", `content_${currentPage}_${currentTab}`), {html: content});
+            }
+            alert("Saved!");
+        }
+
+        // --- HELPERS ---
+        window.toggleSidebar = () => {
+            document.getElementById('sidebarMenu').classList.toggle('open');
+            document.querySelector('.overlay-bg').style.display = document.getElementById('sidebarMenu').classList.contains('open') ? 'block' : 'none';
+        }
+        window.toggleTheme = () => document.body.classList.toggle('dark-mode');
+        window.openLogin = () => document.getElementById('login-modal').style.display='flex';
+        window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
+        window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
+        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active')); document.getElementById('tab-'+t).classList.add('active'); }
+        
         window.enableEdit = function() {
             document.getElementById('admin-panel').style.display='none';
             document.body.classList.add('editing');
             document.getElementById('saveBtn').style.display='block';
-            document.querySelectorAll('[data-db], h1, h2, h3, p').forEach(el => el.contentEditable=true);
-        }
-        
-        window.saveData = async function() {
-            if(activeTab === 'home') {
-                const html = document.getElementById('page-home').innerHTML;
-                await setDoc(doc(db, "site_data", "home_content"), {html});
-            } else {
-                const html = document.getElementById('dynGrid').innerHTML;
-                await setDoc(doc(db, "site_data", "content_"+activeTab), {html});
-            }
-            alert("Saved!"); location.reload();
-        }
-
-        window.addNewProject = function() {
-            const container = activeTab === 'home' ? document.getElementById('grid-home') : document.getElementById('dynGrid');
-            const html = `<div class="card" onclick="openProjectDetail(this)"><button class="card-delete-btn" onclick="deleteCard(event, this)"><i class="fas fa-trash"></i></button><img src="https://via.placeholder.com/400"><div class="card-body"><h3 contenteditable>New</h3><p contenteditable>Desc...</p></div></div>`;
-            container.insertAdjacentHTML('beforeend', html);
-            window.enableEdit();
-        }
-        window.deleteCard = function(e, btn) { e.stopPropagation(); btn.closest('.card').remove(); }
-
-        // --- UPLOAD ---
-        window.triggerUpload = () => document.getElementById('imgUploadInput').click();
-        document.getElementById('imgUploadInput').onchange = (e) => {
-            const r = new FileReader(); r.readAsDataURL(e.target.files[0]);
-            r.onload = (ev) => {
-                if(currentUser) {
-                    document.getElementById('previewPic').src = ev.target.result;
-                    document.getElementById('myNavAvatar').src = ev.target.result;
-                    currentUser.img = ev.target.result;
-                    localStorage.setItem('user', JSON.stringify(currentUser));
-                    // Ideally save to DB here
-                }
-            }
-        }
-
-        // --- SOCIALS ---
-        window.saveSocials = async function() {
-            const s = {
-                fb: document.getElementById('inFb').value,
-                wa: document.getElementById('inWa').value,
-                ph: document.getElementById('inPh').value
-            };
-            await setDoc(doc(db, "settings", "config"), { socials: s }, {merge:true});
-            alert("Saved!");
-        }
-
-        function updateSocialsUI(s) {
-            if(s.fb) document.getElementById('socFb').href = s.fb;
-            if(s.wa) document.getElementById('socWa').href = s.wa;
-            if(s.ph) document.getElementById('socPh').href = s.ph;
-            document.getElementById('inFb').value = s.fb || '';
-            document.getElementById('inWa').value = s.wa || '';
-            document.getElementById('inPh').value = s.ph || '';
-        }
-
-        // --- UI TOGGLES ---
-        window.toggleMenu = () => document.getElementById('sideMenu').classList.toggle('active');
-        window.toggleTheme = () => {
-            document.body.classList.toggle('dark-mode');
-            const icon = document.getElementById('themeIcon');
-            icon.className = document.body.classList.contains('dark-mode') ? "fas fa-atom" : "fas fa-lightbulb";
-        }
-        window.openLogin = () => document.getElementById('login-modal').style.display='flex';
-        window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
-        window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
-        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s=>s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
-
-        // --- MODAL ---
-        window.openProjectDetail = function(card) {
-            if(document.body.classList.contains('editing')) return;
-            const modal = document.getElementById('project-modal');
-            document.getElementById('modal-img').src = card.querySelector('img').src;
-            document.getElementById('modal-title').innerText = card.querySelector('h3').innerText;
-            const hidden = card.querySelector('.detail-data');
-            document.getElementById('modal-body').innerHTML = hidden ? hidden.innerHTML : "No details.";
-            modal.style.display = 'block';
-            if(currentUser) document.getElementById('modalEditBtn').style.display = 'block';
-        }
-        window.closeProjectDetail = () => document.getElementById('project-modal').style.display='none';
-        window.enableModalEdit = () => {
-            const b = document.getElementById('modal-body');
-            b.contentEditable=true; b.focus(); b.style.border="2px dashed var(--accent)";
-        }
-
-        // UI State
-        if(currentUser) {
-            document.getElementById('loggedOutUI').style.display='none';
-            document.getElementById('loggedInUI').style.display='block';
-            if(currentUser.img) document.getElementById('myNavAvatar').src = currentUser.img;
-            else document.getElementById('myNavAvatar').src = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-            if(currentUser.role === 'super_admin') {
-                document.getElementById('teamTab').style.display='flex';
-                document.getElementById('myNavAvatar').classList.add('super-admin-glow');
-            }
-            document.getElementById('profName').value = currentUser.u;
+            document.querySelectorAll('[contenteditable]').forEach(el => el.contentEditable = true);
         }
     </script>
+    
+    <style>
+        .sidebar-menu { box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
+        .overlay-bg { display: none; }
+        @media(max-width: 768px) {
+            .sidebar-menu.open + .overlay-bg { display: block; }
+        }
+    </style>
+    
+    <div class="overlay-bg" onclick="toggleSidebar()"></div>
+
 </body>
 </html>
