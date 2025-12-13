@@ -17,43 +17,59 @@
             --primary: #2c3e50; --accent: #3498db; --bg-body: #f0f2f5; --bg-card: #ffffff;
             --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.98);
             --shadow: 0 8px 30px rgba(0,0,0,0.08); --radius: 16px;
-            --sidebar-grad: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            --dash-bg: rgba(255, 255, 255, 0.95);
+            --sidebar-grad: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
         }
         body.dark-mode {
             --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
             --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.98); --shadow: 0 8px 30px rgba(0,0,0,0.4);
-            --sidebar-grad: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --dash-bg: rgba(30, 41, 59, 0.95);
+            --sidebar-grad: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
         }
-        
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         
-        /* --- 2. APP LAYOUT STRUCTURE (THE FIX) --- */
         html, body {
             height: 100%; margin: 0; padding: 0;
-            overflow: hidden; /* Prevent full page scroll */
+            overflow: hidden; /* App Mode */
             font-family: 'Poppins', sans-serif;
             background: var(--bg-body); color: var(--text-main);
-            display: flex; flex-direction: column; /* Stack: Nav -> Main -> Footer */
+            display: flex; flex-direction: column;
         }
 
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(52, 152, 219, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 152, 219, 0); } }
-
-        /* Intro */
-        #intro-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 99999; display: flex; justify-content: center; align-items: center; pointer-events: none; opacity: 0; transition: opacity 0.5s; }
+        /* --- 2. NEW CINEMATIC INTRO ANIMATION --- */
+        #intro-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            background: #000; z-index: 999999; display: flex; justify-content: center; align-items: center; 
+            pointer-events: none; opacity: 0; transition: opacity 0.8s ease-in-out; 
+        }
         #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        .intro-content { text-align: center; color: white; }
-        .intro-content h1 { font-size: 3rem; margin: 0; }
-        .intro-content span { color: var(--accent); font-size: 1.5rem; letter-spacing: 2px; }
+        
+        .intro-content { text-align: center; color: white; position: relative; z-index: 10; }
+        
+        /* The New "Focus In" Animation */
+        .intro-content h1 { 
+            font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: 2px;
+            opacity: 0; filter: blur(20px); transform: scale(1.2);
+        }
+        .intro-content span { 
+            display: block; font-size: 1.5rem; color: var(--accent); letter-spacing: 5px; text-transform: uppercase;
+            opacity: 0; filter: blur(10px); transform: translateY(20px);
+        }
 
-        /* --- 3. Navbar (Fixed Top) --- */
+        /* Animation Trigger Classes */
+        .active .intro-content h1 { animation: focusIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.2s; }
+        .active .intro-content span { animation: slideUpFade 0.8s ease-out forwards 0.8s; }
+
+        @keyframes focusIn {
+            0% { opacity: 0; filter: blur(20px); transform: scale(1.2); }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+        }
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* --- 3. Navbar --- */
         nav { 
-            flex: 0 0 70px; /* Fixed height */
-            background: var(--nav-bg); backdrop-filter: blur(15px); z-index: 5000; 
+            flex: 0 0 70px; background: var(--nav-bg); backdrop-filter: blur(15px); z-index: 5000; 
             display: flex; align-items: center; justify-content: space-between; 
             padding: 0 5%; box-shadow: 0 2px 15px rgba(0,0,0,0.05);
         }
@@ -69,9 +85,10 @@
 
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         .theme-btn { background: none; border: none; font-size: 1.3rem; color: var(--text-main); cursor: pointer; transition: 0.3s; }
+        .theme-btn:hover { transform: rotate(30deg); color: var(--accent); }
         .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
 
-        /* Side Menu */
+        /* --- 4. Sidebar --- */
         .sidebar-menu {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
             background: var(--bg-card); z-index: 4999; padding-top: 80px;
@@ -82,22 +99,18 @@
         .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
         .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4998; display: none; }
 
-        /* --- 4. SCROLLABLE CONTAINER (Middle) --- */
+        /* --- 5. Main Content --- */
         .main-container { 
-            flex: 1; /* Takes remaining space */
-            overflow-y: auto; /* Internal Scroll */
-            padding: 30px 5%;
-            scroll-behavior: smooth;
+            flex: 1; overflow-y: auto; padding: 30px 5%; scroll-behavior: smooth;
         }
-        /* Hide Scrollbar */
         .main-container::-webkit-scrollbar { display: none; }
-        .main-container { -ms-overflow-style: none; scrollbar-width: none; }
-
-        .hero { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; flex-wrap: wrap; gap: 30px; }
+        
+        .hero { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; flex-wrap: wrap; gap: 30px; animation: fadeIn 0.5s ease-out; }
         .hero-txt { flex: 1; min-width: 300px; }
         .hero-txt h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
         .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
-        .hero-img img { width: 100%; max-width: 550px; border-radius: 20px; }
+        .hero-img img { width: 100%; max-width: 550px; border-radius: 20px; animation: float 6s infinite ease-in-out; }
+        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
 
         .section-header { text-align: center; margin-bottom: 40px; }
         .section-header h2 { font-size: 2.2rem; color: var(--text-main); position: relative; display: inline-block; font-weight: 700; }
@@ -116,74 +129,51 @@
         .card h3 { font-size: 1.3rem; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
         .card p { font-size: 0.95rem; color: var(--text-sec); line-height: 1.6; }
         
-        .delete-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); z-index: 10; }
+        .delete-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; }
         .editing .delete-btn { display: flex; }
 
         .coming-soon { text-align: center; padding: 80px 20px; color: var(--text-sec); border: 2px dashed rgba(0,0,0,0.1); border-radius: 20px; margin-top: 20px; animation: fadeIn 0.5s; }
 
-        /* --- 5. Footer (Fixed Bottom) --- */
+        /* --- 6. Footer --- */
         footer { 
-            flex: 0 0 auto; /* Don't shrink/grow */
-            background: #1e293b; color: white; padding: 20px 5%; 
+            flex: 0 0 auto; background: #1e293b; color: white; padding: 20px 5%; 
             text-align: center; border-top: 4px solid var(--accent);
             display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
         }
         .footer-info { text-align: left; }
-        .footer-socials { display: flex; gap: 30px; font-size: 1.5rem; } /* ADJUSTED GAP */
+        .footer-socials { display: flex; gap: 30px; font-size: 1.5rem; }
         .footer-socials a { color: white; transition: 0.3s; opacity: 0.8; }
         .footer-socials a:hover { color: var(--accent); opacity: 1; transform: scale(1.2); }
 
-        /* --- 6. NEW ADMIN DASHBOARD (Fancy) --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 7000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(8px); }
-        .dash-board { 
-            background: var(--dash-bg); width: 90%; max-width: 1000px; height: 80vh; 
-            border-radius: 30px; display: flex; overflow: hidden; position: relative; 
-            box-shadow: 0 30px 80px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
-            animation: fadeIn 0.4s ease-out;
-        }
-        .dash-sidebar { 
-            width: 260px; background: var(--sidebar-grad); color: white; padding: 30px; 
-            display: flex; flex-direction: column; gap: 15px; 
-        }
-        .dash-sidebar h3 { margin-bottom: 20px; letter-spacing: 1px; font-weight: 800; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
-        
-        .dash-main { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); position: relative; }
-        
-        .sb-btn { 
-            padding: 15px 20px; cursor: pointer; border-radius: 12px; background: rgba(255,255,255,0.05); 
-            display: flex; gap: 15px; align-items: center; transition: 0.3s; font-weight: 500;
-        }
-        .sb-btn i { width: 20px; text-align: center; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: var(--primary); transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); font-weight: 700; }
-        
-        .dash-section { display: none; animation: fadeIn 0.4s; }
-        .dash-section.active-sec { display: block; }
-        .dash-section h2 { color: var(--accent); margin-bottom: 20px; font-size: 2rem; }
-        
-        .close-dash { position: absolute; top: 25px; right: 25px; font-size: 1.8rem; cursor: pointer; color: var(--text-sec); z-index: 100; transition: 0.3s; }
-        .close-dash:hover { color: #ff4757; transform: rotate(90deg); }
-        
-        .team-table { width: 100%; border-collapse: collapse; margin-top: 20px; background: var(--bg-card); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
-        .team-table th { background: var(--accent); color: white; padding: 15px; text-align: left; }
-        .team-table td { padding: 15px; border-bottom: 1px solid rgba(0,0,0,0.05); }
-
-        /* Floating Admin Button */
-        .fab-admin { position: fixed; bottom: 90px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4); z-index: 5000; animation: pulseGlow 2s infinite; }
-
-        /* Login & Modals */
-        #login-modal, #add-content-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 8000; display: none; justify-content: center; align-items: center; }
-        .login-box { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 350px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-        .form-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
-        
-        /* Viewer */
+        /* --- 7. Modals & Viewer --- */
         #project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 6000; overflow-y: auto; display: none; animation: fadeIn 0.3s; }
         .project-content { max-width: 1000px; margin: 40px auto; padding: 0 20px 50px; }
         .modal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; position: sticky; top: 20px; z-index: 6001; }
         .close-btn { padding: 10px 30px; background: #ff4757; color: white; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
-        .doc-viewer { width: 100%; height: 80vh; border: none; border-radius: 20px; box-shadow: var(--shadow); background: #fff; margin-top: 20px; }
+        
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 30px 0; }
         .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
+        .gallery-img:hover { border-color: var(--accent); transform: scale(1.05); }
+        
+        .doc-viewer { width: 100%; height: 80vh; border: none; border-radius: 20px; box-shadow: var(--shadow); background: #fff; margin-top: 20px; }
+
+        /* --- Admin & Tools --- */
+        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; display: none; justify-content: center; align-items: center; }
+        .dash-board { background: var(--bg-card); width: 90%; max-width: 1100px; height: 85vh; border-radius: 25px; display: flex; overflow: hidden; position: relative; }
+        .dash-sidebar { width: 250px; background: var(--sidebar-grad); color: white; padding: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .dash-main { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); }
+        .sb-btn { padding: 12px 15px; cursor: pointer; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
+        .sb-btn:hover, .sb-btn.active { background: white; color: #333; font-weight: bold; }
+        
+        .dash-section { display: none; animation: fadeIn 0.3s; }
+        .dash-section.active-sec { display: block; }
+        .close-dash { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-sec); }
+        
+        .fab-admin { position: fixed; bottom: 90px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4); z-index: 5000; }
+
+        #login-modal, #add-content-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 8000; display: none; justify-content: center; align-items: center; }
+        .login-box { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
+        .form-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
         
         .editable { border: 2px dashed #f39c12; cursor: text; }
         #saveBtn { position: fixed; bottom: 100px; right: 110px; background: #27ae60; color: white; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; z-index: 6000; }
@@ -194,8 +184,7 @@
             .hero-txt, .hero-img { width: 100%; }
             .dash-board { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
             .dash-sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 15px; }
-            footer { flex-direction: column; gap: 20px; }
-            .footer-info { text-align: center; }
+            footer { flex-direction: column; gap: 20px; } .footer-info { text-align: center; }
         }
     </style>
 </head>
@@ -220,7 +209,7 @@
         </div>
         <div class="nav-actions">
             <button class="theme-btn" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="authArea"><button onclick="openLogin()" style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:20px; cursor:pointer; font-weight:600;">Login</button></div>
+            <div id="authArea"><button onclick="openLogin()" style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:20px; font-weight:600; cursor:pointer;">Login</button></div>
         </div>
     </nav>
 
@@ -324,36 +313,29 @@
             <i class="fas fa-times close-dash" onclick="closeDashboard()"></i>
             <div class="dash-sidebar">
                 <h3>CONTROL</h3>
-                <div class="sb-btn active" onclick="switchTab('content')"><i class="fas fa-edit"></i> Content</div>
-                <div class="sb-btn" onclick="switchTab('socials')"><i class="fas fa-share-alt"></i> Socials</div>
-                <div class="sb-btn" id="teamTabBtn" style="display:none;" onclick="switchTab('team')"><i class="fas fa-users-cog"></i> Team</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b; background:rgba(255,107,107,0.1);"><i class="fas fa-sign-out-alt"></i> Logout</div>
+                <div class="sb-btn active" onclick="switchTab('content')">Content</div>
+                <div class="sb-btn" onclick="switchTab('socials')">Socials</div>
+                <div class="sb-btn" onclick="switchTab('team')">Team</div>
+                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
             </div>
             <div class="dash-main">
                 <div id="tab-content" class="dash-section active-sec">
-                    <h2>Content Management</h2>
-                    <p style="margin-bottom:20px; color:var(--text-sec);">Select a page from the main menu, then use actions below.</p>
-                    <div style="display:flex; gap:15px; flex-wrap:wrap;">
-                        <button onclick="enableEdit()" style="padding:20px; background:#2ecc71; color:white; border:none; border-radius:15px; cursor:pointer; flex:1; font-weight:600;"><i class="fas fa-pen"></i> Live Text Edit</button>
-                        <button onclick="openAddContentModal()" style="padding:20px; background:var(--accent); color:white; border:none; border-radius:15px; cursor:pointer; flex:1; font-weight:600;"><i class="fas fa-plus"></i> Add New Card</button>
+                    <h2>Content Editor</h2>
+                    <p style="margin-bottom:20px; color:var(--text-sec);">Navigate to page first.</p>
+                    <div style="display:flex; gap:10px;">
+                        <button onclick="enableEdit()" style="padding:15px 30px; background:#2ecc71; color:white; border:none; border-radius:10px; cursor:pointer;">Live Text Edit</button>
+                        <button onclick="openAddContentModal()" style="padding:15px 30px; background:var(--accent); color:white; border:none; border-radius:10px; cursor:pointer;">+ Add Content</button>
                     </div>
                 </div>
                 <div id="tab-socials" class="dash-section">
                     <h2>Social Links</h2>
-                    <div style="background:var(--bg-card); padding:20px; border-radius:15px; box-shadow:var(--shadow);">
-                        <input id="inFb" class="form-input" placeholder="Facebook URL">
-                        <input id="inWa" class="form-input" placeholder="WhatsApp URL">
-                        <button onclick="saveSocials()" style="padding:12px 25px; background:var(--accent); color:white; border:none; border-radius:10px; margin-top:10px;">Save Updates</button>
-                    </div>
+                    <input id="inFb" class="form-input" placeholder="Facebook"><input id="inWa" class="form-input" placeholder="WhatsApp">
+                    <button onclick="saveSocials()" style="padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:5px;">Save</button>
                 </div>
                 <div id="tab-team" class="dash-section">
                     <h2>Team Manager</h2>
-                    <div style="background:var(--bg-card); padding:20px; border-radius:15px; box-shadow:var(--shadow); margin-bottom:20px;">
-                        <input id="newAdminUser" class="form-input" placeholder="Username" style="width:48%;">
-                        <input id="newAdminPass" class="form-input" placeholder="Password" style="width:48%;">
-                        <button onclick="addNewAdmin()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:10px; margin-top:10px;">Add New Admin</button>
-                    </div>
-                    <table class="team-table"><thead><tr><th>User</th><th>Role</th></tr></thead><tbody id="teamTable"></tbody></table>
+                    <div class="setting-row"><input id="newAdminUser" class="form-input" placeholder="User" style="width:48%;"><input id="newAdminPass" class="form-input" placeholder="Pass" style="width:48%;"><button onclick="addNewAdmin()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button></div>
+                    <div id="teamTable"></div>
                 </div>
             </div>
         </div>
@@ -365,20 +347,33 @@
                 <h2 style="margin:0; color:var(--accent);">Line Follower Robot</h2>
                 <button class="close-btn" onclick="closeProjectModal()">Close</button>
             </div>
+            
             <p style="font-size:1.1rem; line-height:1.8; color:var(--text-sec);">
                 This project demonstrates an autonomous robot capable of tracking a black line on a white surface using IR sensors. 
                 <br><b>Work Team:</b> Abd-Elrahman Yehya, Mohammed Yasser, Mostafa Ashraf, Abdallah Ahmed, Adham Sayed, Adel Farooq.
             </p>
+
             <div class="gallery-grid">
                 <img src="car1.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                 <img src="car2.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
                 <img src="car3.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
             </div>
+
             <hr style="margin:40px 0; border:0; border-top:1px solid rgba(0,0,0,0.1);">
+
+            <div style="margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); background:#000;">
+                <video controls style="width: 100%; display: block;" poster="car1.jpg">
+                    <source src="carmotion.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
             <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
                 <i class="fas fa-file-pdf" style="font-size:1.5rem; color:#e74c3c;"></i><h3 style="margin:0;">Project Documentation</h3>
             </div>
+            
             <iframe src="project.pdf" class="doc-viewer"></iframe>
+            <p style="text-align:center; font-size:0.9rem; color:var(--text-sec); margin-top:10px;">* Ensure files are in the folder.</p>
         </div>
     </div>
 
@@ -386,8 +381,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
+        // FIREBASE CONFIG
         const firebaseConfig = {
           apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
           authDomain: "physiatic-508a1.firebaseapp.com",
@@ -407,7 +403,6 @@
             activePage = page;
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
             document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            
             document.getElementById('page-home').style.display='none';
             document.getElementById('page-projects').style.display='none';
             document.getElementById('page-dynamic').style.display='none';
@@ -422,7 +417,6 @@
             }
             document.getElementById('sidebarMenu').classList.remove('open');
             document.querySelector('.overlay-bg').style.display='none';
-            
             const navLink = document.querySelector(`.nav-link[onclick="route('${page}')"]`);
             if(navLink) navLink.classList.add('active-page');
         }
@@ -436,7 +430,7 @@
             if(document.body.classList.contains('editing')) window.enableEdit();
         }
 
-        // --- CONTENT LOGIC ---
+        // --- ADD CONTENT (Base64 + YouTube) ---
         window.openAddContentModal = () => {
             if(activePage === 'home') { alert("Use Live Edit for Home"); return; }
             document.getElementById('add-content-modal').style.display = 'flex';
@@ -476,7 +470,6 @@
                 if (link.includes("youtube.com/watch?v=")) videoId = link.split("v=")[1].split("&")[0];
                 else if (link.includes("youtu.be/")) videoId = link.split("youtu.be/")[1];
                 const embedLink = videoId ? `https://www.youtube.com/embed/${videoId}` : link;
-                
                 html = `<div class="card"><div class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></div><div class="card-video"><iframe src="${embedLink}" allowfullscreen></iframe></div><div class="card-body"><h3 contenteditable>${title||"Video"}</h3><p contenteditable>${desc||""}</p></div></div>`;
             } else {
                 html = `<div class="card"><div class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></div><img src="${tempImageBase64 || 'https://via.placeholder.com/400'}" class="editable-img"><div class="card-body"><h3 contenteditable>${title||"Title"}</h3><p contenteditable>${desc||"..."}</p></div></div>`;
@@ -537,18 +530,19 @@
         }
         async function renderTeam() {
             const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) document.getElementById('teamTable').innerHTML = snap.data().list.map(a => `<tr><td>${a.u}</td><td>${a.role}</td></tr>`).join('');
+            if(snap.exists()) document.getElementById('teamTable').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
         }
         window.saveSocials = async function() {
             const s = { fb: document.getElementById('inFb').value, wa: document.getElementById('inWa').value, ph: document.getElementById('inPh').value };
             await setDoc(doc(db, "settings", "config"), {socials:s}, {merge:true}); alert("Saved!");
         }
 
+        // --- INIT ---
         async function init() {
             if(!sessionStorage.getItem('intro')) {
                 const intro = document.getElementById('intro-overlay');
                 intro.classList.add('active');
-                setTimeout(() => intro.classList.remove('active'), 2500);
+                setTimeout(() => intro.classList.remove('active'), 1800); // Wait for anim
                 sessionStorage.setItem('intro', 'true');
             }
             const snap = await getDoc(doc(db, "site_data", "static_content"));
@@ -559,10 +553,7 @@
             if(currentUser) {
                 document.getElementById('authArea').innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><span style="font-weight:600;">${currentUser.u}</span><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="nav-avatar" onclick="if(confirm('Logout?')) { localStorage.removeItem('user'); location.reload(); }"></div>`;
                 document.getElementById('fabAdmin').style.display = 'flex';
-                if(currentUser.role === 'super_admin') {
-                    document.getElementById('teamTabBtn').style.display = 'flex';
-                    renderTeam();
-                }
+                if(currentUser.role === 'super_admin') renderTeam();
             }
         }
         init();
@@ -579,3 +570,4 @@
     </script>
 </body>
 </html>
+
