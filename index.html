@@ -1,572 +1,194 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="google" content="notranslate">
-    <title>Physiatić | Engineering Hub</title>
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#2c3e50">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        /* --- 1. Variables & Global --- */
-        :root { 
-            --primary: #2c3e50; --accent: #3498db; --bg-body: #f0f2f5; --bg-card: #ffffff;
-            --text-main: #2d3436; --text-sec: #636e72; --nav-bg: rgba(255, 255, 255, 0.98);
-            --shadow: 0 8px 30px rgba(0,0,0,0.08); --radius: 16px;
-            --sidebar-grad: linear-gradient(180deg, #2c3e50 0%, #3498db 100%);
-        }
-        body.dark-mode {
-            --primary: #dfe6e9; --bg-body: #0f172a; --bg-card: #1e293b; --text-main: #f8fafc;
-            --text-sec: #94a3b8; --nav-bg: rgba(15, 23, 42, 0.98); --shadow: 0 8px 30px rgba(0,0,0,0.4);
-            --sidebar-grad: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-        }
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        
-        html, body {
-            height: 100%; margin: 0; padding: 0;
-            overflow: hidden; /* App Mode */
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-body); color: var(--text-main);
-            display: flex; flex-direction: column;
-        }
+<meta charset="UTF-8">
+<title>Engineering Prep Section – Ultimate</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        /* --- 2. NEW CINEMATIC INTRO ANIMATION --- */
-        #intro-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-            background: #000; z-index: 999999; display: flex; justify-content: center; align-items: center; 
-            pointer-events: none; opacity: 0; transition: opacity 0.8s ease-in-out; 
-        }
-        #intro-overlay.active { opacity: 1; pointer-events: auto; }
-        
-        .intro-content { text-align: center; color: white; position: relative; z-index: 10; }
-        
-        /* The New "Focus In" Animation */
-        .intro-content h1 { 
-            font-size: 3.5rem; margin: 0; font-weight: 800; letter-spacing: 2px;
-            opacity: 0; filter: blur(20px); transform: scale(1.2);
-        }
-        .intro-content span { 
-            display: block; font-size: 1.5rem; color: var(--accent); letter-spacing: 5px; text-transform: uppercase;
-            opacity: 0; filter: blur(10px); transform: translateY(20px);
-        }
+<!-- Fonts + GSAP -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-        /* Animation Trigger Classes */
-        .active .intro-content h1 { animation: focusIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards 0.2s; }
-        .active .intro-content span { animation: slideUpFade 0.8s ease-out forwards 0.8s; }
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-        @keyframes focusIn {
-            0% { opacity: 0; filter: blur(20px); transform: scale(1.2); }
-            100% { opacity: 1; filter: blur(0); transform: scale(1); }
-        }
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(20px); filter: blur(10px); }
-            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-        }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
+body{background:#0b1c2d;color:#fff;overflow-x:hidden;position:relative;}
+canvas{position:fixed;inset:0;z-index:-2;}
 
-        /* --- 3. Navbar --- */
-        nav { 
-            flex: 0 0 70px; background: var(--nav-bg); backdrop-filter: blur(15px); z-index: 5000; 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 0 5%; box-shadow: 0 2px 15px rgba(0,0,0,0.05);
-        }
-        .hamburger { font-size: 1.5rem; cursor: pointer; color: var(--text-main); display: none; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        
-        .nav-center { display: flex; gap: 10px; }
-        .nav-link { 
-            color: var(--text-sec); font-weight: 600; padding: 8px 16px; border-radius: 20px; 
-            cursor: pointer; transition: 0.3s; font-size: 0.9rem;
-        }
-        .nav-link:hover, .nav-link.active-page { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3); }
+/* ===== LOGIN ===== */
+#login{height:100vh;display:flex;justify-content:center;align-items:center;}
+.login-box{background:#12263a;padding:30px;border-radius:15px;width:320px;box-shadow:0 0 30px rgba(0,0,0,.5);}
+.login-box h2{text-align:center;margin-bottom:20px;}
+.login-box input{width:100%;padding:12px;margin-bottom:15px;border:none;border-radius:8px;}
+.login-box .password-container{position:relative;}
+.login-box .toggle-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#fff;}
+.login-box button{width:100%;padding:12px;background:#0d6efd;border:none;color:#fff;border-radius:8px;font-size:16px;cursor:pointer;}
 
-        .nav-actions { display: flex; align-items: center; gap: 15px; }
-        .theme-btn { background: none; border: none; font-size: 1.3rem; color: var(--text-main); cursor: pointer; transition: 0.3s; }
-        .theme-btn:hover { transform: rotate(30deg); color: var(--accent); }
-        .nav-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); cursor: pointer; }
+/* ===== APP ===== */
+#app{display:none;}
+header{padding:20px;text-align:center;background:linear-gradient(135deg,#0d6efd,#6610f2);box-shadow:0 0 20px rgba(0,0,0,.5);}
+.section{padding:60px 20px;text-align:center;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;max-width:1100px;margin:auto;}
+.card{background:#12263a;border-radius:15px;padding:30px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);}
+.card h3{margin-bottom:10px;}
+footer{text-align:center;padding:15px;background:#000;font-size:14px;}
 
-        /* --- 4. Sidebar --- */
-        .sidebar-menu {
-            position: fixed; top: 0; left: -280px; width: 280px; height: 100vh;
-            background: var(--bg-card); z-index: 4999; padding-top: 80px;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column;
-        }
-        .sidebar-menu.open { left: 0; }
-        .menu-item { padding: 15px 25px; font-weight: 600; cursor: pointer; color: var(--text-sec); border-left: 4px solid transparent; transition: 0.2s; }
-        .menu-item:hover, .menu-item.active { background: rgba(52, 152, 219, 0.1); color: var(--accent); border-left-color: var(--accent); }
-        .overlay-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 4998; display: none; }
+/* ===== Background Animations ===== */
+.bg-animations{position:fixed;inset:0;overflow:hidden;z-index:-1;}
+.atom,.atom::before,.atom::after{border-radius:50%;}
+.atom{position:absolute;width:120px;height:120px;border:2px solid rgba(13,110,253,.4);top:20%;left:10%;animation:rotate 10s linear infinite;}
+.atom::before, .atom::after{content:"";position:absolute;inset:0;border:2px solid rgba(13,110,253,.2);}
+.atom::after{transform:rotate(-60deg);}
+.atom.small{width:70px;height:70px;top:70%;left:80%;animation-duration:6s;}
 
-        /* --- 5. Main Content --- */
-        .main-container { 
-            flex: 1; overflow-y: auto; padding: 30px 5%; scroll-behavior: smooth;
-        }
-        .main-container::-webkit-scrollbar { display: none; }
-        
-        .hero { display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; flex-wrap: wrap; gap: 30px; animation: fadeIn 0.5s ease-out; }
-        .hero-txt { flex: 1; min-width: 300px; }
-        .hero-txt h1 { font-size: 3rem; line-height: 1.2; margin-bottom: 15px; color: var(--text-main); }
-        .hero-img { flex: 1; min-width: 300px; display: flex; justify-content: center; }
-        .hero-img img { width: 100%; max-width: 550px; border-radius: 20px; animation: float 6s infinite ease-in-out; }
-        @keyframes float { 0% { transform: translateY(0); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0); } }
+.bubble{position:absolute;width:40px;height:40px;background:rgba(0,255,200,.25);border-radius:50%;bottom:-50px;left:30%;animation:bubbleUp 8s infinite;}
+.bubble.delay{left:60%;width:25px;height:25px;animation-delay:3s;}
+.bubble.pop{animation:bubblePop 0.5s forwards;}
 
-        .section-header { text-align: center; margin-bottom: 40px; }
-        .section-header h2 { font-size: 2.2rem; color: var(--text-main); position: relative; display: inline-block; font-weight: 700; }
-        .section-header h2::after { content: ''; display: block; width: 60px; height: 4px; background: var(--accent); margin: 10px auto 0; border-radius: 2px; }
+.code-float{position:absolute;color:#0f0;font-size:26px;opacity:.15;top:40%;left:75%;animation:floatCode 6s ease-in-out infinite;}
+.code-float.delay{top:15%;left:50%;animation-delay:2s;}
+.code-float.binary{top:80%;left:20%;font-size:20px;}
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; padding-bottom: 30px; }
-        .card { 
-            background: var(--bg-card); border-radius: 16px; overflow: hidden; 
-            box-shadow: var(--shadow); transition: 0.4s; border: 1px solid rgba(0,0,0,0.05); cursor: pointer; position: relative;
-        }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--accent); }
-        .card img { width: 100%; height: 200px; object-fit: cover; background: #f9f9f9; }
-        .card-video { width: 100%; height: 200px; background: black; display: flex; align-items: center; justify-content: center; }
-        .card-video iframe { width: 100%; height: 100%; border: 0; }
-        .card-body { padding: 25px; }
-        .card h3 { font-size: 1.3rem; color: var(--accent); margin-bottom: 10px; font-weight: 600; }
-        .card p { font-size: 0.95rem; color: var(--text-sec); line-height: 1.6; }
-        
-        .delete-btn { position: absolute; top: 15px; right: 15px; background: #ff4757; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; z-index: 10; }
-        .editing .delete-btn { display: flex; }
-
-        .coming-soon { text-align: center; padding: 80px 20px; color: var(--text-sec); border: 2px dashed rgba(0,0,0,0.1); border-radius: 20px; margin-top: 20px; animation: fadeIn 0.5s; }
-
-        /* --- 6. Footer --- */
-        footer { 
-            flex: 0 0 auto; background: #1e293b; color: white; padding: 20px 5%; 
-            text-align: center; border-top: 4px solid var(--accent);
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .footer-info { text-align: left; }
-        .footer-socials { display: flex; gap: 30px; font-size: 1.5rem; }
-        .footer-socials a { color: white; transition: 0.3s; opacity: 0.8; }
-        .footer-socials a:hover { color: var(--accent); opacity: 1; transform: scale(1.2); }
-
-        /* --- 7. Modals & Viewer --- */
-        #project-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-body); z-index: 6000; overflow-y: auto; display: none; animation: fadeIn 0.3s; }
-        .project-content { max-width: 1000px; margin: 40px auto; padding: 0 20px 50px; }
-        .modal-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; position: sticky; top: 20px; z-index: 6001; }
-        .close-btn { padding: 10px 30px; background: #ff4757; color: white; border-radius: 50px; border: none; font-weight: bold; cursor: pointer; }
-        
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 30px 0; }
-        .gallery-img { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: 0.3s; border: 2px solid transparent; }
-        .gallery-img:hover { border-color: var(--accent); transform: scale(1.05); }
-        
-        .doc-viewer { width: 100%; height: 80vh; border: none; border-radius: 20px; box-shadow: var(--shadow); background: #fff; margin-top: 20px; }
-
-        /* --- Admin & Tools --- */
-        #admin-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 7000; display: none; justify-content: center; align-items: center; }
-        .dash-board { background: var(--bg-card); width: 90%; max-width: 1100px; height: 85vh; border-radius: 25px; display: flex; overflow: hidden; position: relative; }
-        .dash-sidebar { width: 250px; background: var(--sidebar-grad); color: white; padding: 30px; display: flex; flex-direction: column; gap: 15px; }
-        .dash-main { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); }
-        .sb-btn { padding: 12px 15px; cursor: pointer; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; gap: 10px; align-items: center; }
-        .sb-btn:hover, .sb-btn.active { background: white; color: #333; font-weight: bold; }
-        
-        .dash-section { display: none; animation: fadeIn 0.3s; }
-        .dash-section.active-sec { display: block; }
-        .close-dash { position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer; color: var(--text-sec); }
-        
-        .fab-admin { position: fixed; bottom: 90px; right: 30px; width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: none; align-items: center; justify-content: center; color: white; font-size: 1.5rem; cursor: pointer; box-shadow: 0 10px 30px rgba(52, 152, 219, 0.4); z-index: 5000; }
-
-        #login-modal, #add-content-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 8000; display: none; justify-content: center; align-items: center; }
-        .login-box { background: var(--bg-card); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
-        .form-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; background: var(--bg-body); color: var(--text-main); }
-        
-        .editable { border: 2px dashed #f39c12; cursor: text; }
-        #saveBtn { position: fixed; bottom: 100px; right: 110px; background: #27ae60; color: white; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; display: none; z-index: 6000; }
-
-        @media (max-width: 900px) {
-            .nav-center { display: none; } .hamburger { display: block; }
-            .hero { flex-direction: column-reverse; text-align: center; }
-            .hero-txt, .hero-img { width: 100%; }
-            .dash-board { flex-direction: column; width: 100%; height: 100%; border-radius: 0; }
-            .dash-sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 15px; }
-            footer { flex-direction: column; gap: 20px; } .footer-info { text-align: center; }
-        }
-    </style>
+@keyframes rotate{from{transform:rotate(0);}to{transform:rotate(360deg);}}
+@keyframes bubbleUp{0%{transform:translateY(0);opacity:.6;}100%{transform:translateY(-600px);opacity:0;}}
+@keyframes floatCode{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
+@keyframes bubblePop{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.8);opacity:0;}}
+</style>
 </head>
 <body>
 
-    <div id="intro-overlay"><div class="intro-content"><h1>Welcome</h1><span>Engineer</span></div></div>
-
-    <input type="file" id="imgUploadInput" accept="image/*" style="display: none;">
-    <input type="file" id="videoFileInput" accept="video/*" style="display: none;">
-
-    <nav>
-        <div style="display:flex; align-items:center; gap:15px;">
-            <i class="fas fa-bars hamburger" onclick="toggleSidebar()"></i>
-            <div class="logo"><i class="fas fa-atom" style="color:var(--accent)"></i> Physiatić</div>
-        </div>
-        <div class="nav-center">
-            <div class="nav-link active-page" onclick="route('home')">Home</div>
-            <div class="nav-link" onclick="route('lectures')">Lectures</div>
-            <div class="nav-link" onclick="route('sections')">Sections</div>
-            <div class="nav-link" onclick="route('research')">Research</div>
-            <div class="nav-link" onclick="route('projects')">Projects</div>
-        </div>
-        <div class="nav-actions">
-            <button class="theme-btn" onclick="toggleTheme()"><i id="themeIcon" class="fas fa-lightbulb"></i></button>
-            <div id="authArea"><button onclick="openLogin()" style="padding:8px 25px; background:var(--accent); color:white; border:none; border-radius:20px; font-weight:600; cursor:pointer;">Login</button></div>
-        </div>
-    </nav>
-
-    <div class="overlay-bg" onclick="toggleSidebar()"></div>
-    <div class="sidebar-menu" id="sidebarMenu">
-        <div style="padding:25px; font-weight:bold; color:var(--accent); border-bottom:1px solid rgba(0,0,0,0.05);">MENU</div>
-        <div class="menu-item active" onclick="route('home')">Home</div>
-        <div class="menu-item" onclick="route('lectures')">Lectures</div>
-        <div class="menu-item" onclick="route('sections')">Sections</div>
-        <div class="menu-item" onclick="route('research')">Research</div>
-        <div class="menu-item" onclick="route('projects')">Projects</div>
-        <div style="margin-top:auto; padding:20px; text-align:center; font-size:0.8rem; color:var(--text-sec); border-top:1px solid rgba(0,0,0,0.05);">Under Supervision of <br> <b>Dr. Ahmed Khaled</b></div>
+<!-- Login -->
+<div id="login">
+  <div class="login-box">
+    <h2>تسجيل الدخول</h2>
+    <input type="email" id="email" placeholder="الإيميل">
+    <div class="password-container">
+      <input type="password" id="password" placeholder="كلمة المرور">
+      <span class="toggle-eye" onclick="togglePassword()">👁️</span>
     </div>
+    <button onclick="login()">دخول</button>
+  </div>
+</div>
 
-    <div class="main-container">
-        <div id="page-home">
-            <div class="hero">
-                <div class="hero-txt">
-                    <h1 data-db="h_t">Advanced <span style="color:var(--accent)">Physics</span></h1>
-                    <p data-db="h_d">The ultimate platform for engineering students.</p>
-                    <button class="nav-link active-page" style="border:none; padding:12px 35px; font-size:1rem;" onclick="route('projects')">Explore Projects</button>
-                </div>
-                <div class="hero-img">
-                    <img src="https://img.freepik.com/free-vector/science-lab-concept-illustration_114360-1090.jpg" alt="Hero">
-                </div>
-            </div>
-            <div class="section-header"><h2>Featured</h2></div>
-            <div style="text-align:center; color:var(--text-sec); max-width:700px; margin:0 auto 50px;" data-db="abt">Welcome to Physiatić Hub.</div>
-        </div>
+<!-- App -->
+<div id="app">
+<header>
+  <h1 id="welcome">سكشن هندسة إعدادي</h1>
+  <p>Physics • Chemistry • Programming • Hello Engineer</p>
+</header>
 
-        <div id="page-projects" style="display:none;">
-            <div class="section-header"><h2>Our Projects</h2></div>
-            <div class="grid" id="projectsGrid">
-                <div class="card" onclick="openProjectModal('line-follower')">
-                    <div class="delete-btn"><i class="fas fa-trash"></i></div>
-                    <img src="car1.jpg" onerror="this.src='https://via.placeholder.com/400x200?text=Line+Follower'">
-                    <div class="card-body">
-                        <h3>Line Follower Robot</h3>
-                        <p>Autonomous robot tracking pathways.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+<section class="section">
+  <h2>📚 المواد</h2><br>
+  <div class="cards" id="materials-cards">
+    <!-- المواد هتتحط هنا ديناميكياً -->
+  </div>
+</section>
 
-        <div id="page-dynamic" style="display:none;">
-            <div class="section-header"><h2 id="dynTitle">Page</h2></div>
-            <div class="grid" id="dynGrid"></div>
-        </div>
+<footer>© 2025 Engineering Prep – BIMBO SOFT</footer>
+</div>
 
-        <div id="page-soon" style="display:none;">
-            <div class="coming-soon"><i class="fas fa-layer-group"></i><h2 id="soonTitle">Coming Soon</h2><p>This section is under development.</p></div>
-        </div>
-    </div>
+<!-- Animations -->
+<div class="bg-animations">
+  <div class="atom"></div>
+  <div class="atom small"></div>
+  <div class="bubble"></div>
+  <div class="bubble delay"></div>
+  <div class="code-float">{ }</div>
+  <div class="code-float delay">&lt;/&gt;</div>
+  <div class="code-float binary">0101</div>
+</div>
 
-    <footer>
-        <div class="footer-info">
-            <h3>Physiatić Hub</h3>
-            <p style="opacity:0.7; font-size:0.9rem;">Under Supervision of <b>Dr. Ahmed Khaled</b></p>
-            <div style="margin-top:5px; font-size:0.8rem; opacity:0.6;">Developed by Eng. Adham Sayed</div>
-        </div>
-        <div class="footer-socials">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-            <a href="#"><i class="fas fa-phone"></i></a>
-        </div>
-    </footer>
+<script>
+/* Firebase Config */
+const firebaseConfig = {
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "PUT_YOUR_DOMAIN",
+  projectId: "PUT_PROJECT_ID",
+  storageBucket: "PUT_BUCKET",
+  messagingSenderId: "PUT_ID",
+  appId: "PUT_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-    <div id="add-content-modal">
-        <div class="login-box" style="width:400px;">
-            <h2 style="margin-bottom:15px; color:var(--accent);">Add New Content</h2>
-            <label style="display:block; text-align:left; margin-bottom:5px; font-weight:600;">Content Type</label>
-            <select id="newContentType" class="form-input" onchange="toggleInputs()">
-                <option value="card">Card (Image)</option>
-                <option value="video">Video (YouTube)</option>
-            </select>
-            <div id="imageInputArea" style="text-align:left; margin-bottom:10px;">
-                <label style="font-weight:600;">Card Image:</label>
-                <button onclick="document.getElementById('imgUploadInput').click()" style="padding:10px; border:1px dashed var(--accent); background:none; width:100%; cursor:pointer; color:var(--text-sec); border-radius:8px;">Choose Image</button>
-            </div>
-            <input id="newContentTitle" class="form-input" placeholder="Title">
-            <textarea id="newContentDesc" class="form-input" rows="3" placeholder="Description"></textarea>
-            <div id="videoInputArea" style="display:none;"><input id="newContentLink" class="form-input" placeholder="Paste YouTube Link"></div>
-            <button onclick="submitNewContent()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:8px; margin-top:10px;">Add</button>
-            <button onclick="document.getElementById('add-content-modal').style.display='none'" style="margin-top:10px; background:none; border:none; color:var(--text-sec);">Cancel</button>
-        </div>
-    </div>
+/* المواد اللي هتتحط ديناميك */
+const subjects = [
+  {name:"⚡ فيزياء", desc:"Mechanics – Waves – Motion"},
+  {name:"🧪 كيمياء", desc:"Atoms – Reactions – Bonds"},
+  {name:"💻 برمجة", desc:"C / Python / JS"},
+  {name:"📐 رسم هندسي", desc:"Projection – AutoCAD"},
+  {name:"🧱 ميكانيكا", desc:"Statics – Dynamics"}
+];
 
-    <div class="fab-admin" id="fabAdmin" onclick="openDashboard()"><i class="fas fa-cog"></i></div>
+/* Login */
+function login(){
+  const emailInput = document.getElementById("email");
+  const passwordInput = document.getElementById("password");
+  const email = emailInput.value;
+  const password = passwordInput.value;
 
-    <div id="login-modal">
-        <div class="login-box">
-            <h2>Admin Login</h2>
-            <input id="u" class="form-input" placeholder="User"><input id="p" type="password" class="form-input" placeholder="Pass">
-            <button onclick="login()" style="width:100%; padding:12px; background:var(--accent); color:white; border:none; border-radius:10px; font-weight:bold;">Access</button>
-            <button onclick="document.getElementById('login-modal').style.display='none'" style="margin-top:15px; background:none; border:none; color:var(--text-sec);">Cancel</button>
-        </div>
-    </div>
+  if(!email.includes("@Vision.iron")){
+    alert("الإيميل لازم يكون @Vision.iron");
+    return;
+  }
 
-    <div id="admin-panel">
-        <div class="dash-board">
-            <i class="fas fa-times close-dash" onclick="closeDashboard()"></i>
-            <div class="dash-sidebar">
-                <h3>CONTROL</h3>
-                <div class="sb-btn active" onclick="switchTab('content')">Content</div>
-                <div class="sb-btn" onclick="switchTab('socials')">Socials</div>
-                <div class="sb-btn" onclick="switchTab('team')">Team</div>
-                <div class="sb-btn" onclick="performLogout()" style="margin-top:auto; color:#ff6b6b;">Logout</div>
-            </div>
-            <div class="dash-main">
-                <div id="tab-content" class="dash-section active-sec">
-                    <h2>Content Editor</h2>
-                    <p style="margin-bottom:20px; color:var(--text-sec);">Navigate to page first.</p>
-                    <div style="display:flex; gap:10px;">
-                        <button onclick="enableEdit()" style="padding:15px 30px; background:#2ecc71; color:white; border:none; border-radius:10px; cursor:pointer;">Live Text Edit</button>
-                        <button onclick="openAddContentModal()" style="padding:15px 30px; background:var(--accent); color:white; border:none; border-radius:10px; cursor:pointer;">+ Add Content</button>
-                    </div>
-                </div>
-                <div id="tab-socials" class="dash-section">
-                    <h2>Social Links</h2>
-                    <input id="inFb" class="form-input" placeholder="Facebook"><input id="inWa" class="form-input" placeholder="WhatsApp">
-                    <button onclick="saveSocials()" style="padding:10px 20px; background:var(--accent); color:white; border:none; border-radius:5px;">Save</button>
-                </div>
-                <div id="tab-team" class="dash-section">
-                    <h2>Team Manager</h2>
-                    <div class="setting-row"><input id="newAdminUser" class="form-input" placeholder="User" style="width:48%;"><input id="newAdminPass" class="form-input" placeholder="Pass" style="width:48%;"><button onclick="addNewAdmin()" style="width:100%; padding:10px; background:var(--accent); color:white; border:none; border-radius:5px;">Add Admin</button></div>
-                    <div id="teamTable"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+  auth.signInWithEmailAndPassword(email,password)
+  .then(()=>{
+    document.getElementById("login").style.display="none";
+    document.getElementById("app").style.display="block";
 
-    <div id="project-modal">
-        <div class="project-content">
-            <div class="modal-nav">
-                <h2 style="margin:0; color:var(--accent);">Line Follower Robot</h2>
-                <button class="close-btn" onclick="closeProjectModal()">Close</button>
-            </div>
-            
-            <p style="font-size:1.1rem; line-height:1.8; color:var(--text-sec);">
-                This project demonstrates an autonomous robot capable of tracking a black line on a white surface using IR sensors. 
-                <br><b>Work Team:</b> Abd-Elrahman Yehya, Mohammed Yasser, Mostafa Ashraf, Abdallah Ahmed, Adham Sayed, Adel Farooq.
-            </p>
+    // Hello Engineer
+    document.getElementById("welcome").innerText = "Hello Engineer 👋";
 
-            <div class="gallery-grid">
-                <img src="car1.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
-                <img src="car2.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
-                <img src="car3.jpg" class="gallery-img" onclick="window.open(this.src)" onerror="this.style.display='none'">
-            </div>
+    // المواد
+    const container = document.getElementById("materials-cards");
+    subjects.forEach(s=>{
+      const card = document.createElement("div");
+      card.classList.add("card");
+      card.innerHTML = `<h3>${s.name}</h3><p>${s.desc}</p>`;
+      container.appendChild(card);
+    });
 
-            <hr style="margin:40px 0; border:0; border-top:1px solid rgba(0,0,0,0.1);">
+    startAnimation();
+  })
+  .catch(e=>alert(e.message));
+}
 
-            <div style="margin: 30px 0; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); background:#000;">
-                <video controls style="width: 100%; display: block;" poster="car1.jpg">
-                    <source src="carmotion.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
+/* GSAP Animations */
+function startAnimation(){
+  gsap.from("header",{y:-100,opacity:0,duration:1});
+  gsap.from(".card",{scale:.5,opacity:0,stagger:.3,duration:1});
+}
 
-            <div style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-                <i class="fas fa-file-pdf" style="font-size:1.5rem; color:#e74c3c;"></i><h3 style="margin:0;">Project Documentation</h3>
-            </div>
-            
-            <iframe src="project.pdf" class="doc-viewer"></iframe>
-            <p style="text-align:center; font-size:0.9rem; color:var(--text-sec); margin-top:10px;">* Ensure files are in the folder.</p>
-        </div>
-    </div>
+/* Toggle Password */
+function togglePassword(){
+  const pw = document.getElementById("password");
+  if(pw.type === "password") pw.type = "text";
+  else pw.type = "password";
+}
 
-    <button id="saveBtn" onclick="saveData()">Save Changes</button>
+/* Mouse Physics Interaction */
+document.addEventListener('mousemove',e=>{
+  document.querySelectorAll('.atom').forEach(atom=>{
+    atom.style.left = e.clientX*0.5 + Math.random()*100+'px';
+    atom.style.top = e.clientY*0.5 + Math.random()*100+'px';
+  });
+});
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+/* Bubble Click Pop Sound + Animation */
+document.querySelectorAll('.bubble').forEach(b=>{
+  b.addEventListener('click',()=>{
+    b.classList.add('pop');
+    setTimeout(()=>b.classList.remove('pop'),500);
+    const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+    audio.play();
+  });
+});
+</script>
 
-        // FIREBASE CONFIG
-        const firebaseConfig = {
-          apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
-          authDomain: "physiatic-508a1.firebaseapp.com",
-          projectId: "physiatic-508a1",
-          storageBucket: "physiatic-508a1.firebasestorage.app",
-          messagingSenderId: "729031647428",
-          appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        let currentUser = JSON.parse(localStorage.getItem('user'));
-        let activePage = 'home';
-        let tempImageBase64 = "";
-
-        // --- NAV ---
-        window.route = function(page) {
-            activePage = page;
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-page'));
-            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-            document.getElementById('page-home').style.display='none';
-            document.getElementById('page-projects').style.display='none';
-            document.getElementById('page-dynamic').style.display='none';
-            document.getElementById('page-soon').style.display='none';
-
-            if(page === 'home') document.getElementById('page-home').style.display='block';
-            else if (page === 'projects') document.getElementById('page-projects').style.display='block';
-            else {
-                document.getElementById('page-dynamic').style.display='block';
-                document.getElementById('dynTitle').innerText = page.charAt(0).toUpperCase() + page.slice(1);
-                loadDynamicContent(page);
-            }
-            document.getElementById('sidebarMenu').classList.remove('open');
-            document.querySelector('.overlay-bg').style.display='none';
-            const navLink = document.querySelector(`.nav-link[onclick="route('${page}')"]`);
-            if(navLink) navLink.classList.add('active-page');
-        }
-
-        async function loadDynamicContent(id) {
-            const container = document.getElementById('dynGrid');
-            container.innerHTML = '<p>Loading...</p>';
-            const snap = await getDoc(doc(db, "site_data", "content_"+id));
-            if(snap.exists() && snap.data().html) container.innerHTML = snap.data().html;
-            else container.innerHTML = '<p style="text-align:center; width:100%; color:var(--text-sec);">No content added yet.</p>';
-            if(document.body.classList.contains('editing')) window.enableEdit();
-        }
-
-        // --- ADD CONTENT (Base64 + YouTube) ---
-        window.openAddContentModal = () => {
-            if(activePage === 'home') { alert("Use Live Edit for Home"); return; }
-            document.getElementById('add-content-modal').style.display = 'flex';
-        }
-
-        window.toggleInputs = () => {
-            const type = document.getElementById('newContentType').value;
-            document.getElementById('imageInputArea').style.display = (type === 'card') ? 'block' : 'none';
-            document.getElementById('videoInputArea').style.display = (type === 'video') ? 'block' : 'none';
-        }
-
-        document.getElementById('imgUploadInput').onchange = (e) => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(ev) {
-                const img = new Image(); img.src = ev.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX = 400; const scale = MAX / img.width; canvas.width = MAX; canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    tempImageBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    alert("Image Selected!");
-                }
-            }
-        }
-
-        window.submitNewContent = function() {
-            const type = document.getElementById('newContentType').value;
-            const title = document.getElementById('newContentTitle').value;
-            const desc = document.getElementById('newContentDesc').value;
-            const link = document.getElementById('newContentLink').value;
-            let html = "";
-            
-            if (type === 'video') {
-                let videoId = "";
-                if (link.includes("youtube.com/watch?v=")) videoId = link.split("v=")[1].split("&")[0];
-                else if (link.includes("youtu.be/")) videoId = link.split("youtu.be/")[1];
-                const embedLink = videoId ? `https://www.youtube.com/embed/${videoId}` : link;
-                html = `<div class="card"><div class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></div><div class="card-video"><iframe src="${embedLink}" allowfullscreen></iframe></div><div class="card-body"><h3 contenteditable>${title||"Video"}</h3><p contenteditable>${desc||""}</p></div></div>`;
-            } else {
-                html = `<div class="card"><div class="delete-btn" onclick="deleteCard(this)"><i class="fas fa-trash"></i></div><img src="${tempImageBase64 || 'https://via.placeholder.com/400'}" class="editable-img"><div class="card-body"><h3 contenteditable>${title||"Title"}</h3><p contenteditable>${desc||"..."}</p></div></div>`;
-            }
-
-            const grid = document.getElementById(activePage === 'projects' ? 'projectsGrid' : 'dynGrid');
-            if(grid.innerHTML.includes("<p>")) grid.innerHTML = "";
-            grid.insertAdjacentHTML('beforeend', html);
-            document.getElementById('add-content-modal').style.display='none';
-            window.enableEdit();
-            saveData();
-            tempImageBase64 = "";
-        }
-
-        window.deleteCard = function(btn) { if(confirm("Delete?")) { btn.closest('.card').remove(); saveData(); } }
-
-        // --- AUTH ---
-        window.login = async function() {
-            const u = document.getElementById('u').value; const p = document.getElementById('p').value;
-            if(u === 'Adham' && p === '20250003') {
-                const user = {u:'Adham', role:'super_admin'};
-                localStorage.setItem('user', JSON.stringify(user));
-                await setDoc(doc(db, "settings", "admins"), {list:[user]}, {merge:true});
-                location.reload();
-                return;
-            }
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists() && snap.data().list.find(a => a.u===u && a.p===p)) {
-                localStorage.setItem('user', JSON.stringify(snap.data().list.find(a => a.u===u && a.p===p)));
-                location.reload();
-            } else { alert("Wrong Credentials"); }
-        }
-
-        // --- ADMIN ---
-        window.enableEdit = function() {
-            document.getElementById('admin-panel').style.display='none';
-            document.body.classList.add('editing');
-            document.getElementById('saveBtn').style.display='block';
-            document.querySelectorAll('[data-db], h3, p').forEach(el => el.contentEditable=true);
-        }
-
-        window.saveData = async function() {
-            let payload = {};
-            if(activePage === 'home') {
-                document.querySelectorAll('[data-db]').forEach(el => payload[el.getAttribute('data-db')] = el.innerHTML);
-                await setDoc(doc(db, "site_data", "static_content"), payload, {merge:true});
-            } else {
-                const grid = document.getElementById(activePage === 'projects' ? 'projectsGrid' : 'dynGrid');
-                await setDoc(doc(db, "site_data", "content_"+activePage), {html: grid.innerHTML});
-            }
-            alert("Saved!"); location.reload();
-        }
-
-        window.addNewAdmin = async function() {
-            const u = document.getElementById('newAdmUser').value; const p = document.getElementById('newAdmPass').value;
-            await updateDoc(doc(db, "settings", "admins"), { list: arrayUnion({u,p,role:'admin'}) });
-            renderTeam(); alert("Added!");
-        }
-        async function renderTeam() {
-            const snap = await getDoc(doc(db, "settings", "admins"));
-            if(snap.exists()) document.getElementById('teamTable').innerHTML = snap.data().list.map(a => `<div>${a.u} (${a.role})</div>`).join('');
-        }
-        window.saveSocials = async function() {
-            const s = { fb: document.getElementById('inFb').value, wa: document.getElementById('inWa').value, ph: document.getElementById('inPh').value };
-            await setDoc(doc(db, "settings", "config"), {socials:s}, {merge:true}); alert("Saved!");
-        }
-
-        // --- INIT ---
-        async function init() {
-            if(!sessionStorage.getItem('intro')) {
-                const intro = document.getElementById('intro-overlay');
-                intro.classList.add('active');
-                setTimeout(() => intro.classList.remove('active'), 1800); // Wait for anim
-                sessionStorage.setItem('intro', 'true');
-            }
-            const snap = await getDoc(doc(db, "site_data", "static_content"));
-            if(snap.exists()) {
-                const data = snap.data();
-                document.querySelectorAll('[data-db]').forEach(el => { if(data[el.getAttribute('data-db')]) el.innerHTML = data[el.getAttribute('data-db')]; });
-            }
-            if(currentUser) {
-                document.getElementById('authArea').innerHTML = `<div style="display:flex; align-items:center; gap:10px;"><span style="font-weight:600;">${currentUser.u}</span><img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="nav-avatar" onclick="if(confirm('Logout?')) { localStorage.removeItem('user'); location.reload(); }"></div>`;
-                document.getElementById('fabAdmin').style.display = 'flex';
-                if(currentUser.role === 'super_admin') renderTeam();
-            }
-        }
-        init();
-
-        window.openProjectModal = () => document.getElementById('project-modal').style.display='block';
-        window.closeProjectModal = () => document.getElementById('project-modal').style.display='none';
-        window.toggleTheme = () => { document.body.classList.toggle('dark-mode'); document.getElementById('themeIcon').className = document.body.classList.contains('dark-mode') ? "fas fa-atom" : "fas fa-lightbulb"; }
-        window.toggleSidebar = () => { document.getElementById('sidebarMenu').classList.toggle('open'); document.querySelector('.overlay-bg').style.display = document.getElementById('sidebarMenu').classList.contains('open') ? 'block' : 'none'; }
-        window.openLogin = () => document.getElementById('login-modal').style.display='flex';
-        window.openDashboard = () => document.getElementById('admin-panel').style.display='flex';
-        window.closeDashboard = () => document.getElementById('admin-panel').style.display='none';
-        window.switchTab = (t) => { document.querySelectorAll('.dash-section').forEach(s => s.classList.remove('active-sec')); document.getElementById('tab-'+t).classList.add('active-sec'); }
-        window.performLogout = () => { localStorage.removeItem('user'); location.reload(); }
-    </script>
 </body>
 </html>
