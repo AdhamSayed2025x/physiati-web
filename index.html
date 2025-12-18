@@ -1,193 +1,318 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" translate="no">
 <head>
 <meta charset="UTF-8">
-<title>Engineering Prep Section – Ultimate</title>
+<title>Engineering Prep Section</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Fonts + GSAP -->
+<!-- Disable Google Translate -->
+<meta name="google" content="notranslate">
+<meta http-equiv="Content-Language" content="en">
+
+<!-- Font -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif;}
-body{background:#0b1c2d;color:#fff;overflow-x:hidden;position:relative;}
-canvas{position:fixed;inset:0;z-index:-2;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
+body{background:#0b1c2d;color:#fff;overflow-x:hidden}
 
-/* ===== LOGIN ===== */
-#login{height:100vh;display:flex;justify-content:center;align-items:center;}
-.login-box{background:#12263a;padding:30px;border-radius:15px;width:320px;box-shadow:0 0 30px rgba(0,0,0,.5);}
-.login-box h2{text-align:center;margin-bottom:20px;}
-.login-box input{width:100%;padding:12px;margin-bottom:15px;border:none;border-radius:8px;}
-.login-box .password-container{position:relative;}
-.login-box .toggle-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#fff;}
-.login-box button{width:100%;padding:12px;background:#0d6efd;border:none;color:#fff;border-radius:8px;font-size:16px;cursor:pointer;}
+/* ===== Background Particles ===== */
+canvas{
+  position:fixed;
+  inset:0;
+  z-index:-2;
+}
 
-/* ===== APP ===== */
-#app{display:none;}
-header{padding:20px;text-align:center;background:linear-gradient(135deg,#0d6efd,#6610f2);box-shadow:0 0 20px rgba(0,0,0,.5);}
-.section{padding:60px 20px;text-align:center;}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;max-width:1100px;margin:auto;}
-.card{background:#12263a;border-radius:15px;padding:30px;position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.4);}
-.card h3{margin-bottom:10px;}
-footer{text-align:center;padding:15px;background:#000;font-size:14px;}
+/* ===== Login ===== */
+#login{
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.login-box{
+  background:#12263a;
+  padding:32px;
+  width:330px;
+  border-radius:16px;
+  box-shadow:0 0 40px rgba(0,0,0,.6);
+}
+.login-box h2{text-align:center;margin-bottom:20px}
+.login-box input{
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  margin-bottom:15px;
+}
+.password-container{position:relative}
+.password-container input{
+  direction:ltr;
+  text-align:left;
+  padding-right:42px;
+}
+.toggle-eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  color:#aaa;
+}
+.toggle-eye:hover{color:#0d6efd}
 
-/* ===== Background Animations ===== */
-.bg-animations{position:fixed;inset:0;overflow:hidden;z-index:-1;}
-.atom,.atom::before,.atom::after{border-radius:50%;}
-.atom{position:absolute;width:120px;height:120px;border:2px solid rgba(13,110,253,.4);top:20%;left:10%;animation:rotate 10s linear infinite;}
-.atom::before, .atom::after{content:"";position:absolute;inset:0;border:2px solid rgba(13,110,253,.2);}
-.atom::after{transform:rotate(-60deg);}
-.atom.small{width:70px;height:70px;top:70%;left:80%;animation-duration:6s;}
+.login-box button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#0d6efd;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
 
-.bubble{position:absolute;width:40px;height:40px;background:rgba(0,255,200,.25);border-radius:50%;bottom:-50px;left:30%;animation:bubbleUp 8s infinite;}
-.bubble.delay{left:60%;width:25px;height:25px;animation-delay:3s;}
-.bubble.pop{animation:bubblePop 0.5s forwards;}
+/* ===== App ===== */
+#app{display:none}
+header{
+  padding:25px;
+  text-align:center;
+  background:linear-gradient(135deg,#0d6efd,#6610f2);
+}
+.section{
+  padding:70px 20px;
+  text-align:center;
+}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+  max-width:1200px;
+  margin:auto;
+}
+.card{
+  background:#12263a;
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 10px 35px rgba(0,0,0,.5);
+  position:relative;
+  overflow:hidden;
+}
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);
+  transform:translateX(-100%);
+}
+.card:hover::after{
+  transform:translateX(100%);
+  transition:1s;
+}
+.card h3{margin-bottom:10px}
 
-.code-float{position:absolute;color:#0f0;font-size:26px;opacity:.15;top:40%;left:75%;animation:floatCode 6s ease-in-out infinite;}
-.code-float.delay{top:15%;left:50%;animation-delay:2s;}
-.code-float.binary{top:80%;left:20%;font-size:20px;}
+footer{
+  text-align:center;
+  padding:15px;
+  background:#000;
+  font-size:14px;
+}
 
-@keyframes rotate{from{transform:rotate(0);}to{transform:rotate(360deg);}}
-@keyframes bubbleUp{0%{transform:translateY(0);opacity:.6;}100%{transform:translateY(-600px);opacity:0;}}
-@keyframes floatCode{0%,100%{transform:translateY(0);}50%{transform:translateY(-20px);}}
-@keyframes bubblePop{0%{transform:scale(1);opacity:1;}100%{transform:scale(1.8);opacity:0;}}
+/* ===== Floating Science Animations ===== */
+.atom{
+  position:absolute;
+  width:120px;
+  height:120px;
+  border:2px solid rgba(13,110,253,.4);
+  border-radius:50%;
+  animation:spin 12s linear infinite;
+}
+.atom::before,.atom::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border:2px solid rgba(13,110,253,.2);
+  border-radius:50%;
+}
+.atom::after{transform:rotate(60deg)}
+
+.bubble{
+  position:absolute;
+  bottom:-50px;
+  width:30px;
+  height:30px;
+  background:rgba(0,255,200,.3);
+  border-radius:50%;
+  animation:bubbleUp 8s infinite;
+}
+
+.code-float{
+  position:absolute;
+  color:#00ff88;
+  opacity:.2;
+  font-size:22px;
+  animation:float 6s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bubbleUp{
+  from{transform:translateY(0);opacity:.6}
+  to{transform:translateY(-700px);opacity:0}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+}
 </style>
 </head>
+
 <body>
 
-<!-- Login -->
+<canvas id="particles"></canvas>
+
+<!-- ===== Login ===== -->
 <div id="login">
   <div class="login-box">
-    <h2>تسجيل الدخول</h2>
-    <input type="email" id="email" placeholder="الإيميل">
+    <h2>Sign In</h2>
+    <input type="email" id="email" placeholder="Email">
     <div class="password-container">
-      <input type="password" id="password" placeholder="كلمة المرور">
-      <span class="toggle-eye" onclick="togglePassword()">👁️</span>
+      <input type="password" id="password" placeholder="Password">
+      <i class="fa-solid fa-eye toggle-eye" onclick="togglePassword()"></i>
     </div>
-    <button onclick="login()">دخول</button>
+    <button onclick="login()">Login</button>
   </div>
 </div>
 
-<!-- App -->
+<!-- ===== App ===== -->
 <div id="app">
-<header>
-  <h1 id="welcome">سكشن هندسة إعدادي</h1>
-  <p>Physics • Chemistry • Programming • Hello Engineer</p>
-</header>
+  <header>
+    <h1 id="welcome">Engineering Prep Section</h1>
+    <p>Science • Code • Engineering</p>
+  </header>
 
-<section class="section">
-  <h2>📚 المواد</h2><br>
-  <div class="cards" id="materials-cards">
-    <!-- المواد هتتحط هنا ديناميكياً -->
-  </div>
-</section>
+  <section class="section">
+    <h2>Subjects</h2><br>
+    <div class="cards" id="subjects"></div>
+  </section>
 
-<footer>© 2025 Engineering Prep – BIMBO SOFT</footer>
+  <footer>© 2025 BIMBO SOFT</footer>
 </div>
 
-<!-- Animations -->
-<div class="bg-animations">
-  <div class="atom"></div>
-  <div class="atom small"></div>
-  <div class="bubble"></div>
-  <div class="bubble delay"></div>
-  <div class="code-float">{ }</div>
-  <div class="code-float delay">&lt;/&gt;</div>
-  <div class="code-float binary">0101</div>
-</div>
+<!-- Floating Science Elements -->
+<div class="atom" style="top:20%;left:5%"></div>
+<div class="atom" style="top:70%;left:80%;width:70px;height:70px"></div>
 
-<script>
+<div class="bubble" style="left:20%"></div>
+<div class="bubble" style="left:50%;animation-delay:2s"></div>
+<div class="bubble" style="left:75%;animation-delay:4s"></div>
+
+<div class="code-float" style="top:30%;left:70%">{ }</div>
+<div class="code-float" style="top:60%;left:15%">&lt;/&gt;</div>
+<div class="code-float" style="top:80%;left:45%">0101</div>
+
+<!-- ===== Firebase + Logic ===== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
 /* Firebase Config */
 const firebaseConfig = {
-  apiKey: "PUT_YOUR_KEY",
-  authDomain: "PUT_YOUR_DOMAIN",
-  projectId: "PUT_PROJECT_ID",
-  storageBucket: "PUT_BUCKET",
-  messagingSenderId: "PUT_ID",
-  appId: "PUT_APP_ID"
+  apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
+  authDomain: "physiatic-508a1.firebaseapp.com",
+  projectId: "physiatic-508a1",
+  storageBucket: "physiatic-508a1.firebasestorage.app",
+  messagingSenderId: "729031647428",
+  appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
 };
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 
-/* المواد اللي هتتحط ديناميك */
+initializeApp(firebaseConfig);
+getFirestore();
+getStorage();
+const auth = getAuth();
+
+/* ALL SUBJECTS READY */
 const subjects = [
-  {name:"⚡ فيزياء", desc:"Mechanics – Waves – Motion"},
-  {name:"🧪 كيمياء", desc:"Atoms – Reactions – Bonds"},
-  {name:"💻 برمجة", desc:"C / Python / JS"},
-  {name:"📐 رسم هندسي", desc:"Projection – AutoCAD"},
-  {name:"🧱 ميكانيكا", desc:"Statics – Dynamics"}
+  "Physics",
+  "Chemistry",
+  "Programming",
+  "Engineering Mathematics",
+  "Mechanics",
+  "Engineering Drawing",
+  "Electronics",
+  "Materials Science"
 ];
 
 /* Login */
-function login(){
-  const emailInput = document.getElementById("email");
-  const passwordInput = document.getElementById("password");
+window.login = function(){
   const email = emailInput.value;
   const password = passwordInput.value;
 
-  if(!email.includes("@Vision.iron")){
-    alert("الإيميل لازم يكون @Vision.iron");
+  if(!email.endsWith("@Vision.iron")){
+    alert("Email must end with @Vision.iron");
     return;
   }
 
-  auth.signInWithEmailAndPassword(email,password)
+  signInWithEmailAndPassword(auth,email,password)
   .then(()=>{
-    document.getElementById("login").style.display="none";
-    document.getElementById("app").style.display="block";
+    login.style.display="none";
+    app.style.display="block";
+    welcome.innerText="Hello Engineer 👋";
 
-    // Hello Engineer
-    document.getElementById("welcome").innerText = "Hello Engineer 👋";
-
-    // المواد
-    const container = document.getElementById("materials-cards");
     subjects.forEach(s=>{
-      const card = document.createElement("div");
-      card.classList.add("card");
-      card.innerHTML = `<h3>${s.name}</h3><p>${s.desc}</p>`;
-      container.appendChild(card);
+      const card=document.createElement("div");
+      card.className="card";
+      card.innerHTML=`<h3>${s}</h3><p>Interactive content & animations</p>`;
+      document.getElementById("subjects").appendChild(card);
     });
 
-    startAnimation();
+    gsap.from(".card",{opacity:0,y:40,stagger:.2,duration:1});
   })
   .catch(e=>alert(e.message));
 }
 
-/* GSAP Animations */
-function startAnimation(){
-  gsap.from("header",{y:-100,opacity:0,duration:1});
-  gsap.from(".card",{scale:.5,opacity:0,stagger:.3,duration:1});
-}
-
 /* Toggle Password */
-function togglePassword(){
-  const pw = document.getElementById("password");
-  if(pw.type === "password") pw.type = "text";
-  else pw.type = "password";
+window.togglePassword=function(){
+  const pw=passwordInput;
+  const eye=document.querySelector(".toggle-eye");
+  if(pw.type==="password"){
+    pw.type="text";
+    eye.classList.replace("fa-eye","fa-eye-slash");
+  }else{
+    pw.type="password";
+    eye.classList.replace("fa-eye-slash","fa-eye");
+  }
 }
+</script>
 
-/* Mouse Physics Interaction */
-document.addEventListener('mousemove',e=>{
-  document.querySelectorAll('.atom').forEach(atom=>{
-    atom.style.left = e.clientX*0.5 + Math.random()*100+'px';
-    atom.style.top = e.clientY*0.5 + Math.random()*100+'px';
+<!-- ===== Particle Background ===== -->
+<script>
+const c=document.getElementById("particles"),x=c.getContext("2d");
+c.width=innerWidth;c.height=innerHeight;
+let p=[];
+for(let i=0;i<80;i++){
+  p.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:Math.random()-0.5,vy:Math.random()-0.5});
+}
+function draw(){
+  x.clearRect(0,0,c.width,c.height);
+  p.forEach(e=>{
+    e.x+=e.vx;e.y+=e.vy;
+    if(e.x<0||e.x>c.width)e.vx*=-1;
+    if(e.y<0||e.y>c.height)e.vy*=-1;
+    x.fillStyle="rgba(13,110,253,.5)";
+    x.fillRect(e.x,e.y,2,2);
   });
-});
-
-/* Bubble Click Pop Sound + Animation */
-document.querySelectorAll('.bubble').forEach(b=>{
-  b.addEventListener('click',()=>{
-    b.classList.add('pop');
-    setTimeout(()=>b.classList.remove('pop'),500);
-    const audio = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
-    audio.play();
-  });
-});
+  requestAnimationFrame(draw);
+}
+draw();
 </script>
 
 </body>
