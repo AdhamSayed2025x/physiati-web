@@ -5,43 +5,28 @@
 <title>Engineering Prep Section</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Disable Google Translate -->
 <meta name="google" content="notranslate">
 <meta http-equiv="Content-Language" content="en">
 
-<!-- Font -->
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-<!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
 body{background:#0b1c2d;color:#fff;overflow-x:hidden}
 
-/* ===== Background Particles ===== */
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-2;
-}
+/* Background */
+canvas{position:fixed;inset:0;z-index:-2}
 
-/* ===== Login ===== */
-#login{
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
+/* Login */
+#login{height:100vh;display:flex;align-items:center;justify-content:center}
 .login-box{
   background:#12263a;
   padding:32px;
-  width:330px;
+  width:340px;
   border-radius:16px;
-  box-shadow:0 0 40px rgba(0,0,0,.6);
+  box-shadow:0 0 40px rgba(0,0,0,.6)
 }
 .login-box h2{text-align:center;margin-bottom:20px}
 .login-box input{
@@ -49,13 +34,14 @@ canvas{
   padding:12px;
   border-radius:8px;
   border:none;
-  margin-bottom:15px;
+  margin-bottom:15px
 }
+
 .password-container{position:relative}
 .password-container input{
   direction:ltr;
   text-align:left;
-  padding-right:42px;
+  padding-right:42px
 }
 .toggle-eye{
   position:absolute;
@@ -63,7 +49,7 @@ canvas{
   top:50%;
   transform:translateY(-50%);
   cursor:pointer;
-  color:#aaa;
+  color:#aaa
 }
 .toggle-eye:hover{color:#0d6efd}
 
@@ -75,26 +61,23 @@ canvas{
   background:#0d6efd;
   color:#fff;
   font-size:16px;
-  cursor:pointer;
+  cursor:pointer
 }
 
-/* ===== App ===== */
+/* App */
 #app{display:none}
 header{
-  padding:25px;
+  padding:30px;
   text-align:center;
-  background:linear-gradient(135deg,#0d6efd,#6610f2);
+  background:linear-gradient(135deg,#0d6efd,#6610f2)
 }
-.section{
-  padding:70px 20px;
-  text-align:center;
-}
+.section{padding:70px 20px;text-align:center}
 .cards{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:25px;
   max-width:1200px;
-  margin:auto;
+  margin:auto
 }
 .card{
   background:#12263a;
@@ -102,43 +85,36 @@ header{
   padding:30px;
   box-shadow:0 10px 35px rgba(0,0,0,.5);
   position:relative;
-  overflow:hidden;
+  overflow:hidden
 }
 .card::after{
   content:"";
   position:absolute;
   inset:0;
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);
-  transform:translateX(-100%);
+  transform:translateX(-100%)
 }
 .card:hover::after{
   transform:translateX(100%);
-  transition:1s;
+  transition:1s
 }
-.card h3{margin-bottom:10px}
+footer{text-align:center;padding:15px;background:#000}
 
-footer{
-  text-align:center;
-  padding:15px;
-  background:#000;
-  font-size:14px;
-}
-
-/* ===== Floating Science Animations ===== */
+/* Science Animations */
 .atom{
   position:absolute;
   width:120px;
   height:120px;
   border:2px solid rgba(13,110,253,.4);
   border-radius:50%;
-  animation:spin 12s linear infinite;
+  animation:spin 12s linear infinite
 }
 .atom::before,.atom::after{
   content:"";
   position:absolute;
   inset:0;
   border:2px solid rgba(13,110,253,.2);
-  border-radius:50%;
+  border-radius:50%
 }
 .atom::after{transform:rotate(60deg)}
 
@@ -149,18 +125,17 @@ footer{
   height:30px;
   background:rgba(0,255,200,.3);
   border-radius:50%;
-  animation:bubbleUp 8s infinite;
+  animation:bubbleUp 8s infinite
 }
 
 .code-float{
   position:absolute;
   color:#00ff88;
-  opacity:.2;
+  opacity:.25;
   font-size:22px;
-  animation:float 6s ease-in-out infinite;
+  animation:float 6s ease-in-out infinite
 }
 
-/* Animations */
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes bubbleUp{
   from{transform:translateY(0);opacity:.6}
@@ -177,20 +152,20 @@ footer{
 
 <canvas id="particles"></canvas>
 
-<!-- ===== Login ===== -->
+<!-- LOGIN -->
 <div id="login">
   <div class="login-box">
     <h2>Sign In</h2>
-    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="emailInput" placeholder="Username">
     <div class="password-container">
-      <input type="password" id="password" placeholder="Password">
+      <input type="password" id="passwordInput" placeholder="Password">
       <i class="fa-solid fa-eye toggle-eye" onclick="togglePassword()"></i>
     </div>
     <button onclick="login()">Login</button>
   </div>
 </div>
 
-<!-- ===== App ===== -->
+<!-- APP -->
 <div id="app">
   <header>
     <h1 id="welcome">Engineering Prep Section</h1>
@@ -205,42 +180,18 @@ footer{
   <footer>© 2025 BIMBO SOFT</footer>
 </div>
 
-<!-- Floating Science Elements -->
+<!-- Floating Elements -->
 <div class="atom" style="top:20%;left:5%"></div>
 <div class="atom" style="top:70%;left:80%;width:70px;height:70px"></div>
-
-<div class="bubble" style="left:20%"></div>
-<div class="bubble" style="left:50%;animation-delay:2s"></div>
+<div class="bubble" style="left:25%"></div>
+<div class="bubble" style="left:55%;animation-delay:2s"></div>
 <div class="bubble" style="left:75%;animation-delay:4s"></div>
-
 <div class="code-float" style="top:30%;left:70%">{ }</div>
 <div class="code-float" style="top:60%;left:15%">&lt;/&gt;</div>
 <div class="code-float" style="top:80%;left:45%">0101</div>
 
-<!-- ===== Firebase + Logic ===== -->
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
-/* Firebase Config */
-const firebaseConfig = {
-  apiKey: "AIzaSyAXV0GFrmWdO26Zz8cP5Ko_Kn-9wedeT9o",
-  authDomain: "physiatic-508a1.firebaseapp.com",
-  projectId: "physiatic-508a1",
-  storageBucket: "physiatic-508a1.firebasestorage.app",
-  messagingSenderId: "729031647428",
-  appId: "1:729031647428:web:11bbf71bff5daedc1aa991"
-};
-
-initializeApp(firebaseConfig);
-getFirestore();
-getStorage();
-const auth = getAuth();
-
-/* ALL SUBJECTS READY */
-const subjects = [
+<script>
+const subjects=[
   "Physics",
   "Chemistry",
   "Programming",
@@ -251,36 +202,33 @@ const subjects = [
   "Materials Science"
 ];
 
-/* Login */
-window.login = function(){
-  const email = emailInput.value;
-  const password = passwordInput.value;
+function login(){
+  const u=emailInput.value.trim();
+  const p=passwordInput.value;
 
-  if(!email.endsWith("@Vision.iron")){
-    alert("Email must end with @Vision.iron");
-    return;
+  if(u==="Adham" && p==="12345678"){
+    loginBox();
+  }else{
+    alert("Wrong credentials");
   }
-
-  signInWithEmailAndPassword(auth,email,password)
-  .then(()=>{
-    login.style.display="none";
-    app.style.display="block";
-    welcome.innerText="Hello Engineer 👋";
-
-    subjects.forEach(s=>{
-      const card=document.createElement("div");
-      card.className="card";
-      card.innerHTML=`<h3>${s}</h3><p>Interactive content & animations</p>`;
-      document.getElementById("subjects").appendChild(card);
-    });
-
-    gsap.from(".card",{opacity:0,y:40,stagger:.2,duration:1});
-  })
-  .catch(e=>alert(e.message));
 }
 
-/* Toggle Password */
-window.togglePassword=function(){
+function loginBox(){
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").style.display="block";
+  document.getElementById("welcome").innerText="Hello Engineer 👋";
+
+  subjects.forEach(s=>{
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<h3>${s}</h3><p>Interactive content & animations</p>`;
+    subjectsDiv.appendChild(card);
+  });
+
+  gsap.from(".card",{opacity:0,y:40,stagger:.15,duration:1});
+}
+
+function togglePassword(){
   const pw=passwordInput;
   const eye=document.querySelector(".toggle-eye");
   if(pw.type==="password"){
@@ -291,28 +239,25 @@ window.togglePassword=function(){
     eye.classList.replace("fa-eye-slash","fa-eye");
   }
 }
-</script>
 
-<!-- ===== Particle Background ===== -->
-<script>
+/* Particles */
 const c=document.getElementById("particles"),x=c.getContext("2d");
 c.width=innerWidth;c.height=innerHeight;
-let p=[];
-for(let i=0;i<80;i++){
-  p.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:Math.random()-0.5,vy:Math.random()-0.5});
+let pArr=[];
+for(let i=0;i<90;i++){
+  pArr.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:Math.random()-.5,vy:Math.random()-.5});
 }
-function draw(){
+(function draw(){
   x.clearRect(0,0,c.width,c.height);
-  p.forEach(e=>{
+  pArr.forEach(e=>{
     e.x+=e.vx;e.y+=e.vy;
     if(e.x<0||e.x>c.width)e.vx*=-1;
     if(e.y<0||e.y>c.height)e.vy*=-1;
-    x.fillStyle="rgba(13,110,253,.5)";
+    x.fillStyle="rgba(13,110,253,.6)";
     x.fillRect(e.x,e.y,2,2);
   });
   requestAnimationFrame(draw);
-}
-draw();
+})();
 </script>
 
 </body>
