@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Eng Adham Sayed | BIMBO</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- ================= META ================= -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Portfolio | BIMBO</title>
 
-  <!-- Font Awesome -->
+  <!-- ================= FONTS ================= -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- ================= FONT AWESOME ================= -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
   />
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+  <!-- ================= STYLE ================= -->
   <style>
+    /* =====================================================
+       ROOT COLORS – LIGHT MODE (SOFT ENGINEERING STYLE)
+    ===================================================== */
     :root {
-      --bg: #0f172a;
-      --card: #111827;
-      --primary: #38bdf8;
-      --secondary: #a5b4fc;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --primary: #2563eb;
+      --secondary: #6366f1;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
     }
 
+    /* =====================================================
+       GLOBAL RESET
+    ===================================================== */
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
       scroll-behavior: smooth;
     }
 
@@ -35,38 +48,35 @@
       font-family: 'Cairo', sans-serif;
       background: var(--bg);
       color: var(--text);
-      animation: fadePage 0.8s ease-in-out;
+      line-height: 1.6;
+      animation: pageFade 0.8s ease;
     }
 
-    @keyframes fadePage {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes pageFade {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ================= HEADER ================= */
+    /* =====================================================
+       HEADER / NAVBAR
+    ===================================================== */
     header {
       position: fixed;
       top: 0;
       width: 100%;
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(248,250,252,0.85);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      z-index: 1000;
+      border-bottom: 1px solid var(--border);
+      z-index: 999;
     }
 
-    nav {
-      max-width: 1200px;
+    .nav-container {
+      max-width: 1300px;
       margin: auto;
-      padding: 15px 20px;
+      padding: 16px 24px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
     }
 
     .logo {
@@ -78,36 +88,40 @@
     nav ul {
       list-style: none;
       display: flex;
-      gap: 25px;
+      gap: 28px;
     }
 
-    nav ul li a {
-      color: var(--text);
+    nav a {
       text-decoration: none;
+      color: var(--text);
       font-size: 15px;
-      transition: color 0.3s ease;
+      font-weight: 500;
+      transition: 0.3s;
     }
 
-    nav ul li a i {
-      margin-left: 6px;
+    nav a i {
+      margin-right: 6px;
       color: var(--primary);
     }
 
-    nav ul li a:hover {
+    nav a:hover {
       color: var(--primary);
     }
 
-    /* ================= SECTIONS ================= */
-    section {
-      max-width: 1200px;
+    /* =====================================================
+       MAIN SECTIONS
+    ===================================================== */
+    main {
+      max-width: 1300px;
       margin: auto;
-      padding: 120px 20px 80px;
+      padding: 120px 24px 80px;
     }
 
     .section {
+      margin-bottom: 80px;
       opacity: 0;
       transform: translateY(40px);
-      transition: all 0.7s ease;
+      transition: 0.7s ease;
     }
 
     .section.show {
@@ -115,55 +129,124 @@
       transform: translateY(0);
     }
 
-    .card {
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    /* =====================================================
+       SUBJECTS GRID (HOME PAGE)
+    ===================================================== */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .subject-card {
       background: var(--card);
       border-radius: 18px;
-      padding: 40px;
-      text-align: center;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: 0.4s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
     }
 
-    h1, h2 {
-      margin-bottom: 15px;
+    .subject-card:hover {
+      transform: translateY(-8px);
     }
 
-    p {
-      color: var(--muted);
+    .subject-icon {
+      font-size: 34px;
+      color: var(--primary);
       margin-bottom: 20px;
     }
 
-    /* ================= COMING SOON ================= */
-    .coming-icon {
-      font-size: 50px;
-      color: var(--primary);
+    .subject-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .subject-card p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* =====================================================
+       COMING SOON PAGE STYLE
+    ===================================================== */
+    .coming {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .coming i {
+      font-size: 60px;
+      color: var(--secondary);
       margin-bottom: 20px;
       animation: float 2.5s ease-in-out infinite;
     }
 
     @keyframes float {
       0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
     }
 
-    /* ================= FOOTER ================= */
+    /* =====================================================
+       CHATBOT FLOATING BUTTON
+    ===================================================== */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: 0 15px 40px rgba(37,99,235,0.4);
+      transition: 0.3s ease;
+      z-index: 999;
+    }
+
+    .chatbot-btn:hover {
+      transform: scale(1.1);
+    }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
     footer {
-      background: #020617;
+      background: #f1f5f9;
+      border-top: 1px solid var(--border);
       padding: 40px 20px;
       text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.05);
     }
 
     footer p {
       color: var(--muted);
-      margin-bottom: 15px;
       font-size: 14px;
+      margin-bottom: 12px;
     }
 
     .socials i {
       font-size: 20px;
       margin: 0 10px;
       color: var(--text);
-      transition: all 0.3s ease;
+      transition: 0.3s;
       cursor: pointer;
     }
 
@@ -172,10 +255,12 @@
       transform: translateY(-4px);
     }
 
-    /* ================= RESPONSIVE ================= */
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
     @media (max-width: 768px) {
       nav ul {
-        gap: 15px;
+        gap: 16px;
       }
     }
   </style>
@@ -185,67 +270,82 @@
 
 <!-- ================= HEADER ================= -->
 <header>
-  <nav>
+  <div class="nav-container">
     <div class="logo">Eng Adham Sayed</div>
-    <ul>
-      <li><a href="#home"><i class="fa-solid fa-house"></i> Home</a></li>
-      <li><a href="#subjects"><i class="fa-solid fa-book"></i> Subjects</a></li>
-      <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
-      <li><a href="#chatbot"><i class="fa-solid fa-robot"></i> ChatBot</a></li>
-      <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
-    </ul>
-  </nav>
+    <nav>
+      <ul>
+        <li><a href="#home"><i class="fa-solid fa-house"></i>Home</a></li>
+        <li><a href="#subjects"><i class="fa-solid fa-book"></i>Subjects</a></li>
+        <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i>Projects</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<!-- ================= HOME ================= -->
-<section id="home" class="section">
-  <div class="card">
-    <h1>Engineering Preparatory Portfolio</h1>
-    <p>Personal website for projects, subjects & smart chatbot experience.</p>
-  </div>
-</section>
+<!-- ================= MAIN ================= -->
+<main>
 
-<!-- ================= SUBJECTS ================= -->
-<section id="subjects" class="section">
-  <div class="card">
-    <div class="coming-icon"><i class="fa-solid fa-gears"></i></div>
-    <h2>Subjects</h2>
-    <p>Coming Soon</p>
-  </div>
-</section>
+  <!-- HOME / SUBJECTS -->
+  <section id="subjects" class="section">
+    <h2 class="section-title">Engineering Preparatory Subjects</h2>
+    <p class="section-desc">All subjects, projects and labs will be added here.</p>
 
-<!-- ================= PROJECTS ================= -->
-<section id="projects" class="section">
-  <div class="card">
-    <div class="coming-icon"><i class="fa-solid fa-code"></i></div>
-    <h2>Projects</h2>
-    <p>Coming Soon</p>
-  </div>
-</section>
+    <div class="subjects-grid">
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-square-root-variable"></i></div>
+        <h3>Engineering Mathematics</h3>
+        <p>Coming Soon</p>
+      </div>
 
-<!-- ================= CHATBOT ================= -->
-<section id="chatbot" class="section">
-  <div class="card">
-    <div class="coming-icon"><i class="fa-solid fa-microphone-lines"></i></div>
-    <h2>Smart Voice ChatBot</h2>
-    <p>Coming Soon</p>
-  </div>
-</section>
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-atom"></i></div>
+        <h3>Physics</h3>
+        <p>Coming Soon</p>
+      </div>
 
-<!-- ================= CONTACT ================= -->
-<section id="contact" class="section">
-  <div class="card">
-    <div class="coming-icon"><i class="fa-solid fa-address-card"></i></div>
-    <h2>Contact</h2>
-    <p>Coming Soon</p>
-  </div>
-</section>
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-drafting-compass"></i></div>
+        <h3>Engineering Drawing</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-microchip"></i></div>
+        <h3>Computer Basics</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-gears"></i></div>
+        <h3>Mechanics</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-flask"></i></div>
+        <h3>Chemistry</h3>
+        <p>Coming Soon</p>
+      </div>
+
+      <div class="subject-card">
+        <div class="subject-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Technical Skills</h3>
+        <p>Coming Soon</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ================= CHATBOT ICON ================= -->
+<div class="chatbot-btn" title="ChatBot">
+  <i class="fa-solid fa-robot"></i>
+</div>
 
 <!-- ================= FOOTER ================= -->
 <footer>
   <p>© All Rights Reserved to <strong>BIMBO</strong></p>
   <p>Developed by <strong>Eng&lt;Adham/Sayed&gt;</strong></p>
-
   <div class="socials">
     <i class="fa-brands fa-facebook"></i>
     <i class="fa-brands fa-instagram"></i>
@@ -258,19 +358,18 @@
   </div>
 </footer>
 
+<!-- ================= SCRIPT ================= -->
 <script>
-  const sections = document.querySelectorAll(".section");
-
+  const sections = document.querySelectorAll('.section');
   const reveal = () => {
     sections.forEach(sec => {
       const top = sec.getBoundingClientRect().top;
       if (top < window.innerHeight - 120) {
-        sec.classList.add("show");
+        sec.classList.add('show');
       }
     });
   };
-
-  window.addEventListener("scroll", reveal);
+  window.addEventListener('scroll', reveal);
   reveal();
 </script>
 
