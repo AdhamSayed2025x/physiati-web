@@ -1,376 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ================= META ================= -->
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engineering Portfolio | BIMBO</title>
+<meta charset="UTF-8">
+<title>Eng Adham Sayed | BIMBO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ================= FONTS ================= -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- ================= FONT AWESOME ================= -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- ================= STYLE ================= -->
-  <style>
-    /* =====================================================
-       ROOT COLORS – LIGHT MODE (SOFT ENGINEERING STYLE)
-    ===================================================== */
-    :root {
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --primary: #2563eb;
-      --secondary: #6366f1;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e2e8f0;
-      --shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
+<style>
+/* ================= ROOT ================= */
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --text: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+}
 
-    /* =====================================================
-       GLOBAL RESET
-    ===================================================== */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+.dark {
+  --bg: #0f172a;
+  --card: #111827;
+  --primary: #38bdf8;
+  --text: #e5e7eb;
+  --muted: #94a3b8;
+  --border: #1e293b;
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: 'Cairo', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      animation: pageFade 0.8s ease;
-    }
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-    @keyframes pageFade {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+/* ================= INTRO ================= */
+#intro {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
 
-    /* =====================================================
-       HEADER / NAVBAR
-    ===================================================== */
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background: rgba(248,250,252,0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      z-index: 999;
-    }
+#intro h1 {
+  font-size: 48px;
+  color: var(--primary);
+  animation: boom 1.2s ease;
+}
 
-    .nav-container {
-      max-width: 1300px;
-      margin: auto;
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+@keyframes boom {
+  0% { transform: scale(0); opacity: 0; }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
 
-    .logo {
-      font-weight: 700;
-      font-size: 20px;
-      color: var(--primary);
-    }
+/* ================= HEADER ================= */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+}
 
-    nav ul {
-      list-style: none;
-      display: flex;
-      gap: 28px;
-    }
+.nav {
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    nav a {
-      text-decoration: none;
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 500;
-      transition: 0.3s;
-    }
+nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: var(--text);
+}
 
-    nav a i {
-      margin-right: 6px;
-      color: var(--primary);
-    }
+.toggle {
+  cursor: pointer;
+  font-size: 18px;
+  color: var(--primary);
+}
 
-    nav a:hover {
-      color: var(--primary);
-    }
+/* ================= MAIN ================= */
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 120px 20px 120px;
+}
 
-    /* =====================================================
-       MAIN SECTIONS
-    ===================================================== */
-    main {
-      max-width: 1300px;
-      margin: auto;
-      padding: 120px 24px 80px;
-    }
+section {
+  scroll-margin-top: 100px;
+}
 
-    .section {
-      margin-bottom: 80px;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: 0.7s ease;
-    }
+/* ================= SUBJECTS ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 20px;
+}
 
-    .section.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+.card {
+  background: var(--card);
+  padding: 25px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: .3s;
+}
 
-    .section-title {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
+.card:hover {
+  transform: translateY(-6px);
+}
 
-    .section-desc {
-      color: var(--muted);
-      margin-bottom: 40px;
-    }
+.card i {
+  font-size: 30px;
+  color: var(--primary);
+  margin-bottom: 15px;
+}
 
-    /* =====================================================
-       SUBJECTS GRID (HOME PAGE)
-    ===================================================== */
-    .subjects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 25px;
-    }
+/* ================= SUBJECT PAGE ================= */
+#subjectPage {
+  display: none;
+}
 
-    .subject-card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      transition: 0.4s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
+.tabs button {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .subject-card:hover {
-      transform: translateY(-8px);
-    }
+.coming {
+  margin-top: 40px;
+  text-align: center;
+}
 
-    .subject-icon {
-      font-size: 34px;
-      color: var(--primary);
-      margin-bottom: 20px;
-    }
+.coming i {
+  font-size: 60px;
+  color: var(--primary);
+  animation: float 2s infinite;
+}
 
-    .subject-card h3 {
-      font-size: 18px;
-      margin-bottom: 8px;
-    }
+@keyframes float {
+  50% { transform: translateY(-10px); }
+}
 
-    .subject-card p {
-      color: var(--muted);
-      font-size: 14px;
-    }
+/* ================= CHATBOT ================= */
+#chatbot {
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  width: 300px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  display: none;
+  flex-direction: column;
+}
 
-    /* =====================================================
-       COMING SOON PAGE STYLE
-    ===================================================== */
-    .coming {
-      text-align: center;
-      padding: 80px 20px;
-    }
+#chatbot header {
+  padding: 10px;
+  background: var(--primary);
+  color: white;
+}
 
-    .coming i {
-      font-size: 60px;
-      color: var(--secondary);
-      margin-bottom: 20px;
-      animation: float 2.5s ease-in-out infinite;
-    }
+#chatbot .body {
+  padding: 10px;
+  height: 200px;
+  overflow-y: auto;
+}
 
-    @keyframes float {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
+#chatbot input {
+  border: none;
+  border-top: 1px solid var(--border);
+  padding: 10px;
+}
 
-    /* =====================================================
-       CHATBOT FLOATING BUTTON
-    ===================================================== */
-    .chatbot-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      cursor: pointer;
-      box-shadow: 0 15px 40px rgba(37,99,235,0.4);
-      transition: 0.3s ease;
-      z-index: 999;
-    }
+#chatBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
 
-    .chatbot-btn:hover {
-      transform: scale(1.1);
-    }
-
-    /* =====================================================
-       FOOTER
-    ===================================================== */
-    footer {
-      background: #f1f5f9;
-      border-top: 1px solid var(--border);
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    footer p {
-      color: var(--muted);
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-
-    .socials i {
-      font-size: 20px;
-      margin: 0 10px;
-      color: var(--text);
-      transition: 0.3s;
-      cursor: pointer;
-    }
-
-    .socials i:hover {
-      color: var(--primary);
-      transform: translateY(-4px);
-    }
-
-    /* =====================================================
-       RESPONSIVE
-    ===================================================== */
-    @media (max-width: 768px) {
-      nav ul {
-        gap: 16px;
-      }
-    }
-  </style>
+/* ================= FOOTER ================= */
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<div id="intro"><h1>Hello Engineer</h1></div>
+
 <header>
-  <div class="nav-container">
-    <div class="logo">Eng Adham Sayed</div>
-    <nav>
-      <ul>
-        <li><a href="#home"><i class="fa-solid fa-house"></i>Home</a></li>
-        <li><a href="#subjects"><i class="fa-solid fa-book"></i>Subjects</a></li>
-        <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i>Projects</a></li>
-      </ul>
-    </nav>
+  <div class="nav">
+    <strong>Eng Adham Sayed</strong>
+    <div>
+      <a href="#subjects">Subjects</a>
+      <a href="#projects">Projects</a>
+      <span class="toggle" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></span>
+    </div>
   </div>
 </header>
 
-<!-- ================= MAIN ================= -->
 <main>
+<section id="subjects">
+  <h2>Engineering Preparatory Subjects</h2>
+  <div class="grid">
+    <div class="card" onclick="openSubject('Mathematics')"><i class="fa-solid fa-square-root-variable"></i>Mathematics</div>
+    <div class="card" onclick="openSubject('Physics')"><i class="fa-solid fa-atom"></i>Physics</div>
+    <div class="card" onclick="openSubject('Drawing')"><i class="fa-solid fa-drafting-compass"></i>Drawing</div>
+  </div>
+</section>
 
-  <!-- HOME / SUBJECTS -->
-  <section id="subjects" class="section">
-    <h2 class="section-title">Engineering Preparatory Subjects</h2>
-    <p class="section-desc">All subjects, projects and labs will be added here.</p>
-
-    <div class="subjects-grid">
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-square-root-variable"></i></div>
-        <h3>Engineering Mathematics</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-atom"></i></div>
-        <h3>Physics</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-drafting-compass"></i></div>
-        <h3>Engineering Drawing</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-microchip"></i></div>
-        <h3>Computer Basics</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-gears"></i></div>
-        <h3>Mechanics</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-flask"></i></div>
-        <h3>Chemistry</h3>
-        <p>Coming Soon</p>
-      </div>
-
-      <div class="subject-card">
-        <div class="subject-icon"><i class="fa-solid fa-chart-line"></i></div>
-        <h3>Technical Skills</h3>
-        <p>Coming Soon</p>
-      </div>
-    </div>
-  </section>
-
+<section id="subjectPage">
+  <h2 id="subjectTitle"></h2>
+  <div class="tabs">
+    <button onclick="showComing()">Labs</button>
+    <button onclick="showComing()">Projects</button>
+    <button onclick="showComing()">Reports</button>
+  </div>
+  <div class="coming" id="coming">
+    <i class="fa-solid fa-hourglass-half"></i>
+    <p>Coming Soon</p>
+  </div>
+</section>
 </main>
 
-<!-- ================= CHATBOT ICON ================= -->
-<div class="chatbot-btn" title="ChatBot">
-  <i class="fa-solid fa-robot"></i>
+<div id="chatbot">
+  <header>Assistant</header>
+  <div class="body" id="chatBody"></div>
+  <input placeholder="Ask me..." onkeydown="chat(event)">
 </div>
 
-<!-- ================= FOOTER ================= -->
+<div id="chatBtn" onclick="toggleChat()">
+  <i class="fa-solid fa-comments"></i>
+</div>
+
 <footer>
-  <p>© All Rights Reserved to <strong>BIMBO</strong></p>
-  <p>Developed by <strong>Eng&lt;Adham/Sayed&gt;</strong></p>
-  <div class="socials">
-    <i class="fa-brands fa-facebook"></i>
-    <i class="fa-brands fa-instagram"></i>
-    <i class="fa-brands fa-x-twitter"></i>
-    <i class="fa-brands fa-linkedin"></i>
-    <i class="fa-brands fa-github"></i>
-    <i class="fa-brands fa-youtube"></i>
-    <i class="fa-brands fa-telegram"></i>
-    <i class="fa-brands fa-whatsapp"></i>
+  <span>© BIMBO</span>
+  <span>Eng&lt;Adham/Sayed&gt;</span>
+  <div>
+    <!-- PUT YOUR LINKS HERE -->
+    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+    <a href="#"><i class="fa-brands fa-github"></i></a>
   </div>
 </footer>
 
-<!-- ================= SCRIPT ================= -->
 <script>
-  const sections = document.querySelectorAll('.section');
-  const reveal = () => {
-    sections.forEach(sec => {
-      const top = sec.getBoundingClientRect().top;
-      if (top < window.innerHeight - 120) {
-        sec.classList.add('show');
-      }
-    });
-  };
-  window.addEventListener('scroll', reveal);
-  reveal();
+/* INTRO */
+if(sessionStorage.getItem("visited")){
+  document.getElementById("intro").style.display="none";
+}else{
+  sessionStorage.setItem("visited","yes");
+  setTimeout(()=>document.getElementById("intro").style.display="none",1500);
+}
+
+/* SUBJECT */
+function openSubject(name){
+  document.getElementById("subjects").style.display="none";
+  document.getElementById("subjectPage").style.display="block";
+  document.getElementById("subjectTitle").innerText = name;
+}
+function showComing(){
+  document.getElementById("coming").style.display="block";
+}
+
+/* CHAT */
+function toggleChat(){
+  const c=document.getElementById("chatbot");
+  c.style.display = c.style.display==="flex"?"none":"flex";
+}
+function chat(e){
+  if(e.key==="Enter"){
+    const msg=e.target.value.toLowerCase();
+    const body=document.getElementById("chatBody");
+    body.innerHTML+=`<p><b>You:</b> ${msg}</p>`;
+    body.innerHTML+=`<p><b>Bot:</b> This section is coming soon.</p>`;
+    e.target.value="";
+  }
+}
+
+/* THEME */
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+}
 </script>
 
 </body>
