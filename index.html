@@ -1,263 +1,277 @@
 <!DOCTYPE html>
-<html lang="en" translate="no">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>Engineering Prep Section</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Eng Adham Sayed | BIMBO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<meta name="google" content="notranslate">
-<meta http-equiv="Content-Language" content="en">
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Cairo',sans-serif}
-body{background:#0b1c2d;color:#fff;overflow-x:hidden}
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --primary: #38bdf8;
+      --secondary: #a5b4fc;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+    }
 
-/* Background */
-canvas{position:fixed;inset:0;z-index:-2}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
 
-/* Login */
-#login{height:100vh;display:flex;align-items:center;justify-content:center}
-.login-box{
-  background:#12263a;
-  padding:32px;
-  width:340px;
-  border-radius:16px;
-  box-shadow:0 0 40px rgba(0,0,0,.6)
-}
-.login-box h2{text-align:center;margin-bottom:20px}
-.login-box input{
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  margin-bottom:15px
-}
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      animation: fadePage 0.8s ease-in-out;
+    }
 
-.password-container{position:relative}
-.password-container input{
-  direction:ltr;
-  text-align:left;
-  padding-right:42px
-}
-.toggle-eye{
-  position:absolute;
-  right:12px;
-  top:50%;
-  transform:translateY(-50%);
-  cursor:pointer;
-  color:#aaa
-}
-.toggle-eye:hover{color:#0d6efd}
+    @keyframes fadePage {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.login-box button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:#0d6efd;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer
-}
+    /* ================= HEADER ================= */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      z-index: 1000;
+    }
 
-/* App */
-#app{display:none}
-header{
-  padding:30px;
-  text-align:center;
-  background:linear-gradient(135deg,#0d6efd,#6610f2)
-}
-.section{padding:70px 20px;text-align:center}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:25px;
-  max-width:1200px;
-  margin:auto
-}
-.card{
-  background:#12263a;
-  border-radius:16px;
-  padding:30px;
-  box-shadow:0 10px 35px rgba(0,0,0,.5);
-  position:relative;
-  overflow:hidden
-}
-.card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.08),transparent);
-  transform:translateX(-100%)
-}
-.card:hover::after{
-  transform:translateX(100%);
-  transition:1s
-}
-footer{text-align:center;padding:15px;background:#000}
+    nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-/* Science Animations */
-.atom{
-  position:absolute;
-  width:120px;
-  height:120px;
-  border:2px solid rgba(13,110,253,.4);
-  border-radius:50%;
-  animation:spin 12s linear infinite
-}
-.atom::before,.atom::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border:2px solid rgba(13,110,253,.2);
-  border-radius:50%
-}
-.atom::after{transform:rotate(60deg)}
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+      color: var(--primary);
+    }
 
-.bubble{
-  position:absolute;
-  bottom:-50px;
-  width:30px;
-  height:30px;
-  background:rgba(0,255,200,.3);
-  border-radius:50%;
-  animation:bubbleUp 8s infinite
-}
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
 
-.code-float{
-  position:absolute;
-  color:#00ff88;
-  opacity:.25;
-  font-size:22px;
-  animation:float 6s ease-in-out infinite
-}
+    nav ul li a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.3s ease;
+    }
 
-@keyframes spin{to{transform:rotate(360deg)}}
-@keyframes bubbleUp{
-  from{transform:translateY(0);opacity:.6}
-  to{transform:translateY(-700px);opacity:0}
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-}
-</style>
+    nav ul li a i {
+      margin-left: 6px;
+      color: var(--primary);
+    }
+
+    nav ul li a:hover {
+      color: var(--primary);
+    }
+
+    /* ================= SECTIONS ================= */
+    section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 120px 20px 80px;
+    }
+
+    .section {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.7s ease;
+    }
+
+    .section.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+
+    h1, h2 {
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* ================= COMING SOON ================= */
+    .coming-icon {
+      font-size: 50px;
+      color: var(--primary);
+      margin-bottom: 20px;
+      animation: float 2.5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      background: #020617;
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    footer p {
+      color: var(--muted);
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .socials i {
+      font-size: 20px;
+      margin: 0 10px;
+      color: var(--text);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .socials i:hover {
+      color: var(--primary);
+      transform: translateY(-4px);
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 768px) {
+      nav ul {
+        gap: 15px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
+<!-- ================= HEADER ================= -->
+<header>
+  <nav>
+    <div class="logo">Eng Adham Sayed</div>
+    <ul>
+      <li><a href="#home"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li><a href="#subjects"><i class="fa-solid fa-book"></i> Subjects</a></li>
+      <li><a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a></li>
+      <li><a href="#chatbot"><i class="fa-solid fa-robot"></i> ChatBot</a></li>
+      <li><a href="#contact"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+    </ul>
+  </nav>
+</header>
 
-<!-- LOGIN -->
-<div id="login">
-  <div class="login-box">
-    <h2>Sign In</h2>
-    <input type="text" id="emailInput" placeholder="Username">
-    <div class="password-container">
-      <input type="password" id="passwordInput" placeholder="Password">
-      <i class="fa-solid fa-eye toggle-eye" onclick="togglePassword()"></i>
-    </div>
-    <button onclick="login()">Login</button>
+<!-- ================= HOME ================= -->
+<section id="home" class="section">
+  <div class="card">
+    <h1>Engineering Preparatory Portfolio</h1>
+    <p>Personal website for projects, subjects & smart chatbot experience.</p>
   </div>
-</div>
+</section>
 
-<!-- APP -->
-<div id="app">
-  <header>
-    <h1 id="welcome">Engineering Prep Section</h1>
-    <p>Science • Code • Engineering</p>
-  </header>
+<!-- ================= SUBJECTS ================= -->
+<section id="subjects" class="section">
+  <div class="card">
+    <div class="coming-icon"><i class="fa-solid fa-gears"></i></div>
+    <h2>Subjects</h2>
+    <p>Coming Soon</p>
+  </div>
+</section>
 
-  <section class="section">
-    <h2>Subjects</h2><br>
-    <div class="cards" id="subjects"></div>
-  </section>
+<!-- ================= PROJECTS ================= -->
+<section id="projects" class="section">
+  <div class="card">
+    <div class="coming-icon"><i class="fa-solid fa-code"></i></div>
+    <h2>Projects</h2>
+    <p>Coming Soon</p>
+  </div>
+</section>
 
-  <footer>© 2025 BIMBO SOFT</footer>
-</div>
+<!-- ================= CHATBOT ================= -->
+<section id="chatbot" class="section">
+  <div class="card">
+    <div class="coming-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+    <h2>Smart Voice ChatBot</h2>
+    <p>Coming Soon</p>
+  </div>
+</section>
 
-<!-- Floating Elements -->
-<div class="atom" style="top:20%;left:5%"></div>
-<div class="atom" style="top:70%;left:80%;width:70px;height:70px"></div>
-<div class="bubble" style="left:25%"></div>
-<div class="bubble" style="left:55%;animation-delay:2s"></div>
-<div class="bubble" style="left:75%;animation-delay:4s"></div>
-<div class="code-float" style="top:30%;left:70%">{ }</div>
-<div class="code-float" style="top:60%;left:15%">&lt;/&gt;</div>
-<div class="code-float" style="top:80%;left:45%">0101</div>
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="section">
+  <div class="card">
+    <div class="coming-icon"><i class="fa-solid fa-address-card"></i></div>
+    <h2>Contact</h2>
+    <p>Coming Soon</p>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <p>© All Rights Reserved to <strong>BIMBO</strong></p>
+  <p>Developed by <strong>Eng&lt;Adham/Sayed&gt;</strong></p>
+
+  <div class="socials">
+    <i class="fa-brands fa-facebook"></i>
+    <i class="fa-brands fa-instagram"></i>
+    <i class="fa-brands fa-x-twitter"></i>
+    <i class="fa-brands fa-linkedin"></i>
+    <i class="fa-brands fa-github"></i>
+    <i class="fa-brands fa-youtube"></i>
+    <i class="fa-brands fa-telegram"></i>
+    <i class="fa-brands fa-whatsapp"></i>
+  </div>
+</footer>
 
 <script>
-const subjects=[
-  "Physics",
-  "Chemistry",
-  "Programming",
-  "Engineering Mathematics",
-  "Mechanics",
-  "Engineering Drawing",
-  "Electronics",
-  "Materials Science"
-];
+  const sections = document.querySelectorAll(".section");
 
-function login(){
-  const u=emailInput.value.trim();
-  const p=passwordInput.value;
+  const reveal = () => {
+    sections.forEach(sec => {
+      const top = sec.getBoundingClientRect().top;
+      if (top < window.innerHeight - 120) {
+        sec.classList.add("show");
+      }
+    });
+  };
 
-  if(u==="Adham" && p==="12345678"){
-    loginBox();
-  }else{
-    alert("Wrong credentials");
-  }
-}
-
-function loginBox(){
-  document.getElementById("login").style.display="none";
-  document.getElementById("app").style.display="block";
-  document.getElementById("welcome").innerText="Hello Engineer 👋";
-
-  subjects.forEach(s=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML=`<h3>${s}</h3><p>Interactive content & animations</p>`;
-    subjectsDiv.appendChild(card);
-  });
-
-  gsap.from(".card",{opacity:0,y:40,stagger:.15,duration:1});
-}
-
-function togglePassword(){
-  const pw=passwordInput;
-  const eye=document.querySelector(".toggle-eye");
-  if(pw.type==="password"){
-    pw.type="text";
-    eye.classList.replace("fa-eye","fa-eye-slash");
-  }else{
-    pw.type="password";
-    eye.classList.replace("fa-eye-slash","fa-eye");
-  }
-}
-
-/* Particles */
-const c=document.getElementById("particles"),x=c.getContext("2d");
-c.width=innerWidth;c.height=innerHeight;
-let pArr=[];
-for(let i=0;i<90;i++){
-  pArr.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:Math.random()-.5,vy:Math.random()-.5});
-}
-(function draw(){
-  x.clearRect(0,0,c.width,c.height);
-  pArr.forEach(e=>{
-    e.x+=e.vx;e.y+=e.vy;
-    if(e.x<0||e.x>c.width)e.vx*=-1;
-    if(e.y<0||e.y>c.height)e.vy*=-1;
-    x.fillStyle="rgba(13,110,253,.6)";
-    x.fillRect(e.x,e.y,2,2);
-  });
-  requestAnimationFrame(draw);
-})();
+  window.addEventListener("scroll", reveal);
+  reveal();
 </script>
 
 </body>
