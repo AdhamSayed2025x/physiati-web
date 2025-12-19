@@ -1,329 +1,306 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Eng Adham Sayed | BIMBO</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eng Adham Sayed</title>  <!-- Font Awesome -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />  <!-- Google Font -->  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">  <style>
+    /* ===================== RESET ===================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    :root {
+      --bg: #f7f9fc;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #777;
+      --primary: #4f7cff;
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
 
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    body.dark {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #38bdf8;
+    }
 
-<style>
-/* ================= ROOT ================= */
-:root {
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --primary: #2563eb;
-  --text: #0f172a;
-  --muted: #64748b;
-  --border: #e2e8f0;
-}
+    body {
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-.dark {
-  --bg: #0f172a;
-  --card: #111827;
-  --primary: #38bdf8;
-  --text: #e5e7eb;
-  --muted: #94a3b8;
-  --border: #1e293b;
-}
+    /* ===================== INTRO ===================== */
+    #intro {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle, var(--primary), #000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeOut 1s ease forwards;
+      animation-delay: 2.5s;
+    }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    #intro h1 {
+      color: #fff;
+      font-size: 48px;
+      animation: pop 1s ease;
+    }
 
-body {
-  font-family: 'Cairo', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-}
+    @keyframes pop {
+      0% {transform: scale(0); opacity: 0}
+      100% {transform: scale(1); opacity: 1}
+    }
 
-/* ================= INTRO ================= */
-#intro {
-  position: fixed;
-  inset: 0;
-  background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
+    @keyframes fadeOut {
+      to {opacity: 0; visibility: hidden}
+    }
 
-#intro h1 {
-  font-size: 48px;
-  color: var(--primary);
-  animation: boom 1.2s ease;
-}
+    /* ===================== HEADER ===================== */
+    header {
+      height: 70px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      z-index: 10;
+    }
 
-@keyframes boom {
-  0% { transform: scale(0); opacity: 0; }
-  70% { transform: scale(1.2); }
-  100% { transform: scale(1); opacity: 1; }
-}
+    header h2 {
+      color: var(--primary);
+    }
 
-/* ================= HEADER ================= */
-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: var(--card);
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-}
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-.nav {
-  max-width: 1200px;
-  margin: auto;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+    nav a i { margin-right: 6px; }
 
-nav a {
-  margin-left: 20px;
-  text-decoration: none;
-  color: var(--text);
-}
+    /* ===================== MAIN ===================== */
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      animation: slideUp 0.6s ease;
+    }
 
-.toggle {
-  cursor: pointer;
-  font-size: 18px;
-  color: var(--primary);
-}
+    @keyframes slideUp {
+      from {opacity: 0; transform: translateY(20px)}
+      to {opacity: 1; transform: translateY(0)}
+    }
 
-/* ================= MAIN ================= */
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 120px 20px 120px;
-}
+    h1.section-title {
+      margin-bottom: 30px;
+    }
 
-section {
-  scroll-margin-top: 100px;
-}
+    /* ===================== GRID ===================== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 25px;
+    }
 
-/* ================= SUBJECTS ================= */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap: 20px;
-}
+    .card {
+      background: var(--card);
+      padding: 25px;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-.card {
-  background: var(--card);
-  padding: 25px;
-  border-radius: 16px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: .3s;
-}
+    .card:hover {
+      transform: translateY(-8px);
+    }
 
-.card:hover {
-  transform: translateY(-6px);
-}
+    .card i {
+      font-size: 36px;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
 
-.card i {
-  font-size: 30px;
-  color: var(--primary);
-  margin-bottom: 15px;
-}
+    .card h3 { margin-bottom: 5px; }
 
-/* ================= SUBJECT PAGE ================= */
-#subjectPage {
-  display: none;
-}
+    .muted { color: var(--muted); }
 
-.tabs button {
-  margin-right: 10px;
-  padding: 10px 20px;
-  border: none;
-  background: var(--primary);
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    /* ===================== TABS ===================== */
+    .tabs {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
 
-.coming {
-  margin-top: 40px;
-  text-align: center;
-}
+    .tab {
+      padding: 10px 20px;
+      background: var(--card);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+    }
 
-.coming i {
-  font-size: 60px;
-  color: var(--primary);
-  animation: float 2s infinite;
-}
+    /* ===================== COMING ===================== */
+    .coming {
+      text-align: center;
+      margin-top: 60px;
+    }
 
-@keyframes float {
-  50% { transform: translateY(-10px); }
-}
+    .coming i {
+      font-size: 60px;
+      color: var(--primary);
+      animation: spin 2s linear infinite;
+    }
 
-/* ================= CHATBOT ================= */
-#chatbot {
-  position: fixed;
-  bottom: 90px;
-  right: 30px;
-  width: 300px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  display: none;
-  flex-direction: column;
-}
+    @keyframes spin {
+      from {transform: rotate(0)}
+      to {transform: rotate(360deg)}
+    }
 
-#chatbot header {
-  padding: 10px;
-  background: var(--primary);
-  color: white;
-}
+    /* ===================== FOOTER ===================== */
+    footer {
+      height: 55px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 25px;
+      box-shadow: var(--shadow);
+    }
 
-#chatbot .body {
-  padding: 10px;
-  height: 200px;
-  overflow-y: auto;
-}
+    footer .social i {
+      margin-left: 12px;
+      cursor: pointer;
+    }
 
-#chatbot input {
-  border: none;
-  border-top: 1px solid var(--border);
-  padding: 10px;
-}
+    /* ===================== CHATBOT ===================== */
+    #chat-btn {
+      position: fixed;
+      right: 25px;
+      bottom: 80px;
+      background: var(--primary);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
 
-#chatBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 30px;
-  width: 60px;
-  height: 60px;
-  background: var(--primary);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
+    #chat {
+      position: fixed;
+      right: 25px;
+      bottom: 150px;
+      width: 280px;
+      height: 360px;
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      display: none;
+      flex-direction: column;
+    }
 
-/* ================= FOOTER ================= */
-footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  background: var(--card);
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
-</style>
-</head>
+    #chat header {
+      height: 50px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 14px;
+    }
 
-<body>
+    #chat main {
+      padding: 10px;
+      font-size: 13px;
+      overflow-y: auto;
+    }
 
-<div id="intro"><h1>Hello Engineer</h1></div>
+    #chat input {
+      border: none;
+      padding: 12px;
+      outline: none;
+    }
 
-<header>
-  <div class="nav">
-    <strong>Eng Adham Sayed</strong>
-    <div>
-      <a href="#subjects">Subjects</a>
-      <a href="#projects">Projects</a>
-      <span class="toggle" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></span>
-    </div>
+    /* ===================== TOGGLE ===================== */
+    #mode {
+      cursor: pointer;
+      font-size: 20px;
+      margin-left: 20px;
+    }
+  </style></head>
+<body><div id="intro"><h1>Hello Engineer</h1></div><header>
+  <h2>Eng Adham Sayed</h2>
+  <nav>
+    <a onclick="go('subjects')"><i class="fa-solid fa-book"></i>Subjects</a>
+    <a onclick="go('projects')"><i class="fa-solid fa-diagram-project"></i>Projects</a>
+    <i id="mode" class="fa-solid fa-moon" onclick="toggleMode()"></i>
+  </nav>
+</header><main id="app"></main><footer>
+  <span>© All Rights Reserved to BIMBO</span>
+  <span>Developed by Eng&lt;Adham/Sayed&gt;</span>
+  <div class="social">
+    <!-- PUT LINKS -->
+    <i class="fab fa-facebook"></i>
+    <i class="fab fa-github"></i>
+    <i class="fab fa-linkedin"></i>
+    <i class="fab fa-instagram"></i>
   </div>
-</header>
+</footer><div id="chat"></div>
+<div id="chat-btn" onclick="toggleChat()"><i class="fa-solid fa-robot"></i></div><script>
+  const app = document.getElementById('app');
 
-<main>
-<section id="subjects">
-  <h2>Engineering Preparatory Subjects</h2>
-  <div class="grid">
-    <div class="card" onclick="openSubject('Mathematics')"><i class="fa-solid fa-square-root-variable"></i>Mathematics</div>
-    <div class="card" onclick="openSubject('Physics')"><i class="fa-solid fa-atom"></i>Physics</div>
-    <div class="card" onclick="openSubject('Drawing')"><i class="fa-solid fa-drafting-compass"></i>Drawing</div>
-  </div>
-</section>
+  const subjects = [
+    {id:'math', name:'Engineering Mathematics', icon:'fa-square-root-variable'},
+    {id:'physics', name:'Physics', icon:'fa-atom'},
+    {id:'drawing', name:'Engineering Drawing', icon:'fa-drafting-compass'},
+    {id:'computer', name:'Computer Basics', icon:'fa-microchip'},
+    {id:'mechanics', name:'Mechanics', icon:'fa-gears'},
+    {id:'chemistry', name:'Chemistry', icon:'fa-flask'},
+    {id:'skills', name:'Technical Skills', icon:'fa-chart-line'},
+  ];
 
-<section id="subjectPage">
-  <h2 id="subjectTitle"></h2>
-  <div class="tabs">
-    <button onclick="showComing()">Labs</button>
-    <button onclick="showComing()">Projects</button>
-    <button onclick="showComing()">Reports</button>
-  </div>
-  <div class="coming" id="coming">
-    <i class="fa-solid fa-hourglass-half"></i>
-    <p>Coming Soon</p>
-  </div>
-</section>
-</main>
-
-<div id="chatbot">
-  <header>Assistant</header>
-  <div class="body" id="chatBody"></div>
-  <input placeholder="Ask me..." onkeydown="chat(event)">
-</div>
-
-<div id="chatBtn" onclick="toggleChat()">
-  <i class="fa-solid fa-comments"></i>
-</div>
-
-<footer>
-  <span>© BIMBO</span>
-  <span>Eng&lt;Adham/Sayed&gt;</span>
-  <div>
-    <!-- PUT YOUR LINKS HERE -->
-    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-    <a href="#"><i class="fa-brands fa-github"></i></a>
-  </div>
-</footer>
-
-<script>
-/* INTRO */
-if(sessionStorage.getItem("visited")){
-  document.getElementById("intro").style.display="none";
-}else{
-  sessionStorage.setItem("visited","yes");
-  setTimeout(()=>document.getElementById("intro").style.display="none",1500);
-}
-
-/* SUBJECT */
-function openSubject(name){
-  document.getElementById("subjects").style.display="none";
-  document.getElementById("subjectPage").style.display="block";
-  document.getElementById("subjectTitle").innerText = name;
-}
-function showComing(){
-  document.getElementById("coming").style.display="block";
-}
-
-/* CHAT */
-function toggleChat(){
-  const c=document.getElementById("chatbot");
-  c.style.display = c.style.display==="flex"?"none":"flex";
-}
-function chat(e){
-  if(e.key==="Enter"){
-    const msg=e.target.value.toLowerCase();
-    const body=document.getElementById("chatBody");
-    body.innerHTML+=`<p><b>You:</b> ${msg}</p>`;
-    body.innerHTML+=`<p><b>Bot:</b> This section is coming soon.</p>`;
-    e.target.value="";
+  function go(page) {
+    location.hash = page;
+    render();
   }
-}
 
-/* THEME */
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-}
-</script>
+  function render() {
+    const hash = location.hash.replace('#','') || 'subjects';
 
-</body>
-</html>
+    if (hash === 'subjects') {
+      app.innerHTML = `<h1 class="section-title">Engineering Preparatory Subjects</h1><div class="grid">${subjects.map(s=>`
+        <div class="card" onclick="openSubject('${s.id}','${s.name}')">
+          <i class="fa-solid ${s.icon}"></i>
+          <h3>${s.name}</h3>
+          <p class="muted">Coming Soon</p>
+        </div>`).join('')}</div>`;
+    }
+
+    if (hash === 'projects') {
+      app.innerHTML = `<h1 class="section-title">Projects</h1><div class="coming"><i class="fa-solid fa-hourglass"></i><p>Coming Soon</p></div>`;
+    }
+  }
+
+  function openSubject(id,name) {
+    app.innerHTML = `<h1 class="section-title">${name}</h1>
+    <div class="tabs">
+      <div class="tab">Chapters</div>
+      <div class="tab">Labs</div>
+      <div class="tab">Exams</div>
+    </div>
+    <div class="coming"><
